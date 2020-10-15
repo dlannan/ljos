@@ -99,6 +99,18 @@ dofile("boot.lua")
 ```
 You should see:
 
+![ljos boot](/screenshots/2020-10-15_14-44.png "ljos boot in qemu")
+
+## Luastatic
+Why is luastatic in here?
+One of the tests I have been running is packaging luajit + various lua files into a single file used at init. 
+The benefits of this are: 
+- You can hide away complex boot behaviour that doesnt really need to be edited (setup file systems etc)
+- External libs can be brought into to be statically built more easily (depending on complexity and issues with building). 
+- No need for shared libraries - this is good and bad. Bigger code, but no dependency madness.
+
+There will be some examples added to show how this works. Hello.c already works fine, if you are interested. 
+I expect that this will be used for some of the complex behavior for IoT and mobile, so its related to the futures below.
 
 ## Future
 The aim is to build this into a nice little toolkit for various use cases.
