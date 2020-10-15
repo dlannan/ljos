@@ -19,8 +19,8 @@ An iso is included in the repo - bb.iso
 
 ![ljos boot](/screenshots/2020-10-15_14-44.png "ljos boot in qemu")
 
-## Prerequisities
-If you want to build your own linux kernel there are some prerequisities you need to have setup. 
+## Pre-requisities
+If you want to build your own linux kernel there are some dependencies you need to have setup. 
 
 This page is not intended for learning how to build a kernel, please visit the linux build documents for fine detail on this. 
 
@@ -40,6 +40,9 @@ If you are having problems, please post an issue, and I'll try to help.
 Dont use the Makefile, yet. This is from Kenneths repo and its going to be 'remodelled' :)
 
 Follow these steps:
+
+**Note:** *Skip to step 3 if you dont want to build the linux kernel.  The provided linux kernel 4.9.239 can be used.*
+
 1. Download the kernel as described in Kenneths blog page. You can use _any_ linux kernel you want. 
 Example: 
 ```
