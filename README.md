@@ -1,6 +1,6 @@
 # ljos
 
-Firstly, but thanks to Kenneth Wilke whos excellent blogs on making a bootable linux lead me to make this setup.
+Firstly, big thanks to Kenneth Wilke whos excellent blogs on making a bootable linux lead me to make this setup.
 > https://suchprogramming.com/barebones-linux-system/
 
 > https://suchprogramming.com/barebones-linux-iso/
