@@ -19,6 +19,19 @@ An iso is included in the repo - bb.iso
 
 ![ljos boot](/screenshots/2020-10-15_14-44.png "ljos boot in qemu")
 
+## Build Problems
+Here is a list of common problems I have come across when building (on linux and windows).
+1. When building luajit, make sure the init executable has execution permissions on it in linux. 
+Filepath: ```/barebones/build/initfs/init```
+Fix execution permissions: ```chmod +x /barebones/build/initfs/init```
+2. Check the execution permissions for the build and run shell scripts. 
+Files: ```/barebones/build/bb_build.sh /barebones/build/bb_console.sh /barebones/build/bb_iso.sh /barebones/build/bb_run.sh ```
+Fix execution permissions: ```chmod +x /barebones/build/*.sh```
+3. Do not use a normal Luajit build - this will not work. It must be statically _built_. This is why luajit is included.
+4. Be careful with grub.cfg. Some settings can stop the linux boot from working. For example setting gfxpayload=1280x1024 will result in a black screen.
+5. bb_run.shy should not be used. This is for dev purposes. 
+If you have problems. Raise an issue. 
+
 ## Pre-requisities
 If you want to build your own linux kernel there are some dependencies you need to have setup. 
 
