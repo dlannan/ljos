@@ -35,7 +35,7 @@ Fix execution permissions: ```chmod +x /barebones/build/*.sh```
 
 3. Do not use a normal Luajit build - this will not work. It must be statically _built_. This is why luajit is included.
 4. Be careful with grub.cfg. Some settings can stop the linux boot from working. For example setting gfxpayload=1280x1024 will result in a black screen.
-5. bb_run.shy should not be used. This is for dev purposes. 
+5. bb_run.sh should not be used. This is for dev purposes. 
 If you have problems. Raise an issue. 
 
 ## Pre-requisities
