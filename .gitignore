@@ -1,0 +1,2 @@
+*.o
+/barebones/build/linux*

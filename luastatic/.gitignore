@@ -1,0 +1,8 @@
+*.luastatic.c
+*.o
+*.a
+lua
+luac
+luastatic
+old.txt
+*.rock
