@@ -6,6 +6,7 @@
 ** Copyright (C) 1994-2008 Lua.org, PUC-Rio. See Copyright Notice in lua.h
 */
 
+#include <arpa/inet.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -555,6 +556,8 @@ static int pmain(lua_State *L)
   return 0;
 }
 
+int luaopen_lfs(lua_State * L);
+
 int main(int argc, char **argv)
 {
   int status;
@@ -563,11 +566,16 @@ int main(int argc, char **argv)
     l_message(argv[0], "cannot create state: not enough memory");
     return EXIT_FAILURE;
   }
-  smain.argc = argc;
-  smain.argv = argv;
-  status = lua_cpcall(L, pmain, NULL);
+//   smain.argc = argc;
+//   smain.argv = argv;
+//   status = lua_cpcall(L, pmain, NULL);
+  lua_gc(L, LUA_GCSTOP, 0);  /* stop collector during initialization */
+  luaL_openlibs(L);  /* open libraries */
+  luaopen_lfs(L);
+  lua_gc(L, LUA_GCRESTART, -1);
+
+  dofile(L, "./boot.lua");  /* executes boot file */
   report(L, status);
   lua_close(L);
   return (status || smain.status) ? EXIT_FAILURE : EXIT_SUCCESS;
 }
-

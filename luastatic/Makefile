@@ -1,5 +1,5 @@
 LUA ?= luajit
-LIBLUA_A ?= ../luajit/src/lib$(LUA).a
+LIBLUA_A ?= ../luajit/src/lib$(LUA).a 
 LUA_INCLUDE ?= ../luajit/src
 
 .PHONY: *.lua *.lua.c test run_test
@@ -8,6 +8,9 @@ default: luastatic
 
 luastatic: luastatic.lua
 	../luajit/src/$(LUA) luastatic.lua luastatic.lua $(LIBLUA_A) -I$(LUA_INCLUDE) $(CFLAGS)
+
+ljsys: ljsyscall.lua
+	./luastatic ljsyscall.lua $(LIBLUA_A) /usr/lib/x86_64-linux-gnu/libc.a  -I$(LUA_INCLUDE) $(CFLAGS)
 
 hello: luastatic
 	./luastatic hello.lua $(LIBLUA_A) -I$(LUA_INCLUDE) $(CFLAGS)

@@ -24,7 +24,7 @@ NODOTABIVER= 51
 # removing the '#' in front of them. Make sure you force a full recompile
 # with "make clean", followed by "make" if you change any options.
 #
-DEFAULT_CC = gcc -static
+DEFAULT_CC = gcc -static 
 #
 # LuaJIT builds as a native 32 or 64 bit binary by default.
 CC= $(DEFAULT_CC)
@@ -36,7 +36,7 @@ CC= $(DEFAULT_CC)
 # to slow down the C part by not omitting it. Debugging, tracebacks and
 # unwinding are not affected -- the assembler part has frame unwind
 # information and GCC emits it where needed (x64) or with -g (see CCDEBUG).
-CCOPT= -O2 -fomit-frame-pointer
+CCOPT= -O2 -fomit-frame-pointer 
 # Use this if you want to generate a smaller binary (but it's slower):
 #CCOPT= -Os -fomit-frame-pointer
 # Note: it's no longer recommended to use -O3 with GCC 4.x.
@@ -148,6 +148,7 @@ XCFLAGS=
 # everything. Use only if you suspect a problem with LuaJIT itself.
 #XCFLAGS+= -DLUA_USE_ASSERT
 #
+
 ##############################################################################
 # You probably don't need to change anything below this line!
 ##############################################################################
@@ -460,7 +461,7 @@ LJVM_BOUT= $(LJVM_S)
 LJVM_MODE= elfasm
 
 LJLIB_O= lib_base.o lib_math.o lib_bit.o lib_string.o lib_table.o \
-	 lib_io.o lib_os.o lib_package.o lib_debug.o lib_jit.o lib_ffi.o
+	 lib_io.o lib_os.o lib_package.o lib_debug.o lib_jit.o lib_ffi.o lfs.o
 LJLIB_C= $(LJLIB_O:.o=.c)
 
 LJCORE_O= lj_gc.o lj_err.o lj_char.o lj_bc.o lj_obj.o \
@@ -688,7 +689,7 @@ $(LUAJIT_SO): $(LJVMCORE_O)
 
 $(LUAJIT_T): $(TARGET_O) $(LUAJIT_O) $(TARGET_DEP)
 	$(E) "LINK      $@"
-	$(Q)$(TARGET_LD) $(TARGET_ALDFLAGS) -o $@ $(LUAJIT_O) $(TARGET_O) $(TARGET_ALIBS)
+	$(Q)$(TARGET_LD) $(TARGET_ALDFLAGS) -o $@ $(LUAJIT_O) $(TARGET_O) $(TARGET_ALIBS) 
 	$(Q)$(TARGET_STRIP) $@
 	$(E) "OK        Successfully built LuaJIT"
 
