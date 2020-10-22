@@ -2,7 +2,7 @@
 rm -rf ./initfs/*
 
 #gcc -static -o init init.c
-cp ../../luajit/src/luajit ./initfs/init
+cp ../../luajit/src/luajit ./bootfiles/init
 #cp ../libc/init ./initfs/init
 #cp ../libc/libc-2.28.so ./initfs/libc-2.28.so
 
