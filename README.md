@@ -24,7 +24,7 @@ I am slowly adding packages to ljos so that more and more capabilities are avail
 
 Thanks to Desvelao for a fantastic commandline toolkit: https://github.com/Desvelao/lummander
 
-Thanks to Antirex for an amazing little editor kilo: https://github.com/antirez/kilo
+Thanks to Antirez for an amazing little editor kilo: https://github.com/antirez/kilo
 
 24/10/2020 - kilo is not fully functional yet (need to sort out some library and linking issues). 
 
