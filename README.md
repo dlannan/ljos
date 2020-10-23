@@ -19,6 +19,13 @@ An iso is included in the repo - bb.iso
 
 ![ljos boot](/screenshots/2020-10-23_23-52.png "ljos boot in qemu")
 
+## Additional Thanks
+I am slowing adding packages to ljos so that more and more capabilities are available. 
+
+Thanks to Desvelao for a fantastic commandline toolkit: https://github.com/Desvelao/lummander
+Thanks to Antirex for an amazing little editor kilo: https://github.com/antirez/kilo
+24/10/2020 - kilo is not fully functional yet (need to sort out some library and linking issues). 
+
 ## Build Problems
 Here is a list of common problems I have come across when building (on linux and windows).
 1. When building luajit, make sure the init executable has execution permissions on it in linux. 
