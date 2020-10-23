@@ -20,7 +20,7 @@ An iso is included in the repo - bb.iso
 ![ljos boot](/screenshots/2020-10-23_23-52.png "ljos boot in qemu")
 
 ## Additional Thanks
-I am slowing adding packages to ljos so that more and more capabilities are available. 
+I am slowly adding packages to ljos so that more and more capabilities are available. 
 
 Thanks to Desvelao for a fantastic commandline toolkit: https://github.com/Desvelao/lummander
 Thanks to Antirex for an amazing little editor kilo: https://github.com/antirez/kilo
