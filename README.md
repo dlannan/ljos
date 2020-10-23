@@ -17,7 +17,7 @@ Once booted, the luajit runtime is started and you have a simple luajit commandl
 
 An iso is included in the repo - bb.iso
 
-![ljos boot](/screenshots/2020-10-15_14-44.png "ljos boot in qemu")
+![ljos boot](/screenshots/2020-10-23_23-52.png "ljos boot in qemu")
 
 ## Build Problems
 Here is a list of common problems I have come across when building (on linux and windows).
@@ -99,7 +99,11 @@ dofile("boot.lua")
 ```
 You should see:
 
-![ljos boot](/screenshots/2020-10-15_14-44.png "ljos boot in qemu")
+![ljos boot](/screenshots/2020-10-23_23-51.png "ljos grub bootmenu in qemu")
+
+followed by:
+
+![ljos boot](/screenshots/2020-10-23_23-52.png "ljos in qemu")
 
 ## Luastatic
 Why is luastatic in here?
