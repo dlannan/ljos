@@ -103,9 +103,10 @@ To see the available commands (again, thanks to lummander) type:
 help
 ```
 
-This displays:
+Example use below:
+![ljos help](/screenshots/2020-10-24_11-30.png "ljos help")
 
-
+As shown above, individual help for each command can be used as well. 
 
 ## Booting 
 You should see:
