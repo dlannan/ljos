@@ -1,2 +1,2 @@
 *.o
-/barebones/build/linux*
+/linux-src/*
