@@ -32,19 +32,12 @@ Thanks to Antirez for an amazing little editor kilo: https://github.com/antirez/
 Here is a list of common problems I have come across when building (on linux and windows).
 1. When building luajit, make sure the init executable has execution permissions on it in linux. 
 
-Filepath: ```/barebones/build/initfs/init```
+Filepath: ```/barebones/initfs/init```
 
-Fix execution permissions: ```chmod +x /barebones/build/initfs/init```
+Fix execution permissions: ```chmod +x /barebones/initfs/init```
 
-2. Check the execution permissions for the build and run shell scripts. 
-
-Files: ```/barebones/build/bb_build.sh /barebones/build/bb_console.sh /barebones/build/bb_iso.sh /barebones/build/bb_run.sh ```
-
-Fix execution permissions: ```chmod +x /barebones/build/*.sh```
-
-3. Do not use a normal Luajit build - this will not work. It must be statically _built_. This is why luajit is included.
-4. Be careful with grub.cfg. Some settings can stop the linux boot from working. For example setting gfxpayload=1280x1024 will result in a black screen.
-5. bb_run.sh should not be used. This is for dev purposes. 
+2. Do not use a normal Luajit build - this will not work. It must be statically _built_. This is why luajit is included.
+3. Be careful with grub.cfg. Some settings can stop the linux boot from working. For example setting gfxpayload=1280x1024 will result in a black screen.
 If you have problems. Raise an issue. 
 
 ## Pre-requisities
@@ -65,47 +58,56 @@ https://www.kernel.org/doc/html/latest/process/changes.html
 If you are having problems, please post an issue, and I'll try to help.
 
 ## Building
-Dont use the Makefile, yet. This is from Kenneths repo and its going to be 'remodelled' :)
+Thanks to Kenneth Wilke's Makefile, I have reworked it to suit the building of this system.
 
-Follow these steps:
+To build a full kernel image (one x86_64 default linux kernel is included), from the top level directory, type:
+```
+make vmlinux
+```
 
-**Note:** *Skip to step 3 if you dont want to build the linux kernel.  The provided linux kernel 4.9.239 can be used.*
+To build only luajit - this is called at startup of the OS:
+```
+make luajit
+```
 
-1. Download the kernel as described in Kenneths blog page. You can use _any_ linux kernel you want. 
-Example: 
+To create the initramfs (the bootable portion of the system) type:
 ```
-cd barebones/build
-wget https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.15.tar.xz
-tar xf linux-4.15.tar.xz
-```
-2. Build and copy the linux default kernel
-```
-cd linux && make defconfig && make -j`nproc`
-cp linux/arch/x86_64/boot/bzImage vmlinuz
-```
-3. Build luajit
-```
-cd luajit
-make clean
 make
 ```
-4. Build initramfs with luajit as init and other included lua files.
-You can add other lua files if you want to try them out after booting. 
+
+To build an iso for use in qemu, in a vm or as a bare metal bootable:
 ```
-./bb_build.sh
-```
-An iso file will be created called bb.iso, that you can boot in a virtual machine or even from a USB.
-5. Run as a virtual machine.
-```
-./bb_iso.sh
+make bb.iso
 ```
 
-## Running Scripts
-Once booted you should be greeted with the usual luajit command prompt.
-To run the sample boot script type:
+To test the iso using quemu:
 ```
-dofile("boot.lua")
+make runiso
 ```
+
+To test the vmlinuz kernel and the initramfs packages using quemu:
+```
+make runvm
+```
+
+## Usage
+A number of commands have been added to the command line. The Luajit command line is currently not available, all commands are parsed. However, thanks to the awesome lummander package, it is trivial to add more commands to the system. 
+
+A generic pcall or dofile can be added as needed. This method has been chosen because:
+- It limits the need for checking calls to dangerous methods like os.execute.
+- It allows the implementation of bash like commands more easily.
+- All execution is contained within the VM - eventually _all_ execution will be within single instances like this (even larger processes).
+
+To see the available commands (again, thanks to lummander) type:
+```
+help
+```
+
+This displays:
+
+
+
+## Booting 
 You should see:
 
 ![ljos boot](/screenshots/2020-10-23_23-51.png "ljos grub bootmenu in qemu")
@@ -128,3 +130,18 @@ I expect that this will be used for some of the complex behavior for IoT and mob
 ## Future
 The aim is to build this into a nice little toolkit for various use cases.
 I hope to build an ARM version that will be used on IoT and mobile.
+
+## License
+All source code that is not covered by a license (from other packages) is MIT license. The linux kernel is GPL license, please refer to the license within the linux repository for more information.
+
+Please refer to included source package licenses for their licensing agreement.
+
+The MIT License (MIT)
+Copyright © 2020 <copyright holders>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
