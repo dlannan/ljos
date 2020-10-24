@@ -80,8 +80,6 @@ cli:command("kilo [file]", "edit a file in a simple text editor")
         print("\027c")
     end)
 
-
-
 -- Print a prompt an read an input line
 local function getline(line)
 

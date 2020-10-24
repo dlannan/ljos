@@ -39,7 +39,7 @@ function Lummander.new(setup)
     lummander:apply_theme(config.theme)
     -- Adding default commands
     -- Help command
-    local default_action = lummander:command("help [cmd]","Help command"):action(function(parsed, command, lum)
+    local default_action = lummander:command("default [cmd]","Help command"):action(function(parsed, command, lum)
         if(parsed.cmd)then
             local command = lummander:find_cmd(parsed.cmd)
             if(command)then command:usage_extended(lummander.tag) else lummander:help(false) end
@@ -47,6 +47,15 @@ function Lummander.new(setup)
             lummander:help(false)
         end
     end)
+
+    lummander:command("help [cmd]","Help command"):action(function(parsed, command, lum)
+        if(parsed.cmd)then
+            local command = lummander:find_cmd(parsed.cmd)
+            if(command)then command:usage_extended(lummander.tag) else lummander:help(true) end
+        else
+            lummander:help(true)
+        end
+    end)    
 
     lummander:action(default_action, {})
     -- Version
