@@ -49,13 +49,13 @@ bb.iso: initramfs
 	grub-mkrescue -o $(BUILD_PATH)/bb.iso $(BUILD_PATH)/iso
 
 # Utility targets
-runvm: bb.iso
+runvm: vmlinuz initramfs
 	qemu-system-x86_64 -m 2048 -kernel $(LINUX_PATH)/vmlinuz -initrd $(BUILD_PATH)/initramfs -append console=ttyS0 -nographic
 
 runiso: bb.iso
 	qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d
 
-makeusb: bb.iso
+usbiso: bb.iso
 	dd if=$(BUILD_PATH)/bb.iso of=$(USB_DEVICE) status="progress"
 
 clean:
