@@ -104,6 +104,7 @@ help
 ```
 
 Example use below:
+
 ![ljos help](/screenshots/2020-10-24_11-30.png "ljos help")
 
 As shown above, individual help for each command can be used as well. 
