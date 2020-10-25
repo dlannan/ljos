@@ -1,6 +1,6 @@
 # ljos
 
-Waening: Under devleopment. various systems are being added, so this is very unstable at the moment.
+Warning: Under development. Various systems are being added, so this is very unstable at the moment.
 
 Firstly, big thanks to Kenneth Wilke whos excellent blogs on making a bootable linux lead me to make this setup.
 > https://suchprogramming.com/barebones-linux-system/
