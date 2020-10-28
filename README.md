@@ -1,5 +1,7 @@
 # ljos
 
+Warning: Under development. Various systems are being added, so this is very unstable at the moment.
+
 Firstly, big thanks to Kenneth Wilke whos excellent blogs on making a bootable linux lead me to make this setup.
 > https://suchprogramming.com/barebones-linux-system/
 
@@ -103,9 +105,11 @@ To see the available commands (again, thanks to lummander) type:
 help
 ```
 
-This displays:
+Example use below:
 
+![ljos help](/screenshots/2020-10-24_11-30.png "ljos help")
 
+As shown above, individual help for each command can be used as well. 
 
 ## Booting 
 You should see:
