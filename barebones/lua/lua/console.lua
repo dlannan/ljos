@@ -1,7 +1,27 @@
+local ffi   = require("ffi")
+local S     = require "syscall"
+
 local LINE_CARET    = "$"
 local LINE_SEP      = ":"
 
--- Simple editor from here:
+-- Print a prompt an read an input line
+local inline = ffi.new("char[?]", 1024)
+
+local function iowrite( str )
+    -- io.stdout:write( str )
+    io.write( str )
+    -- libc.write(stdout, ffi.string(str, #str), #str)
+end
+
+local function ioread()
+
+    return io.read("*l")
+    -- return io.stdin:read()
+    -- libc.read(stdin, inline, 1024)
+    -- return ffi.string(inline)
+end
+
+-- Simple cli command interface:
 --     https://github.com/Desvelao/lummander
 
 -- Require "lummander"
@@ -11,7 +31,7 @@ local Lummander = require "lummander"
 local cli = Lummander.new{
     title = "LJOS", -- <string> title for CLI. Default: ""
     tag = "", -- <string> CLI Command to execute your program. Default: "".
-    description = "My App description", -- <string> CLI description. Default: ""
+    description = "Luajit Operating System", -- <string> CLI description. Default: ""
     version = "0.1.1", -- <string> CLI version. Default: "0.1.0"
     author = "David Lannan", -- <string> author. Default: ""
     root_path = "/", -- <string> root_path. Default "". Concat this path to load commands of a subfolder
@@ -63,9 +83,38 @@ cli:command("ple <file>", "edit a file in a simple text editor")
         dofile("./ple/ple.lua")
     end)
 
+cli:command("cmd <file>", "execute a file or command within vm")
+    :action(function(parsed, command, app)
+        iowrite( cmd(parsed.file) )
+    end)    
+
 cli:command("exec <file>", "execute a binary file")
     :action(function(parsed, command, app)
-        print( cmd(parsed.file) )
+
+        cli:execute(parsed.file , function(value)
+            iowrite( value )
+        end)        
+    end)    
+
+cli:command("cat <file>", "show the contents of a file")
+    :action(function(parsed, command, app)
+        local isfile = lfs.attributes( parsed.file ) 
+        if(isfile == nil) then print("File not found."); return end
+         for line in io.lines(parsed.file) do print(line) end
+    end)    
+
+cli:command("dofile <luafile>", "execute a lua file")
+    :action(function(parsed, command, app)
+
+        local isfile = lfs.attributes( parsed.luafile ) 
+        if(isfile == nil) then print("File not found."); return end
+        dofile(parsed.luafile)
+    end)    
+
+cli:command("reboot", "reboot the system.")
+    :action(function(parsed, command, app)
+
+        S.reboot("restart")
     end)    
 
 cli:command("kilo [file]", "edit a file in a simple text editor")
@@ -76,20 +125,22 @@ cli:command("kilo [file]", "edit a file in a simple text editor")
             editfile = os.tmpname()
             tmpfh:close()
         end
-        os.execute("./sbin/kilo "..editfile)
-        print("\027c")
+
+        cli:execute("./sbin/kilo" , function(value)
+            print("\027c")
+        end)
     end)
 
--- Print a prompt an read an input line
+
 local function getline(line)
 
     if line ~= "" then
-      io.write(">> ")
-      return line .. "\n" .. io.read()
+        iowrite(">> ")
+        return line .. "\n" .. io.read()
     end
   
-    io.write(LINE_CARET.." ")
-    return io.read()
+    iowrite(LINE_CARET.." ")
+    return ioread()
   end
   
   -- Print an error message

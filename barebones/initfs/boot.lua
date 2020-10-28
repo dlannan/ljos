@@ -2,15 +2,48 @@
 -- **********************************************************************************
 -- Setup pats first
 
-package.cpath = "./lib/?.so;./?.so"
-package.path = "./?.lua;./lib/?/init.lua;./ffi/?/init.lua;./lua/?/init.lua;"
-package.path = package.path.."./lib/?.lua;./lua/?.lua;./ffi/?.lua"
+package.cpath = "./lib/?.so;./lib64/?.so;./?.so"
+package.path = "./lua/?.lua;./lib/?/init.lua;./lib64/?/init.lua;./ffi/?/init.lua;./lua/?/init.lua"
+package.path = package.path..";./lib/?.lua;./lib64/?.lua;./lua/?.lua;./ffi/?.lua"
 
 local ffi = require("ffi")
-require("pprint")
+
+pp = require("pprint").prettyPrint
+
+-- **********************************************************************************
+
+ffi.cdef[[
+
+void sleep( unsigned int sec );
+
+int dup2(int oldfd, int newfd);
+int open(const char *pathname, int flags, int mode);
+
+unsigned int read(int fd, void *buf, unsigned int count);
+unsigned int write(int fd, const void *buf, unsigned int count);
+
+int execvp(const char *file, char *const argv[]);
+
+/*
+long syscall(long number, ...);
+dev_t makedev(int major, int minor);
+int mknod(const char *path, mode_t mode, dev_t dev);
+*/
+]]
+
+if(false) then 
+libld   = ffi.load("/usr/lib64/ld-linux-x86-64.so.2", true)
+libc    = ffi.load("/lib/x86_64-linux-gnu/libc.so.6", true)
+else
+libld   = ffi.load("/lib/ld-linux-x86-64.so.2", true)
+libc    = ffi.load("/lib/libc.so.6", true)
+end
+
+require("init_system")
 
 -- **********************************************************************************
 -- A simple console parser. Will expand
+
 local console = require "console"
 local chalk = require "chalk"
 
@@ -27,7 +60,7 @@ LJOS_WELCOME    = [[ Welcome to LJOS. Version: ]]..LJOS_VERSION
 -- This will be per user - each instance ca run its VM with separate configs
 -- Later this is how all processes will run.
 LJOS_CONF       = {
-
+    display_logo    = true,
 }
 
 
@@ -71,9 +104,10 @@ function cmd( command )
     local fh = io.popen( command, "r" )
     local data = nil
 
-    if( fh ) then 
+    if( fh ~= nil ) then 
         data = tostring( fh:read("*a") )
         fh:close()
+        print(data)
     else 
         data = "invalid command."
     end 
@@ -87,6 +121,9 @@ function ls(path, detail)
 
     if(path == nil) then path = "." end
     local fileline = ""
+
+    local isfile = lfs.attributes( path ) 
+    if(isfile == nil) then return end 
 
     for file in lfs.dir(path) do
 
@@ -182,6 +219,10 @@ end
 -- **********************************************************************************
 -- Setup output
 
+-- start the logger
+os.execute("./sbin/syslogd -T -f /etc/syslog.conf")
+
+if( LJOS_CONF.display_logo ) then
 -- Clear screen
 print("\027c")
 
@@ -222,6 +263,8 @@ logo = logo..[[  |]]..LJOS_WELCOME..(string.rep(" ",fillcount)).."|\n"
 logo = logo..LOGO_LINE
 -- output logo
 print(logo)
+
+end 
 
 -- start console.
 console.runconsole( {} )

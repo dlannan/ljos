@@ -300,9 +300,7 @@ end
 
 loadColors()
 
-_G.p = prettyPrint
-
-pprint = {
+return {
   loadColors = loadColors,
   theme = theme,
   prettyPrint = prettyPrint,

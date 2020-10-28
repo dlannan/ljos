@@ -1,6 +1,8 @@
 
 # Build paths for copying files
 BUILD_PATH  = 	 ./barebones
+DEV_PATH	= 	 $(BUILD_PATH)/bootfiles/dev
+INITFS_PATH = 	 $(BUILD_PATH)/initfs/
 LUAJIT_PATH = 	 ./luajit
 LUASTATIC_PATH = ./luastatic
 LINUX_SRC = 	 ./linux-src
@@ -36,8 +38,13 @@ initfs/init: initfs
 
 # Prepare folders for initramfs - force a folder delete, or it ends up messy.
 initfs:
-	mkdir -p $(BUILD_PATH)/initfs/bin $(BUILD_PATH)/initfs/proc $(BUILD_PATH)/initfs/dev $(BUILD_PATH)/initfs/sys
 	rm -rf $(BUILD_PATH)/initfs/*
+	mkdir -p $(INITFS_PATH)/bin $(INITFS_PATH)/dev $(INITFS_PATH)/dev/pts 
+	mkdir -p $(INITFS_PATH)/etc $(INITFS_PATH)/lib
+	mkdir -p $(INITFS_PATH)/mnt $(INITFS_PATH)/proc $(INITFS_PATH)/root 
+	mkdir -p $(INITFS_PATH)/sbin $(INITFS_PATH)/sys $(INITFS_PATH)/usr
+	mkdir -p $(BUILD_PATH)/initfs/mnt/root
+
 	cp -r $(BUILD_PATH)/lua/* $(BUILD_PATH)/initfs/
 	cp -r $(BUILD_PATH)/bootfiles/* $(BUILD_PATH)/initfs/
 
@@ -49,14 +56,20 @@ bb.iso: initramfs
 	grub-mkrescue -o $(BUILD_PATH)/bb.iso $(BUILD_PATH)/iso
 
 # Utility targets
-runvm: vmlinuz initramfs
-	qemu-system-x86_64 -m 2048 -kernel $(LINUX_PATH)/vmlinuz -initrd $(BUILD_PATH)/initramfs -append console=ttyS0 -nographic
+runvm: initramfs
+	qemu-system-x86_64 -m 2048 -kernel $(LINUX_PATH)/vmlinuz -initrd $(BUILD_PATH)/initramfs 
 
+# Builds iso and that builds initramfs
 runiso: bb.iso
+	sudo qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d -nic tap
+
+# Just runs the last built iso
+run: 
 	qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d
 
 usbiso: bb.iso
 	dd if=$(BUILD_PATH)/bb.iso of=$(USB_DEVICE) status="progress"
+
 
 clean:
 	rm -rf vmlinuz initramfs $(KERNEL_DIRECTORY) $(KERNEL_ARCHIVE) \
