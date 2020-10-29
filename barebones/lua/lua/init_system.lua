@@ -28,6 +28,8 @@ end
 
 if not S then fatal("cannot find syscall library") end
 
+if(_G.REAL_MACHINE == nil ) then 
+
 -- **********************************************************************************
 -- This is the preferred way to setup linux dev.
 
@@ -55,12 +57,46 @@ if not S then fatal("cannot find syscall library") end
 -- os.execute("mknod dev/random c 1 8")
 -- os.execute("mknod dev/urandom c 1 9")
 -- os.execute("chown root:tty dev/{console,tty}")
+local t = S.t
+
+try(S.mkdir, "/dev")
+try(S.mkdir, "/bin")
+try(S.mkdir, "/proc")
+try(S.mkdir, "/sys")
+try(S.mkdir, "/run")
+try(S.mkdir, "/mnt")
+
+try(S.mkdir, "/lib/x86_64-linux-gnu")
+
+-- mkdir -p $(INITFS_PATH)/bin $(INITFS_PATH)/dev $(INITFS_PATH)/dev/pts 
+-- mkdir -p $(INITFS_PATH)/etc $(INITFS_PATH)/lib
+-- mkdir -p $(INITFS_PATH)/mnt $(INITFS_PATH)/proc $(INITFS_PATH)/root 
+-- mkdir -p $(INITFS_PATH)/sbin $(INITFS_PATH)/sys $(INITFS_PATH)/usr
 
 -- mounts
-try(S.mount, "devtmpfs", "/dev", "devtmpfs", "rw,nosuid,nodev,noexec,relatime")
-try(S.mount, "sysfs", "/sys", "sysfs", "rw,nosuid,nodev,noexec,relatime")
+try(S.mount, "devtmpfs", "/dev", "devtmpfs", "rw,nosuid,seclabel")
 try(S.mount, "proc", "/proc", "proc", "rw,nosuid,nodev,noexec,relatime")
-try(S.mount, "devpts", "/dev/pts", "devpts", "rw,nosuid,noexec,relatime")
+try(S.mount, "sysfs", "/sys", "sysfs", "rw,nosuid,nodev,noexec,relatime")
+try(S.mount, "tmpfs", "/run", "tmpfs", "rw,nosuid,nodev,noexec,relatime")
+
+-- try(S.mount, "devpts", "/dev/pts", "devpts", "rw,nosuid,noexec,relatime")
+
+--- Since kernel 2.6 devtmpfs creates these below.
+-- try(S.mknod, "/dev/fb0", "fchr,rwxu", t.device(29, 0))
+-- try(S.mknod, "/dev/ttyS0", "fchr,rwxu", t.device(4, 64))
+-- try(S.mknod, "/dev/console", "fchr,rwxu", t.device(5, 1))
+-- try(S.mknod, "/dev/null", "fchr,rwxu", t.device(1, 3))
+
+-- try(S.mknod, "/dev/random", "fchr,rwxu", t.device(1, 8))
+-- try(S.mknod, "/dev/urandom", "fchr,rwxu", t.device(1, 9))
+
+-- Add some uiseful links - this will grow. We are replicating udev here.
+lfs.link("/lib", "/lib64", true)
+
+lfs.link("/lib/libc.so.6", "/lib/x86_64-linux-gnu/libc.so.6")
+lfs.link("/lib/libm.so.6", "/lib/x86_64-linux-gnu/libm.so.6")
+lfs.link("/lib/libpthread.so.0", "/lib/x86_64-linux-gnu/libpthread.so.0")
+
 
 -- interfaces
 
@@ -92,3 +128,4 @@ pp(w)
 
 print("last child exited")
 
+end -- _G.REAL_MACHINE == nil

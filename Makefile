@@ -39,12 +39,7 @@ initfs/init: initfs
 # Prepare folders for initramfs - force a folder delete, or it ends up messy.
 initfs:
 	rm -rf $(BUILD_PATH)/initfs/*
-	mkdir -p $(INITFS_PATH)/bin $(INITFS_PATH)/dev $(INITFS_PATH)/dev/pts 
-	mkdir -p $(INITFS_PATH)/etc $(INITFS_PATH)/lib
-	mkdir -p $(INITFS_PATH)/mnt $(INITFS_PATH)/proc $(INITFS_PATH)/root 
-	mkdir -p $(INITFS_PATH)/sbin $(INITFS_PATH)/sys $(INITFS_PATH)/usr
-	mkdir -p $(BUILD_PATH)/initfs/mnt/root
-
+	mkdir -p $(BUILD_PATH)/initfs/mnt/root	
 	cp -r $(BUILD_PATH)/lua/* $(BUILD_PATH)/initfs/
 	cp -r $(BUILD_PATH)/bootfiles/* $(BUILD_PATH)/initfs/
 

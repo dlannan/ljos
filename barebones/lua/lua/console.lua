@@ -1,11 +1,28 @@
 local ffi   = require("ffi")
 local S     = require "syscall"
+local t     = S.t
 
+-- **********************************************************************************
+-- Config
 local LINE_CARET    = "$"
 local LINE_SEP      = ":"
 
 -- Print a prompt an read an input line
 local inline = ffi.new("char[?]", 1024)
+
+-- **********************************************************************************
+-- Helpers
+
+-- if we have forked we need to fail in main thread not fork
+local function fork_assert(cond, s) 
+    if not cond then
+        print("")
+        print(tostring(s))
+        print(debug.traceback())
+        S.exit("failure")
+    end
+    return cond, s
+end
 
 local function iowrite( str )
     -- io.stdout:write( str )
@@ -21,6 +38,7 @@ local function ioread()
     -- return ffi.string(inline)
 end
 
+-- **********************************************************************************
 -- Simple cli command interface:
 --     https://github.com/Desvelao/lummander
 
@@ -77,37 +95,52 @@ cli:command("mkdir <dir>", "make a new directory")
         mkdir(parsed.dir)
     end)
 
-cli:command("ple <file>", "edit a file in a simple text editor")
-    :action(function(parsed, command, app)
-        arg = { [1]=parsed.file }
-        dofile("./ple/ple.lua")
-    end)
-
 cli:command("cmd <file>", "execute a file or command within vm")
     :action(function(parsed, command, app)
         iowrite( cmd(parsed.file) )
     end)    
 
+cli:command("pwd", "print current working directory")
+    :action(function(parsed, command, app)
+        print(lfs.currentdir ()) 
+    end)   
+
 cli:command("exec <file>", "execute a binary file")
     :action(function(parsed, command, app)
 
-        cli:execute(parsed.file , function(value)
-            iowrite( value )
-        end)        
+        local isfile, err = lfs.attributes( parsed.file )
+        if(isfile == nil) then print("Error:", tostring(err)); return end
+        if(isfile.mode == "directory") then print("Not a file."); return end
+
+        print("[ "..parsed.file.." ]")
+        pid = assert(S.fork())
+        if (pid == 0) then -- child        
+            local ok, err = S.execve( parsed.file, { parsed.file }, { } )
+            if(ok == nil ) then 
+                print("Error:", err) 
+                S.exit("failure")
+            end
+
+        -- cli:execute(parsed.file , function(value)
+        --     iowrite( value )
+        -- end)        
+        end
     end)    
 
 cli:command("cat <file>", "show the contents of a file")
     :action(function(parsed, command, app)
-        local isfile = lfs.attributes( parsed.file ) 
-        if(isfile == nil) then print("File not found."); return end
-         for line in io.lines(parsed.file) do print(line) end
+        local isfile, err = lfs.attributes( parsed.file )
+        if(isfile == nil) then print("Error:", tostring(err)); return end
+        if(isfile.mode == "directory") then print("Not a file."); return end
+
+        for line in io.lines(parsed.file) do print(line) end
     end)    
 
 cli:command("dofile <luafile>", "execute a lua file")
     :action(function(parsed, command, app)
 
-        local isfile = lfs.attributes( parsed.luafile ) 
-        if(isfile == nil) then print("File not found."); return end
+        local isfile, err = lfs.attributes( parsed.file )
+        if(isfile == nil) then print("Error:", tostring(err)); return end
         dofile(parsed.luafile)
     end)    
 
@@ -126,9 +159,12 @@ cli:command("kilo [file]", "edit a file in a simple text editor")
             tmpfh:close()
         end
 
-        cli:execute("./sbin/kilo" , function(value)
-            print("\027c")
-        end)
+        local ok = os.execute("/sbin/kilo "..editfile )
+        print("Kilo returned with: ", ok)
+
+        -- cli:execute("./sbin/kilo" , function(value)
+        --     print("\027c")
+        -- end)
     end)
 
 
