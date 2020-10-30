@@ -2,6 +2,8 @@ local ffi   = require("ffi")
 local S     = require "syscall"
 local t     = S.t
 
+local tinsert   = table.insert
+
 -- **********************************************************************************
 -- Config
 local LINE_CARET    = "$"
@@ -105,7 +107,7 @@ cli:command("pwd", "print current working directory")
         print(lfs.currentdir ()) 
     end)   
 
-cli:command("exec <file>", "execute a binary file")
+cli:command("exec <file> [arg1] [arg2]", "execute a binary file")
     :action(function(parsed, command, app)
 
         local isfile, err = lfs.attributes( parsed.file )
@@ -113,18 +115,13 @@ cli:command("exec <file>", "execute a binary file")
         if(isfile.mode == "directory") then print("Not a file."); return end
 
         print("[ "..parsed.file.." ]")
-        pid = assert(S.fork())
-        if (pid == 0) then -- child        
-            local ok, err = S.execve( parsed.file, { parsed.file }, { } )
-            if(ok == nil ) then 
-                print("Error:", err) 
-                S.exit("failure")
-            end
 
-        -- cli:execute(parsed.file , function(value)
-        --     iowrite( value )
-        -- end)        
-        end
+        local cargv = { parsed.file }
+        if( parsed.arg1 ) then tinsert(cargv, parsed.arg1) end
+        if( parsed.arg2 ) then tinsert(cargv, parsed.arg2) end
+
+        local status, retval = pcall( runproc, cargv )
+        if(status == false) then print("Error:", retval) end        
     end)    
 
 cli:command("cat <file>", "show the contents of a file")
@@ -139,9 +136,12 @@ cli:command("cat <file>", "show the contents of a file")
 cli:command("dofile <luafile>", "execute a lua file")
     :action(function(parsed, command, app)
 
-        local isfile, err = lfs.attributes( parsed.file )
+        local isfile, err = lfs.attributes( parsed.luafile )
         if(isfile == nil) then print("Error:", tostring(err)); return end
-        dofile(parsed.luafile)
+
+        local fh = loadfile(parsed.luafile)
+        local status, retval = pcall( fh )
+        if(status == false) then print("Error:", retval) end
     end)    
 
 cli:command("reboot", "reboot the system.")
@@ -159,50 +159,57 @@ cli:command("kilo [file]", "edit a file in a simple text editor")
             tmpfh:close()
         end
 
-        local ok = os.execute("/sbin/kilo "..editfile )
-        print("Kilo returned with: ", ok)
+        local isfile, err = lfs.attributes( editfile )
+        if(isfile == nil) then print("Error:", tostring(err)); return end
+        if(isfile.mode == "directory") then print("Not a file."); return end
 
-        -- cli:execute("./sbin/kilo" , function(value)
-        --     print("\027c")
-        -- end)
+        print("[ "..editfile.." ]")
+        local status, retval = pcall( runproc, { "/sbin/kilo", editfile } )
+        if(status == false) then print("Error:", retval) end        
     end)
 
 
+-- **********************************************************************************
+-- TODO: Replace witrh interative commandline. 
 local function getline(line)
 
     if line ~= "" then
         iowrite(">> ")
         return line .. "\n" .. io.read()
     end
-  
+
     iowrite(LINE_CARET.." ")
     return ioread()
-  end
-  
-  -- Print an error message
-  local function printerr(error_msg)
-  
+end
+
+-- **********************************************************************************
+-- Print an error message
+local function printerr(error_msg)
+
     error_msg = error_msg:gsub("%[.*%]:", "")
     print(error_msg)
-  end
-  
-  -- Load code from string
-  local function getcode(line)
-  
+end
+
+-- **********************************************************************************
+-- Load code from string
+local function getcode(line)
+
     local code, error_msg = loadstring(line)              -- try to load the code
-  
+
     if code == nil then                                   -- if syntax error
-      code = loadstring("print(" .. line .. ")")            -- try auto print
+    code = loadstring("print(" .. line .. ")")            -- try auto print
     else                                                  -- else
-      local retcode, err = loadstring("return " .. line)    -- try auto return
-      if not err then
+    local retcode, err = loadstring("return " .. line)    -- try auto return
+    if not err then
         code = retcode
-      end
     end
-  
+    end
+
     return code, error_msg
-  end
-  
+end
+
+-- **********************************************************************************
+
 function mysplit (inputstr, sep)
     if sep == nil then
             sep = "%s"
@@ -214,13 +221,13 @@ function mysplit (inputstr, sep)
     return t
 end
 
-  -- main
-  
-  local runconsole = function( lummander )
-  --print(_VERSION)
-  local line = getline("")
+-- **********************************************************************************
+-- main
+local runconsole = function( lummander )
+--print(_VERSION)
+local line = getline("")
 
-  while line ~= nil do
+while line ~= nil do
 
     -- Parse and execute the command wrote
     local args = mysplit(line, " ")
@@ -228,11 +235,15 @@ end
     cli:parse(args) -- parse arg and execute if a command was written
     line = ""
     line = getline(line)                          -- read next line
-  end
+    end
   
-  print()
+    print()
 end
+
+-- **********************************************************************************
 
 return {
     runconsole = runconsole
 }
+
+-- **********************************************************************************

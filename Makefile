@@ -63,7 +63,7 @@ run:
 	qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d
 
 usbiso: bb.iso
-	dd if=$(BUILD_PATH)/bb.iso of=$(USB_DEVICE) status="progress"
+	sudo dd if=$(BUILD_PATH)/bb.iso of=$(USB_DEVICE) status="progress"
 
 
 clean:

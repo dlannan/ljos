@@ -7,7 +7,6 @@ local nlbase= require "syscall.linux.nl"
 local nl    = nlbase.init(S)
 -- for k,v in pairs(nl) do print(k,v) end
 
-
 local IO_OPEN = {
     O_RDONLY    = 0,
     O_WRONLY    = 1,
@@ -28,10 +27,10 @@ end
 
 if not S then fatal("cannot find syscall library") end
 
-if(_G.REAL_MACHINE == nil ) then 
-
 -- **********************************************************************************
 -- This is the preferred way to setup linux dev.
+
+if(_G.REAL_MACHINE == nil ) then 
 
 -- -- According to here: https://stackoverflow.com/questions/35245247/writing-my-own-init-executable
 -- --   its important to setup stdin, stdout, stderr - I think this is BS tho.
@@ -98,34 +97,20 @@ lfs.link("/lib/libm.so.6", "/lib/x86_64-linux-gnu/libm.so.6")
 lfs.link("/lib/libpthread.so.0", "/lib/x86_64-linux-gnu/libpthread.so.0")
 
 
--- interfaces
-
-local i = nl.interfaces()
-local lo, eth0 = i.lo, i.eth0
-
-lo:up()
-eth0:up()
---eth0:address("192.168.4.130/24")
-
--- hostname
-
-S.sethostname("lua")
-
--- print something
-local i = nl.interfaces()
-print(i)
-
--- run processes
-
-
--- reap zombies
-
-local w, err = S.waitpid(-1, "all")
--- if not w and err.ECHILD then break end -- no more children
-pp(w)
-
--- childless
-
-print("last child exited")
-
 end -- _G.REAL_MACHINE == nil
+
+-- **********************************************************************************
+
+-- lfs.chdir("/tmp")
+-- local bootgfx = "tunnel"
+-- local ok, err = S.execve( bootgfx, { bootgfx }, { HOME="/tmp", PATH="/bin:/sbin" } )
+
+-- local ok, err = os.execute(bootgfx)
+-- if( ok == nil ) then print("Error:", err) end
+-- lfs.chdir("..")
+
+os.execute( "echo $HOME" )
+os.execute( "set HOME=/tmp" )
+os.execute( "echo $HOME" )
+
+-- **********************************************************************************

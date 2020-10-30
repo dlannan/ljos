@@ -2,6 +2,10 @@
 -- **********************************************************************************
 -- A simple console parser. Will expand
 
+local ffi   = require("ffi")
+local S     = require "syscall"
+local t     = S.t
+
 local chalk = require "chalk"
 
 -- **********************************************************************************
@@ -32,6 +36,8 @@ local tconcat = table.concat
 -- **********************************************************************************
 -- command for running processes
 function cmd( command )
+
+    print("Command: ", command)
     local fh = io.popen( command, "r" )
     local data = nil
 
@@ -45,6 +51,21 @@ function cmd( command )
     if( data == nil ) then data = "" end
     return data 
 end 
+
+-- **********************************************************************************
+
+function runproc( pargs ) 
+
+    local pid0 = S.getpid()
+    pid = S.fork()
+    if(pid == 0) then 
+        S.execve( pargs[1], pargs, { } )
+    else 
+        S.wait()
+        print("\027c")
+    end
+end
+
 
 -- **********************************************************************************
 -- Our implementation of ls

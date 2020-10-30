@@ -2,9 +2,9 @@
 -- **********************************************************************************
 -- Setup pats first
 
-package.cpath = "./lib/?.so;./lib64/?.so;./?.so"
-package.path = "./lua/?.lua;./lib/?/init.lua;./lib64/?/init.lua;./ffi/?/init.lua;./lua/?/init.lua"
-package.path = package.path..";./lib/?.lua;./lib64/?.lua;./lua/?.lua;./ffi/?.lua"
+package.cpath = "/lib/?.so;/lib64/?.so;/?.so"
+package.path = "/lua/?.lua;/lib/?/init.lua;/lib64/?/init.lua;/ffi/?/init.lua;/lua/?/init.lua"
+package.path = package.path..";/lib/?.lua;/lib64/?.lua;/lua/?.lua;/ffi/?.lua"
 
 local ffi = require("ffi")
 
@@ -43,8 +43,13 @@ libld   = ffi.load("/lib/ld-linux-x86-64.so.2", true)
 libc    = ffi.load("/lib/libc.so.6", true)
 end
 
+
+-- **********************************************************************************
+
 require("init_system")
 require("init_commands")
+
+require("init_interfaces")
 
 -- **********************************************************************************
 -- LJOS Configs!!
@@ -92,6 +97,8 @@ local tbl = {
 -- **********************************************************************************
 -- Setup output
 
+-- libc.sleep(10)
+
 -- start the logger
 os.execute("./sbin/syslogd -T -f /etc/syslog.conf")
 
@@ -100,19 +107,6 @@ if( LJOS_CONF.display_logo ) then
 print("\027c")
 
 -- Logo.. put your own in here.
-local logo1 = [[
-                        
-        o       o .oPYo. .oPYo. 
-        8       8 8    8 8      
-        8       8 8    8 `Yooo. 
-        8       8 8    8     `8 
-        8       8 8    8      8 
-        8oooo oP' `YooP' `YooP' 
-        .........::.....::.....:
-        ::::::::::::::::::::::::
-        ::::::::::::::::::::::::    
-]]
-
 local logo2 = [[
   88           88  ,dBBB888a,  .d88888a.
   88           88  88'    `88  88'   `88
@@ -123,7 +117,6 @@ local logo2 = [[
   88          ,88  Y8.    .8P  Y8.   .88
   8888888  Y88P"   `Y8BBB8YP'  `Y88888P"
   ...............::..........::.........:
-  :::::::::::::::::::::::::::::::::::::::
   :::::::::::::::::::::::::::::::::::::::
   ---------------------------------------
 ]]
@@ -140,6 +133,8 @@ if( _G.REAL_MACHINE ) then print( "WARNING: Running on local machine." ) end
 
 end 
 
+while(true) do
+
 -- start console.
 console.runconsole( {} )
 
@@ -152,3 +147,5 @@ console.runconsole( {} )
 --      - each term is a module, and FBP controller manages them.
 --      - add base networking (if possible with minimal drivers)
 --      - add nuklear for UI. 
+
+end
