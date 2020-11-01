@@ -133,6 +133,9 @@ if( _G.REAL_MACHINE ) then print( "WARNING: Running on local machine." ) end
 
 end 
 
+dofile("lua/examples/libuv_test1.lua")
+
+-- Bit of a hard loop.. will make this a little better with FBP
 while(true) do
 
 -- start console.

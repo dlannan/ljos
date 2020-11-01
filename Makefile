@@ -45,6 +45,7 @@ initfs:
 
 # Build the iso
 bb.iso: initramfs
+	rm -f $(BUILD_PATH)/bb.iso
 	rm -rf $(BUILD_PATH)/iso/*
 	mkdir -p $(BUILD_PATH)/iso/boot/grub
 	cp $(BUILD_PATH)/grub.cfg $(BUILD_PATH)/iso/boot/grub/

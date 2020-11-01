@@ -394,17 +394,17 @@ typedef __sigset_t sigset_t;
 
 
 
-struct timeval
-{
-  __time_t tv_sec;
-  __suseconds_t tv_usec;
-};
+// struct timeval
+// {
+//   __time_t tv_sec;
+//   __suseconds_t tv_usec;
+// };
 
-struct timespec
-{
-  __time_t tv_sec;
-  __syscall_slong_t tv_nsec;
-};
+// struct timespec
+// {
+//   __time_t tv_sec;
+//   __syscall_slong_t tv_nsec;
+// };
 
 
 
@@ -646,14 +646,14 @@ typedef union
 
 
 
-struct stat
-  {
-    __dev_t st_dev;
+// struct stat
+//   {
+//     __dev_t st_dev;
 
 
 
 
-    __ino_t st_ino;
+//     __ino_t st_ino;
 
 
 
@@ -661,31 +661,31 @@ struct stat
 
 
 
-    __nlink_t st_nlink;
-    __mode_t st_mode;
+//     __nlink_t st_nlink;
+//     __mode_t st_mode;
 
-    __uid_t st_uid;
-    __gid_t st_gid;
+//     __uid_t st_uid;
+//     __gid_t st_gid;
 
-    int __pad0;
+//     int __pad0;
 
-    __dev_t st_rdev;
-
-
-
-
-    __off_t st_size;
+//     __dev_t st_rdev;
 
 
 
-    __blksize_t st_blksize;
 
-    __blkcnt_t st_blocks;
-    struct timespec st_atim;
-    struct timespec st_mtim;
-    struct timespec st_ctim;
-    __syscall_slong_t __glibc_reserved[3];
-  };
+//     __off_t st_size;
+
+
+
+//     __blksize_t st_blksize;
+
+//     __blkcnt_t st_blocks;
+//     struct timespec st_atim;
+//     struct timespec st_mtim;
+//     struct timespec st_ctim;
+//     __syscall_slong_t __glibc_reserved[3];
+//   };
 extern int stat (const char *__restrict __file,
    struct stat *__restrict __buf) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
@@ -831,11 +831,11 @@ extern int posix_fallocate (int __fd, off_t __offset, off_t __len);
 
 
 
-struct iovec
-  {
-    void *iov_base;
-    size_t iov_len;
-  };
+// struct iovec
+//   {
+//     void *iov_base;
+//     size_t iov_len;
+//   };
 
 
 
@@ -886,17 +886,17 @@ enum __socket_type
 typedef unsigned short int sa_family_t;
 
 
-struct sockaddr
-  {
-    sa_family_t sa_family;
-    char sa_data[14];
-  };
-struct sockaddr_storage
-  {
-    sa_family_t ss_family;
-    char __ss_padding[(128 - (sizeof (unsigned short int)) - sizeof (unsigned long int))];
-    unsigned long int __ss_align;
-  };
+// struct sockaddr
+//   {
+//     sa_family_t sa_family;
+//     char sa_data[14];
+//   };
+// struct sockaddr_storage
+//   {
+//     sa_family_t ss_family;
+//     char __ss_padding[(128 - (sizeof (unsigned short int)) - sizeof (unsigned long int))];
+//     unsigned long int __ss_align;
+//   };
 
 
 
@@ -957,37 +957,37 @@ enum
 
 
 
-struct msghdr
-  {
-    void *msg_name;
-    socklen_t msg_namelen;
+// struct msghdr
+//   {
+//     void *msg_name;
+//     socklen_t msg_namelen;
 
-    struct iovec *msg_iov;
-    size_t msg_iovlen;
+//     struct iovec *msg_iov;
+//     size_t msg_iovlen;
 
-    void *msg_control;
-    size_t msg_controllen;
-
-
-
-
-    int msg_flags;
-  };
-
-
-struct cmsghdr
-  {
-    size_t cmsg_len;
+//     void *msg_control;
+//     size_t msg_controllen;
 
 
 
 
-    int cmsg_level;
-    int cmsg_type;
+//     int msg_flags;
+//   };
 
-    __extension__ unsigned char __cmsg_data [];
 
-  };
+// struct cmsghdr
+//   {
+//     size_t cmsg_len;
+
+
+
+
+//     int cmsg_level;
+//     int cmsg_type;
+
+//     __extension__ unsigned char __cmsg_data [];
+
+//   };
 extern struct cmsghdr *__cmsg_nxthdr (struct msghdr *__mhdr,
           struct cmsghdr *__cmsg) __attribute__ ((__nothrow__ , __leaf__));
 enum
@@ -1127,33 +1127,33 @@ extern int isfdtype (int __fd, int __fdtype) __attribute__ ((__nothrow__ , __lea
 
 
 typedef uint32_t in_addr_t;
-struct in_addr
-  {
-    in_addr_t s_addr;
-  };
+// struct in_addr
+//   {
+//     in_addr_t s_addr;
+//   };
 
 
-struct ip_opts
-  {
-    struct in_addr ip_dst;
-    char ip_opts[40];
-  };
+// struct ip_opts
+//   {
+//     struct in_addr ip_dst;
+//     char ip_opts[40];
+//   };
 
 
-struct ip_mreqn
-  {
-    struct in_addr imr_multiaddr;
-    struct in_addr imr_address;
-    int imr_ifindex;
-  };
+// struct ip_mreqn
+//   {
+//     struct in_addr imr_multiaddr;
+//     struct in_addr imr_address;
+//     int imr_ifindex;
+//   };
 
 
-struct in_pktinfo
-  {
-    int ipi_ifindex;
-    struct in_addr ipi_spec_dst;
-    struct in_addr ipi_addr;
-  };
+// struct in_pktinfo
+//   {
+//     int ipi_ifindex;
+//     struct in_addr ipi_spec_dst;
+//     struct in_addr ipi_addr;
+//   };
 
 
 enum
@@ -1276,107 +1276,107 @@ enum
 
     IPPORT_USERRESERVED = 5000
   };
-struct in6_addr
-  {
-    union
-      {
- uint8_t __u6_addr8[16];
- uint16_t __u6_addr16[8];
- uint32_t __u6_addr32[4];
-      } __in6_u;
+// struct in6_addr
+//   {
+//     union
+//       {
+//  uint8_t __u6_addr8[16];
+//  uint16_t __u6_addr16[8];
+//  uint32_t __u6_addr32[4];
+//       } __in6_u;
 
 
 
 
 
-  };
+//   };
 
 
 extern const struct in6_addr in6addr_any;
 extern const struct in6_addr in6addr_loopback;
-struct sockaddr_in
-  {
-    sa_family_t sin_family;
-    in_port_t sin_port;
-    struct in_addr sin_addr;
+// struct sockaddr_in
+//   {
+//     sa_family_t sin_family;
+//     in_port_t sin_port;
+//     struct in_addr sin_addr;
 
 
-    unsigned char sin_zero[sizeof (struct sockaddr) -
-      (sizeof (unsigned short int)) -
-      sizeof (in_port_t) -
-      sizeof (struct in_addr)];
-  };
-
-
-
-struct sockaddr_in6
-  {
-    sa_family_t sin6_family;
-    in_port_t sin6_port;
-    uint32_t sin6_flowinfo;
-    struct in6_addr sin6_addr;
-    uint32_t sin6_scope_id;
-  };
+//     unsigned char sin_zero[sizeof (struct sockaddr) -
+//       (sizeof (unsigned short int)) -
+//       sizeof (in_port_t) -
+//       sizeof (struct in_addr)];
+//   };
 
 
 
-
-struct ip_mreq
-  {
-
-    struct in_addr imr_multiaddr;
-
-
-    struct in_addr imr_interface;
-  };
-
-struct ip_mreq_source
-  {
-
-    struct in_addr imr_multiaddr;
-
-
-    struct in_addr imr_interface;
-
-
-    struct in_addr imr_sourceaddr;
-  };
+// struct sockaddr_in6
+//   {
+//     sa_family_t sin6_family;
+//     in_port_t sin6_port;
+//     uint32_t sin6_flowinfo;
+//     struct in6_addr sin6_addr;
+//     uint32_t sin6_scope_id;
+//   };
 
 
 
 
-struct ipv6_mreq
-  {
+// struct ip_mreq
+//   {
 
-    struct in6_addr ipv6mr_multiaddr;
-
-
-    unsigned int ipv6mr_interface;
-  };
+//     struct in_addr imr_multiaddr;
 
 
+//     struct in_addr imr_interface;
+//   };
+
+// struct ip_mreq_source
+//   {
+
+//     struct in_addr imr_multiaddr;
 
 
-struct group_req
-  {
-
-    uint32_t gr_interface;
+//     struct in_addr imr_interface;
 
 
-    struct sockaddr_storage gr_group;
-  };
-
-struct group_source_req
-  {
-
-    uint32_t gsr_interface;
+//     struct in_addr imr_sourceaddr;
+//   };
 
 
-    struct sockaddr_storage gsr_group;
 
 
-    struct sockaddr_storage gsr_source;
-  };
+// struct ipv6_mreq
+//   {
+
+//     struct in6_addr ipv6mr_multiaddr;
+
+
+//     unsigned int ipv6mr_interface;
+//   };
+
+
+
+
+// struct group_req
+//   {
+
+//     uint32_t gr_interface;
+
+
+//     struct sockaddr_storage gr_group;
+//   };
+
+// struct group_source_req
+//   {
+
+//     uint32_t gsr_interface;
+
+
+//     struct sockaddr_storage gsr_group;
+
+
+//     struct sockaddr_storage gsr_source;
+//   };
 
 
 
@@ -2063,19 +2063,19 @@ typedef unsigned int speed_t;
 typedef unsigned int tcflag_t;
 
 
-struct termios
-  {
-    tcflag_t c_iflag;
-    tcflag_t c_oflag;
-    tcflag_t c_cflag;
-    tcflag_t c_lflag;
-    cc_t c_line;
-    cc_t c_cc[32];
-    speed_t c_ispeed;
-    speed_t c_ospeed;
+// struct termios
+//   {
+//     tcflag_t c_iflag;
+//     tcflag_t c_oflag;
+//     tcflag_t c_cflag;
+//     tcflag_t c_lflag;
+//     cc_t c_line;
+//     cc_t c_cc[32];
+//     speed_t c_ispeed;
+//     speed_t c_ospeed;
 
 
-  };
+//   };
 extern speed_t cfgetospeed (const struct termios *__termios_p) __attribute__ ((__nothrow__ , __leaf__));
 
 
@@ -2273,10 +2273,10 @@ extern int sem_getvalue (sem_t *__restrict __sem, int *__restrict __sval)
 
 
 
-struct sched_param
-{
-  int sched_priority;
-};
+// struct sched_param
+// {
+//   int sched_priority;
+// };
 
 
 
@@ -2374,25 +2374,25 @@ struct tm
 
 
 
-struct itimerspec
-  {
-    struct timespec it_interval;
-    struct timespec it_value;
-  };
-struct sigevent;
-struct __locale_struct
-{
+// struct itimerspec
+//   {
+//     struct timespec it_interval;
+//     struct timespec it_value;
+//   };
+// struct sigevent;
+// struct __locale_struct
+// {
 
-  struct __locale_data *__locales[13];
-
-
-  const unsigned short int *__ctype_b;
-  const int *__ctype_tolower;
-  const int *__ctype_toupper;
+//   struct __locale_data *__locales[13];
 
 
-  const char *__names[13];
-};
+//   const unsigned short int *__ctype_b;
+//   const int *__ctype_tolower;
+//   const int *__ctype_toupper;
+
+
+//   const char *__names[13];
+// };
 
 typedef struct __locale_struct *__locale_t;
 
@@ -3239,102 +3239,102 @@ typedef __sig_atomic_t sig_atomic_t;
 
 
 
-union sigval
-{
-  int sival_int;
-  void *sival_ptr;
-};
+// union sigval
+// {
+//   int sival_int;
+//   void *sival_ptr;
+// };
 
 typedef union sigval __sigval_t;
-typedef struct
-  {
-    int si_signo;
+// typedef struct
+//   {
+//     int si_signo;
 
-    int si_errno;
+//     int si_errno;
 
-    int si_code;
-
-
+//     int si_code;
 
 
 
-    int __pad0;
 
 
-    union
-      {
- int _pad[((128 / sizeof (int)) - 4)];
+//     int __pad0;
 
 
- struct
-   {
-     __pid_t si_pid;
-     __uid_t si_uid;
-   } _kill;
+//     union
+//       {
+//  int _pad[((128 / sizeof (int)) - 4)];
 
 
- struct
-   {
-     int si_tid;
-     int si_overrun;
-     __sigval_t si_sigval;
-   } _timer;
+//  struct
+//    {
+//      __pid_t si_pid;
+//      __uid_t si_uid;
+//    } _kill;
 
 
- struct
-   {
-     __pid_t si_pid;
-     __uid_t si_uid;
-     __sigval_t si_sigval;
-   } _rt;
+//  struct
+//    {
+//      int si_tid;
+//      int si_overrun;
+//      __sigval_t si_sigval;
+//    } _timer;
 
 
- struct
-   {
-     __pid_t si_pid;
-     __uid_t si_uid;
-     int si_status;
-     __clock_t si_utime;
-     __clock_t si_stime;
-   } _sigchld;
+//  struct
+//    {
+//      __pid_t si_pid;
+//      __uid_t si_uid;
+//      __sigval_t si_sigval;
+//    } _rt;
 
 
- struct
-   {
-     void *si_addr;
+//  struct
+//    {
+//      __pid_t si_pid;
+//      __uid_t si_uid;
+//      int si_status;
+//      __clock_t si_utime;
+//      __clock_t si_stime;
+//    } _sigchld;
+
+
+//  struct
+//    {
+//      void *si_addr;
     
-     short int si_addr_lsb;
-     union
-       {
+//      short int si_addr_lsb;
+//      union
+//        {
 
-  struct
-    {
-      void *_lower;
-      void *_upper;
-    } _addr_bnd;
+//   struct
+//     {
+//       void *_lower;
+//       void *_upper;
+//     } _addr_bnd;
 
-  __uint32_t _pkey;
-       } _bounds;
-   } _sigfault;
-
-
- struct
-   {
-     long int si_band;
-     int si_fd;
-   } _sigpoll;
+//   __uint32_t _pkey;
+//        } _bounds;
+//    } _sigfault;
 
 
+//  struct
+//    {
+//      long int si_band;
+//      int si_fd;
+//    } _sigpoll;
 
- struct
-   {
-     void *_call_addr;
-     int _syscall;
-     unsigned int _arch;
-   } _sigsys;
 
-      } _sifields;
-  } siginfo_t ;
+
+//  struct
+//    {
+//      void *_call_addr;
+//      int _syscall;
+//      unsigned int _arch;
+//    } _sigsys;
+
+//       } _sifields;
+//   } siginfo_t ;
 enum
 {
   SI_ASYNCNL = -60,
@@ -3467,27 +3467,27 @@ typedef __sigval_t sigval_t;
 
 
 
-typedef struct sigevent
-  {
-    __sigval_t sigev_value;
-    int sigev_signo;
-    int sigev_notify;
+// typedef struct sigevent
+//   {
+//     __sigval_t sigev_value;
+//     int sigev_signo;
+//     int sigev_notify;
 
-    union
-      {
- int _pad[((64 / sizeof (int)) - 4)];
+//     union
+//       {
+//  int _pad[((64 / sizeof (int)) - 4)];
 
 
 
- __pid_t _tid;
+//  __pid_t _tid;
 
- struct
-   {
-     void (*_function) (__sigval_t);
-     pthread_attr_t *_attribute;
-   } _sigev_thread;
-      } _sigev_un;
-  } sigevent_t;
+//  struct
+//    {
+//      void (*_function) (__sigval_t);
+//      pthread_attr_t *_attribute;
+//    } _sigev_thread;
+//       } _sigev_un;
+//   } sigevent_t;
 enum
 {
   SIGEV_SIGNAL = 0,
@@ -3676,57 +3676,57 @@ struct _xmmreg
 {
   __uint32_t element[4];
 };
-struct _fpstate
-{
+// struct _fpstate
+// {
 
-  __uint16_t cwd;
-  __uint16_t swd;
-  __uint16_t ftw;
-  __uint16_t fop;
-  __uint64_t rip;
-  __uint64_t rdp;
-  __uint32_t mxcsr;
-  __uint32_t mxcr_mask;
-  struct _fpxreg _st[8];
-  struct _xmmreg _xmm[16];
-  __uint32_t __glibc_reserved1[24];
-};
+//   __uint16_t cwd;
+//   __uint16_t swd;
+//   __uint16_t ftw;
+//   __uint16_t fop;
+//   __uint64_t rip;
+//   __uint64_t rdp;
+//   __uint32_t mxcsr;
+//   __uint32_t mxcr_mask;
+//   struct _fpxreg _st[8];
+//   struct _xmmreg _xmm[16];
+//   __uint32_t __glibc_reserved1[24];
+// };
 
-struct sigcontext
-{
-  __uint64_t r8;
-  __uint64_t r9;
-  __uint64_t r10;
-  __uint64_t r11;
-  __uint64_t r12;
-  __uint64_t r13;
-  __uint64_t r14;
-  __uint64_t r15;
-  __uint64_t rdi;
-  __uint64_t rsi;
-  __uint64_t rbp;
-  __uint64_t rbx;
-  __uint64_t rdx;
-  __uint64_t rax;
-  __uint64_t rcx;
-  __uint64_t rsp;
-  __uint64_t rip;
-  __uint64_t eflags;
-  unsigned short cs;
-  unsigned short gs;
-  unsigned short fs;
-  unsigned short __pad0;
-  __uint64_t err;
-  __uint64_t trapno;
-  __uint64_t oldmask;
-  __uint64_t cr2;
-  __extension__ union
-    {
-      struct _fpstate * fpstate;
-      __uint64_t __fpstate_word;
-    };
-  __uint64_t __reserved1 [8];
-};
+// struct sigcontext
+// {
+//   __uint64_t r8;
+//   __uint64_t r9;
+//   __uint64_t r10;
+//   __uint64_t r11;
+//   __uint64_t r12;
+//   __uint64_t r13;
+//   __uint64_t r14;
+//   __uint64_t r15;
+//   __uint64_t rdi;
+//   __uint64_t rsi;
+//   __uint64_t rbp;
+//   __uint64_t rbx;
+//   __uint64_t rdx;
+//   __uint64_t rax;
+//   __uint64_t rcx;
+//   __uint64_t rsp;
+//   __uint64_t rip;
+//   __uint64_t eflags;
+//   unsigned short cs;
+//   unsigned short gs;
+//   unsigned short fs;
+//   unsigned short __pad0;
+//   __uint64_t err;
+//   __uint64_t trapno;
+//   __uint64_t oldmask;
+//   __uint64_t cr2;
+//   __extension__ union
+//     {
+//       struct _fpstate * fpstate;
+//       __uint64_t __fpstate_word;
+//     };
+//   __uint64_t __reserved1 [8];
+// };
 
 
 
