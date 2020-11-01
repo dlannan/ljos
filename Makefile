@@ -45,6 +45,7 @@ initfs:
 
 # Build the iso
 bb.iso: initramfs
+	rm -rf $(BUILD_PATH)/iso/*
 	mkdir -p $(BUILD_PATH)/iso/boot/grub
 	cp $(BUILD_PATH)/grub.cfg $(BUILD_PATH)/iso/boot/grub/
 	cp $(LINUX_SRC)/vmlinuz $(BUILD_PATH)/initramfs $(BUILD_PATH)/iso/boot/

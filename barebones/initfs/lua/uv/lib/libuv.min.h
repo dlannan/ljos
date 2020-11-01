@@ -394,17 +394,17 @@ typedef __sigset_t sigset_t;
 
 
 
-// struct timeval
-// {
-//   __time_t tv_sec;
-//   __suseconds_t tv_usec;
-// };
+struct timeval
+{
+  __time_t tv_sec;
+  __suseconds_t tv_usec;
+};
 
-// struct timespec
-// {
-//   __time_t tv_sec;
-//   __syscall_slong_t tv_nsec;
-// };
+struct timespec
+{
+  __time_t tv_sec;
+  __syscall_slong_t tv_nsec;
+};
 
 
 
@@ -646,14 +646,14 @@ typedef union
 
 
 
-// struct stat
-//   {
-//     __dev_t st_dev;
+struct stat
+  {
+    __dev_t st_dev;
 
 
 
 
-//     __ino_t st_ino;
+    __ino_t st_ino;
 
 
 
@@ -661,31 +661,31 @@ typedef union
 
 
 
-//     __nlink_t st_nlink;
-//     __mode_t st_mode;
+    __nlink_t st_nlink;
+    __mode_t st_mode;
 
-//     __uid_t st_uid;
-//     __gid_t st_gid;
+    __uid_t st_uid;
+    __gid_t st_gid;
 
-//     int __pad0;
+    int __pad0;
 
-//     __dev_t st_rdev;
-
-
-
-
-//     __off_t st_size;
+    __dev_t st_rdev;
 
 
 
-//     __blksize_t st_blksize;
 
-//     __blkcnt_t st_blocks;
-//     struct timespec st_atim;
-//     struct timespec st_mtim;
-//     struct timespec st_ctim;
-//     __syscall_slong_t __glibc_reserved[3];
-//   };
+    __off_t st_size;
+
+
+
+    __blksize_t st_blksize;
+
+    __blkcnt_t st_blocks;
+    struct timespec st_atim;
+    struct timespec st_mtim;
+    struct timespec st_ctim;
+    __syscall_slong_t __glibc_reserved[3];
+  };
 extern int stat (const char *__restrict __file,
    struct stat *__restrict __buf) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
@@ -831,11 +831,11 @@ extern int posix_fallocate (int __fd, off_t __offset, off_t __len);
 
 
 
-// struct iovec
-//   {
-//     void *iov_base;
-//     size_t iov_len;
-//   };
+struct iovec
+  {
+    void *iov_base;
+    size_t iov_len;
+  };
 
 
 
