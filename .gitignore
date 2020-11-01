@@ -1,2 +1,3 @@
 *.o
 /linux-src/*
+!/linux-src/vmlinuz
