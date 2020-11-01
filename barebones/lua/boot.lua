@@ -2,7 +2,7 @@
 -- **********************************************************************************
 -- Setup pats first
 
-package.cpath = "/lib/?.so;/lib64/?.so;/?.so"
+package.cpath = "/lib/?.so;/lib64/?.so;/?.so;/lua/uv/lib/?.so"
 package.path = "/lua/?.lua;/lib/?/init.lua;/lib64/?/init.lua;/ffi/?/init.lua;/lua/?/init.lua"
 package.path = package.path..";/lib/?.lua;/lib64/?.lua;/lua/?.lua;/ffi/?.lua"
 
@@ -133,7 +133,7 @@ if( _G.REAL_MACHINE ) then print( "WARNING: Running on local machine." ) end
 
 end 
 
-dofile("lua/examples/libuv_test1.lua")
+-- dofile("lua/examples/libuv_test1.lua")
 
 -- Bit of a hard loop.. will make this a little better with FBP
 while(true) do

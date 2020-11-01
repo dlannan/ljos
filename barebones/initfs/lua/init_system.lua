@@ -96,6 +96,7 @@ lfs.link("/lib/libc.so.6", "/lib/x86_64-linux-gnu/libc.so.6")
 lfs.link("/lib/libm.so.6", "/lib/x86_64-linux-gnu/libm.so.6")
 lfs.link("/lib/libpthread.so.0", "/lib/x86_64-linux-gnu/libpthread.so.0")
 
+--lfs.link("/lib/libuv.so.1.0.0", "/lib/libuv.so")
 
 end -- _G.REAL_MACHINE == nil
 

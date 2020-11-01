@@ -165,6 +165,7 @@ cli:command("kilo [file]", "edit a file in a simple text editor")
 
         print("[ "..editfile.." ]")
         local status, retval = pcall( runproc, { "/sbin/kilo", editfile } )
+        print("\027c")
         if(status == false) then print("Error:", retval) end        
     end)
 

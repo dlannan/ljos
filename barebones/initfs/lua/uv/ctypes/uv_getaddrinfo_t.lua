@@ -13,17 +13,17 @@ local AF_INET6 = 28
 -- sockaddr_in
 --------------------------------------------------------------------------------
 
-local sockaddr_in = ctype('struct sockaddr_in')
+-- local sockaddr_in = ctype('struct sockaddr_in')
 
-function sockaddr_in:ip()
-  local buf = ffi.new('char[?]', 16)
-  libuv.uv_ip4_name(self, buf, 16)
-  return ffi.string(buf)
-end
+-- function sockaddr_in:ip()
+--   local buf = ffi.new('char[?]', 16)
+--   libuv.uv_ip4_name(self, buf, 16)
+--   return ffi.string(buf)
+-- end
 
-function sockaddr_in:port()
-  return libc.ntohs(self.sin_port)
-end
+-- function sockaddr_in:port()
+--   return libc.ntohs(self.sin_port)
+-- end
 
 --------------------------------------------------------------------------------
 -- uv_getaddrinfo_t

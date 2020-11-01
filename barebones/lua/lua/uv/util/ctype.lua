@@ -1,6 +1,7 @@
 local ffi = require 'ffi'
 
 local function ctype(name, constructor, destructor)
+  print(name)
   local metatype = {}
   local metatable = {}
   metatype.__index = metatype

@@ -62,7 +62,6 @@ function runproc( pargs )
         S.execve( pargs[1], pargs, { } )
     else 
         S.wait()
-        print("\027c")
     end
 end
 
