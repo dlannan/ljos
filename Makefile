@@ -58,11 +58,11 @@ runvm: initramfs
 
 # Builds iso and that builds initramfs
 runiso: bb.iso
-	sudo qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d -net user,hostfwd=tcp::8022-:80
+	sudo qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d -netdev user,id=mynet0,hostfwd=tcp::8080-:8080 -device e1000,netdev=mynet0
 
 # Just runs the last built iso
 run: 
-	qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d
+	qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d 
 
 usbiso: bb.iso
 	sudo dd if=$(BUILD_PATH)/bb.iso of=$(USB_DEVICE) status="progress"

@@ -27,7 +27,7 @@ for k,v in pairs(ifaces) do
     v:up()
 end 
 
--- ifaces.eth0:address("192.168.4.130/24")
+ifaces.eth0:address("192.168.4.130/24")
 
 -- -- hostname
 -- S.sethostname("lua")
