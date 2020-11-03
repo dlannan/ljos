@@ -9,7 +9,7 @@ LINUX_SRC = 	 ./linux-src
 
 # USB Device settings
 #   ************* WARNING: use lsblk to check what you are writing to!! *****************
-USB_DEVICE = /dev/sdc
+USB_DEVICE = /dev/sdd
 
 # Linux kernel source
 KERNEL_VERSION=4.9.239
@@ -65,8 +65,7 @@ run:
 	qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d 
 
 usbiso: bb.iso
-	sudo dd if=$(BUILD_PATH)/bb.iso of=$(USB_DEVICE) status="progress"
-
+	./make-usb-iso.sh $(USB_DEVICE) $(BUILD_PATH)
 
 clean:
 	rm -rf vmlinuz initramfs $(KERNEL_DIRECTORY) $(KERNEL_ARCHIVE) \
