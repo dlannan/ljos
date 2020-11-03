@@ -54,12 +54,12 @@ local cli = Lummander.new{
     description = "Luajit Operating System", -- <string> CLI description. Default: ""
     version = "0.1.1", -- <string> CLI version. Default: "0.1.0"
     author = "David Lannan", -- <string> author. Default: ""
-    root_path = "/", -- <string> root_path. Default "". Concat this path to load commands of a subfolder
+    root_path = "", -- <string> root_path. Default "". Concat this path to load commands of a subfolder
     theme = "acid", -- Default = "default". "default" and "acid" are built-in themes
     prevent_help = true -- <boolean> Prevent help message if not command found. Default: false
 }
 
-cli:commands_dir("sbin")
+cli:commands_dir("lua/commands")
 
 -- Add commands
 cli:command("mycmd", "My command description")
@@ -149,25 +149,6 @@ cli:command("reboot", "reboot the system.")
 
         S.reboot("restart")
     end)    
-
-cli:command("kilo [file]", "edit a file in a simple text editor")
-    :action(function(parsed, command, app)
-        local editfile = parsed.file
-        if(editfile == nil) then 
-            local tmpfh = io.tmpfile()
-            editfile = os.tmpname()
-            tmpfh:close()
-        end
-
-        local isfile, err = lfs.attributes( editfile )
-        if(isfile == nil) then print("Error:", tostring(err)); return end
-        if(isfile.mode == "directory") then print("Not a file."); return end
-
-        print("[ "..editfile.." ]")
-        local status, retval = pcall( runproc, { "/sbin/kilo", editfile } )
-        print("\027c")
-        if(status == false) then print("Error:", retval) end        
-    end)
 
 
 -- **********************************************************************************

@@ -11,8 +11,6 @@ local Pcall = require"lummander.pcall"
 local Parsed = require "lummander.parsed"
 local ThemeColor = require"lummander.themecolor"
 
--- local lfs = require "lfs"
-
 --- Create a Lummander instance
 -- @tparam table setup Options
 -- @string[opt=""] setup.title Title message for your CLI.
@@ -37,15 +35,19 @@ function Lummander.new(setup)
     }
     local lummander = setmetatable(config, Lummander)
     lummander:apply_theme(config.theme)
+
     -- Adding default commands
     -- Help command
     local default_action = lummander:command("default [cmd]","Help command"):action(function(parsed, command, lum)
+        local called = nil
         if(parsed.cmd)then
             local command = lummander:find_cmd(parsed.cmd)
-            if(command)then command:usage_extended(lummander.tag) else lummander:help(false) end
-        else
-            lummander:help(false)
+            if(command) then 
+                command:usage_extended(lummander.tag) 
+                called = true
+            end
         end
+        if(called == nil) then lummander:help(false) end
     end)
 
     lummander:command("help [cmd]","Help command"):action(function(parsed, command, lum)
@@ -58,6 +60,7 @@ function Lummander.new(setup)
     end)    
 
     lummander:action(default_action, {})
+    
     -- Version
     lummander:command("--version","Version",{alias = {"-v"}}):action(function(parsed, command, lum)
         lum.theme.cli.text(lummander.tag .. ": " .. lummander.version)
@@ -245,13 +248,13 @@ function Lummander:commands_dir(folderpath)
     local base_directory = self.root_path .. separator .. folderpath
     for filename,i in lfs.dir(base_directory) do
         if(fstring.ends_with(filename, ".lua"))then
-            local file = folderpath .. "." .. filename:sub(1,-5)
+            local file = folderpath .. "/" .. filename
             self.pcall(function()
-                local data = require(file)
-                data.file = file:gsub("%.","/")
+                local data = dofile(file)
+                data.file = file
                 self:command(data.command, data.description, data)
             end):fail(function(err)
-                self:error("Command adding from file: " .. file:gsub("%.","/") .. "\n".. err)
+                self:error("Command adding from file: " .. file .. "\n".. tostring(err))
             end)
         end
     end

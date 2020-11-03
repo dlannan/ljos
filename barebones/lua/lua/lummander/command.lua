@@ -223,7 +223,7 @@ function Command:check_parsed(parsed)
             end
         end
     end
-    local err = "Default action has required arguments what are not defined: "
+    local err = "Default action has required arguments that are not defined: "
     ftable.for_each(required, function(value, index, array)
         err = err .. value.name .. ", "
     end)

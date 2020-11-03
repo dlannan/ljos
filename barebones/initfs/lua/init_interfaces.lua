@@ -11,30 +11,26 @@ local nl    = nlbase.init(S)
 -- interfaces
 local ifaces    = {}
 local i         = nl.interfaces()
-pp(i)
 
 for k,v in pairs(i) do
-
     if(type(k) == "string") then 
         ifaces[k] = v
     end 
 end 
 pp("Interfaces:")
-pp(ifaces)
 
 -- Bring up the interfaces 
 for k,v in pairs(ifaces) do 
     v:up()
 end 
 
-ifaces.eth0:address("192.168.4.130/24")
+if( ifaces.eth0 ) then ifaces.eth0:address("192.168.4.130/24") end
 
 -- -- hostname
 -- S.sethostname("lua")
 
--- -- print something
--- local i = nl.interfaces()
--- print(i)
+-- print available interfaces
+print(i)
 
 -- -- run processes
 
