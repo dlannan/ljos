@@ -38,7 +38,7 @@ initfs:
 
 # Prepare folders for initramfs
 initfs/init: initfs
-	cp -f $(LUAJIT_PATH) $(BUILD_PATH)/initfs/init
+	cp -f $(INIT_PATH)/init $(BUILD_PATH)/initfs/init
 
 # Initramfs build targets
 initramfs: initfs initfs/init 

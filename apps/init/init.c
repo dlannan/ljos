@@ -21,8 +21,6 @@ int main(int argc, char *argv[])
 never_leave:
     execve(LUAVM, newargv, newenviron);
     perror("execve");   /* execve() returns only on error */
-    exit(EXIT_FAILURE);
-
     goto never_leave;
     /* Should never get here!! */
     return 0;

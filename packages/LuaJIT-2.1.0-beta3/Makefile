@@ -110,14 +110,7 @@ INSTALL_DEP= src/luajit
 
 default all $(INSTALL_DEP):
 	@echo "==== Building LuaJIT $(VERSION) ===="
-	cp -f luajit.c src/luajit.c
 	$(MAKE) -C src
-	@echo "==== Successfully built LuaJIT $(VERSION) ===="
-
-ljos $(INSTALL_DEP):
-	@echo "==== Building LuaJIT $(VERSION) ===="
-	cp -f luajit_ljos.c src/luajit.c
-	$(MAKE) -f Makefile.init -C src
 	@echo "==== Successfully built LuaJIT $(VERSION) ===="
 
 install: $(INSTALL_DEP)

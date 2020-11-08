@@ -571,26 +571,20 @@ static int pmain(lua_State *L)
   }
   return 0;
 }
-int luaopen_lfs(lua_State * L);
 
 int main(int argc, char **argv)
 {
   int status;
-  lua_State *L = lua_open();  /* create state */
+  lua_State *L = lua_open();
   if (L == NULL) {
     l_message(argv[0], "cannot create state: not enough memory");
     return EXIT_FAILURE;
   }
-//   smain.argc = argc;
-//   smain.argv = argv;
-//   status = lua_cpcall(L, pmain, NULL);
-  lua_gc(L, LUA_GCSTOP, 0);  /* stop collector during initialization */
-  luaL_openlibs(L);  /* open libraries */
-  luaopen_lfs(L);
-  lua_gc(L, LUA_GCRESTART, -1);
-
-  dofile(L, "./boot.lua");  /* executes boot file */
+  smain.argc = argc;
+  smain.argv = argv;
+  status = lua_cpcall(L, pmain, NULL);
   report(L, status);
   lua_close(L);
-  return (status || smain.status) ? EXIT_FAILURE : EXIT_SUCCESS;
+  return (status || smain.status > 0) ? EXIT_FAILURE : EXIT_SUCCESS;
 }
+
