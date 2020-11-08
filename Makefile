@@ -4,7 +4,7 @@ BUILD_PATH  = 	 ./barebones
 INIT_PATH	= 	 ./apps/init
 DEV_PATH	= 	 $(BUILD_PATH)/bootfiles/dev
 INITFS_PATH = 	 $(BUILD_PATH)/initfs/
-LUAJIT_PATH = 	 ./packages/LuaJIT-2.1/src/luajit
+LUAJIT_PATH = 	 ./packages/LuaJIT-2.1.0-beta3/src/luajit
 LUASTATIC_PATH = ./packages/luastatic
 LINUX_SRC = 	 ./linux-src
 
