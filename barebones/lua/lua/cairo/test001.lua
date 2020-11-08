@@ -20,6 +20,10 @@ print(package.cpath)
 
 pp = require("pprint").prettyPrint
 
+-- If running on real machine, becareful!!!
+libld   = ffi.load(ENV_PATH.."lib/ld-linux-x86-64.so.2", true)
+libc    = ffi.load(ENV_PATH.."lib/libc.so.6", true)
+
 ------------------------------------------------------------------------------------------------------------
 -- Window width
 --local WINwidth, WINheight = 1024, 576

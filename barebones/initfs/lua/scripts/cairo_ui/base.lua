@@ -27,6 +27,37 @@ ffi 	= require( "ffi" )
 cr 		= require( "ffi/cairo" )
 tween 	= require( "scripts/utils/tween" )
 
+local S = require "syscall"
+
+-- **********************************************************************************
+-- Default FB0 dimensions (not realistic)
+FB0 = { w = 1024, h = 1024, fb_name = "/dev/fb0" }
+
+FB0.device  = { fb_fd = nil, fb_data = "", fb_screensize = 0 }
+FB0.device.fb_vinfo = ffi.new("fb_var_screeninfo[1]")
+FB0.device.fb_finfo = ffi.new("fb_fix_screeninfo[1]")
+FB0.surface = ffi.new("cairo_surface_t *")
+
+-- Open the file for reading and writing
+FB0.device.fb_fd = S.open(FB0.fb_name, S.O_RDWR)
+if (FB0.device.fb_fd == -1) then 
+  pp("Error: cannot open framebuffer device")
+  os.exit(1)
+end
+
+-- Get variable screen information
+if (S.ioctl(FB0.device.fb_fd, cr.FBIOGET_VSCREENINFO, FB0.device.fb_vinfo) == -1) then
+  pp("Error reading variable information")
+  os.exit(3)
+end
+
+FB0.w 		= FB0.device.fb_vinfo[0].xres
+FB0.h 		= FB0.device.fb_vinfo[0].yres
+FB0.bits 	= FB0.device.fb_vinfo[0].bits_per_pixel
+pp(FB0.w, FB0.h, FB0.bits)
+
+-- **********************************************************************************
+
 require("scripts/cairo_ui/constants")
 require("scripts/utils/geometry")
 require("scripts/utils/text")

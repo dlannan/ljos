@@ -100,8 +100,6 @@ lfs.link("/lib/libpthread.so.0", "/lib/x86_64-linux-gnu/libpthread.so.0")
 
 end -- _G.REAL_MACHINE == nil
 
--- **********************************************************************************
-
 -- lfs.chdir("/tmp")
 -- local bootgfx = "tunnel"
 -- local ok, err = S.execve( bootgfx, { bootgfx }, { HOME="/tmp", PATH="/bin:/sbin" } )
