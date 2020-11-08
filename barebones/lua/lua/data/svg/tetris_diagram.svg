@@ -1,0 +1,113 @@
+<svg width="12.00cm" height="11.20cm" viewBox="0 0 600 564" xmlns="http://www.w3.org/2000/svg" version="1.1">
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 27.37 98.42 L 64.63 98.42 L 46.00 67.37 L 27.37 98.42" stroke="#008000" stroke-width="1.4" fill="#ffffff"/>
+    <g>
+      <text x="60.00" y="86.00" style="font-size:27px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">*</text>
+    </g>
+    <path d="M 46.26 110.00 L 46.74 156.00 M 41.69 151.05 L 46.74 156.00 L 51.69 150.95" stroke="#008000" stroke-width="1.4" fill="none"/>
+    <g>
+      <text x="36.50" y="137.61" style="font-size:14px;font-style:normal;font-weight:normal;text-align:right;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">1</text>
+    </g>
+    <g>
+      <text x="36.50" y="137.61" style="font-size:14px;font-style:normal;font-weight:normal;text-align:right;text-anchor:end;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">1</text>
+    </g>
+    <path d="M 88.37 153.42 L 125.63 153.42 L 107.00 122.37 L 88.37 153.42" stroke="#0000ff" stroke-width="1.4" fill="#ffffff"/>
+    <g>
+      <text x="121.00" y="141.00" style="font-size:27px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">*</text>
+    </g>
+    <path d="M 131.00 140.54 L 187.00 139.46 M 182.10 144.56 L 187.00 139.46 L 181.91 134.56" stroke="#0000ff" stroke-width="1.4" fill="none"/>
+    <g>
+      <text x="159.19" y="154.50" style="font-size:14px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">1</text>
+    </g>
+    <g>
+      <text x="159.19" y="154.50" style="font-size:14px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">1</text>
+    </g>
+    <path d="M 57.73 201.47 L 58.63 203.26 M 61.76 209.52 L 62.65 211.30 M 65.78 217.57 L 66.68 219.35 M 68.00 222.00 M 72.04 222.08 L 74.04 222.12 M 81.04 222.26 L 83.04 222.29 M 90.04 222.43 L 92.04 222.47 M 99.04 222.61 L 101.04 222.65 M 108.03 222.78 L 110.03 222.82 M 117.03 222.96 L 119.00 223.00 L 119.02 222.97 M 122.39 216.84 L 123.36 215.09 M 126.73 208.96 L 127.70 207.20 M 131.07 201.07 L 132.04 199.32 M 135.41 193.19 L 136.38 191.44 M 139.75 185.30 L 140.72 183.55 M 144.10 177.42 L 145.06 175.67 M 148.44 169.53 L 149.40 167.78 M 152.78 161.65 L 153.74 159.90 M 154.19 159.08 M 156.16 165.87 L 154.19 159.08 L 147.40 161.05" stroke="#008000" stroke-width="1.4" fill="none"/>
+    <g>
+      <text x="118.30" y="237.49" style="font-size:14px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">+0.1</text>
+    </g>
+    <g>
+      <text x="118.30" y="237.49" style="font-size:14px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">+0.1</text>
+    </g>
+    <path d="M 200.90 160.77 L 200.06 162.58 M 197.11 168.93 L 196.27 170.75 M 193.32 177.10 L 192.48 178.91 M 189.53 185.26 L 188.69 187.08 M 185.75 193.43 L 184.90 195.24 M 181.96 201.59 L 181.12 203.40 M 178.17 209.75 L 177.33 211.57 M 174.38 217.92 L 173.54 219.73 M 170.59 226.08 L 169.75 227.90 M 166.81 234.25 L 165.96 236.06 M 163.02 242.41 L 162.18 244.22 M 159.23 250.57 L 159.03 251.00 M 156.60 244.36 L 159.03 251.00 L 165.67 248.57" stroke="#0000ff" stroke-width="1.4" fill="none"/>
+    <g>
+      <text x="170.89" y="206.18" style="font-size:14px;font-style:normal;font-weight:normal;text-align:right;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">&gt;50</text>
+    </g>
+    <g>
+      <text x="170.89" y="206.18" style="font-size:14px;font-style:normal;font-weight:normal;text-align:right;text-anchor:end;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">&gt;50</text>
+    </g>
+    <rect x="144.00" y="255.00" width="18.00" height="18.00" stroke="#ce0000" stroke-width="1.4" fill="#ffffff"/>
+    <rect x="148.00" y="259.00" width="10.00" height="10.00" stroke="#ce0000" stroke-width="1.4" fill="#ce0000"/>
+    <path d="M 279.58 157.63 L 279.58 120.37 L 310.63 139.00 L 279.58 157.63 M 292.00 120.37 L 292.00 157.63" stroke="#0000ff" stroke-width="1.4" fill="#ffffff"/>
+    <g>
+      <text x="292.00" y="173.50" style="font-size:14px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">&amp;</text>
+    </g>
+    <path d="M 291.21 64.00 L 291.23 66.00 M 291.31 73.00 L 291.33 75.00 M 291.40 82.00 L 291.42 84.00 M 291.49 91.00 L 291.52 93.00 M 291.59 100.00 L 291.61 102.00 M 291.68 109.00 L 291.71 111.00 M 291.75 115.00 M 286.70 110.05 L 291.75 115.00 L 296.69 109.95" stroke="#0000ff" stroke-width="1.4" fill="none"/>
+    <g>
+      <text x="281.48" y="94.11" style="font-size:14px;font-style:normal;font-weight:normal;text-align:right;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">90%</text>
+    </g>
+    <g>
+      <text x="281.48" y="94.11" style="font-size:14px;font-style:normal;font-weight:normal;text-align:right;text-anchor:end;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">90%</text>
+    </g>
+    <path d="M 217.02 115.77 L 217.54 113.84 M 219.35 107.07 L 219.87 105.14 M 221.68 98.38 L 222.20 96.45 M 224.01 89.69 L 224.53 87.76 M 225.00 86.00 M 230.17 86.41 L 232.16 86.56 M 239.14 87.11 L 241.13 87.26 M 248.11 87.81 L 250.10 87.97 M 257.08 88.52 L 257.48 88.55 M 252.10 93.14 L 257.48 88.55 L 252.89 83.17" stroke="#0000ff" stroke-width="1.4" fill="none"/>
+    <g>
+      <text x="225.10" y="100.54" style="font-size:14px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">-2%</text>
+    </g>
+    <g>
+      <text x="225.10" y="100.54" style="font-size:14px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">-2%</text>
+    </g>
+    <path d="M 292.00 163.00 L 292.00 204.00 M 287.00 199.00 L 292.00 204.00 L 297.00 199.00" stroke="#0000ff" stroke-width="1.4" fill="none"/>
+    <g>
+      <text x="282.00" y="188.00" style="font-size:14px;font-style:normal;font-weight:normal;text-align:right;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">2</text>
+    </g>
+    <g>
+      <text x="282.00" y="188.00" style="font-size:14px;font-style:normal;font-weight:normal;text-align:right;text-anchor:end;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">2</text>
+    </g>
+    <path d="M 276.10 44.00 L 291.00 58.90 L 305.90 44.00 L 291.00 29.10 L 276.10 44.00" stroke="#0000ff" stroke-width="1.4" fill="#ffffff"/>
+    <g>
+      <text x="305.40" y="46.80" style="font-size:27px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">*</text>
+    </g>
+    <path d="M 285.88 46.25 L 285.88 49.73 L 296.12 49.73 L 296.12 46.25 L 292.69 46.25 L 292.38 40.47 S 293.87 39.55 293.05 37.75 S 290.10 36.81 289.21 37.80 S 289.13 39.96 289.82 40.47 L 289.41 46.25 L 288.44 46.25 L 288.44 45.48 L 286.70 45.48 L 286.65 46.25" fill="#0000ff"/>
+    <g>
+      <text x="291.00" y="78.50" style="font-size:14px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">skill</text>
+    </g>
+    <circle cx="292.00" cy="228.00" r="20.00" stroke="#0000ff" stroke-width="1.4" fill="#ffffff"/>
+    <path d="M 235.00 139.00 L 268.00 139.00 M 263.00 144.00 L 268.00 139.00 L 263.00 134.00" stroke="#0000ff" stroke-width="1.4" fill="none"/>
+    <g>
+      <text x="251.50" y="153.50" style="font-size:14px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">3</text>
+    </g>
+    <g>
+      <text x="251.50" y="153.50" style="font-size:14px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">3</text>
+    </g>
+    <circle cx="47.00" cy="180.00" r="20.00" stroke="#008000" stroke-width="1.4" fill="#ffffff"/>
+    <g>
+      <text x="47.00" y="214.50" style="font-size:14px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">Pace</text>
+    </g>
+    <circle cx="211.00" cy="139.00" r="20.00" stroke="#0000ff" stroke-width="1.4" fill="#ffffff"/>
+    <g>
+      <text x="211.00" y="173.50" style="font-size:14px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">Blocks</text>
+    </g>
+    <path d="M 335.00 290.07 L 330.23 295.19 M 330.76 290.22 L 335.00 290.07 L 335.15 294.31 M 68.23 191.18 L 74.43 194.45 M 70.38 195.70 L 74.43 194.45 L 73.17 190.39" stroke="#008000" stroke-width="1.4" fill="none"/>
+    <path d="M 335.00 225.06 L 328.84 228.39 M 330.93 223.85 L 335.00 225.06 L 333.79 229.13 M 218.17 161.90 L 220.26 168.58 M 216.50 166.62 L 220.26 168.58 L 222.23 164.83" stroke="#0000ff" stroke-width="1.4" fill="none"/>
+    <rect x="338.00" y="30.00" width="238.00" height="258.00" stroke="#000000" stroke-width="0.7" fill="none"/>
+    <path d="M 340.00 94.50 L 573.00 94.50 M 340.00 159.00 L 573.00 159.00 M 340.00 223.50 L 573.00 223.50 M 385.60 32.00 L 385.60 285.00 M 433.20 32.00 L 433.20 285.00 M 480.80 32.00 L 480.80 285.00 M 528.40 32.00 L 528.40 285.00" stroke="#000000" stroke-width="0.7" fill="none" stroke-dasharray="1,2"/>
+    <g>
+      <text x="343.00" y="237.50" style="font-size:15px;font-style:normal;font-weight:normal;text-align:left;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">20</text>
+    </g>
+    <g>
+      <text x="343.00" y="173.00" style="font-size:15px;font-style:normal;font-weight:normal;text-align:left;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">40</text>
+    </g>
+    <g>
+      <text x="343.00" y="108.50" style="font-size:15px;font-style:normal;font-weight:normal;text-align:left;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">60</text>
+    </g>
+    <g>
+      <text x="343.00" y="44.00" style="font-size:15px;font-style:normal;font-weight:normal;text-align:left;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">80</text>
+    </g>
+    <g>
+      <text x="572.00" y="284.00" style="font-size:15px;font-style:normal;font-weight:normal;text-align:right;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">50 s</text>
+    </g>
+    <g>
+      <text x="457.00" y="24.50" style="font-size:14px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans">Chart</text>
+    </g>
+  </g>
+</svg>

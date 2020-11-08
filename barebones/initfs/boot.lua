@@ -1,13 +1,23 @@
 
 -- **********************************************************************************
--- Setup pats first
+-- Setup paths first
 
-package.cpath = "/lib/?.so;/lib64/?.so;/?.so;/lua/uv/lib/?.so"
-package.path = "/lua/?.lua;/lib/?/init.lua;/lib64/?/init.lua;/ffi/?/init.lua;/lua/?/init.lua"
-package.path = package.path..";/lib/?.lua;/lib64/?.lua;/lua/?.lua;/ffi/?.lua"
+_G.COMMAND_LINE = nil
+
+local ENV_PATH  = "/"
+if( _G.COMMAND_LINE ) then 
+    ENV_PATH = "./"
+end 
+
+package.cpath = ENV_PATH.."lib/?.so;"..ENV_PATH.."lib64/?.so;/?.so;"..ENV_PATH.."lua/uv/lib/?.so"
+package.path = ENV_PATH.."lua/?.lua;"..ENV_PATH.."lib/?.so"
+package.path = package.path..";"..ENV_PATH.."lua/ffi/?.lua"
+package.path = package.path..";"..ENV_PATH.."lua/libs/?.lua"
+package.path = package.path..";"..ENV_PATH.."lua/deps/?.lua"
+package.path = package.path..";"..ENV_PATH.."lua/libs/?/init.lua"
+package.path = package.path..";"..ENV_PATH.."lua/ffi/?/init.lua;"..ENV_PATH.."lua/?/init.lua"
 
 local ffi = require("ffi")
-
 pp = require("pprint").prettyPrint
 
 -- **********************************************************************************
@@ -32,10 +42,7 @@ int mknod(const char *path, mode_t mode, dev_t dev);
 ]]
 
 -- If running on real machine, becareful!!!
-local attr = lfs.attributes ("/home")
-if(attr) then _G.REAL_MACHINE = true end 
-
-if(_G.REAL_MACHINE ) then 
+if(_G.COMMAND_LINE ) then 
 libld   = ffi.load("/usr/lib64/ld-linux-x86-64.so.2", true)
 libc    = ffi.load("/lib/x86_64-linux-gnu/libc.so.6", true)
 else
@@ -43,12 +50,10 @@ libld   = ffi.load("/lib/ld-linux-x86-64.so.2", true)
 libc    = ffi.load("/lib/libc.so.6", true)
 end
 
-
 -- **********************************************************************************
 
 require("init_system")
 require("init_commands")
-
 require("init_interfaces")
 
 -- **********************************************************************************
@@ -100,7 +105,7 @@ local tbl = {
 -- libc.sleep(10)
 
 -- start the logger
-os.execute("./sbin/syslogd -T -f /etc/syslog.conf")
+os.execute("/sbin/syslogd -T -f /etc/syslog.conf")
 
 if( LJOS_CONF.display_logo ) then
 -- Clear screen
@@ -129,7 +134,7 @@ logo = logo..[[  |]]..LJOS_WELCOME..(string.rep(" ",fillcount)).."|\n"
 logo = logo..LOGO_LINE
 -- output logo
 print(logo)
-if( _G.REAL_MACHINE ) then print( "WARNING: Running on local machine." ) end
+if( _G.COMMAND_LINE ) then print( "WARNING: Running on local machine." ) end
 
 end 
 

@@ -1,10 +1,11 @@
 
 # Build paths for copying files
 BUILD_PATH  = 	 ./barebones
+INIT_PATH	= 	 ./apps/init
 DEV_PATH	= 	 $(BUILD_PATH)/bootfiles/dev
 INITFS_PATH = 	 $(BUILD_PATH)/initfs/
-LUAJIT_PATH = 	 ./luajit
-LUASTATIC_PATH = ./luastatic
+LUAJIT_PATH = 	 ./packages/LuaJIT-2.1/src/luajit
+LUASTATIC_PATH = ./packages/luastatic
 LINUX_SRC = 	 ./linux-src
 
 # USB Device settings
@@ -28,20 +29,20 @@ $(KERNEL_DIRECTORY):
 	wget $(KERNEL_URL)
 	tar xf $(KERNEL_ARCHIVE)
 
-# Initramfs build targets
-initramfs: initfs initfs/init 
-	cd $(BUILD_PATH)/initfs/ && find . | cpio -o --format=newc > ../initramfs
-
-# Prepare folders for initramfs
-initfs/init: initfs
-	cp luajit/src/luajit $(BUILD_PATH)/bootfiles/init
-
 # Prepare folders for initramfs - force a folder delete, or it ends up messy.
 initfs:
 	rm -rf $(BUILD_PATH)/initfs/*
 	mkdir -p $(BUILD_PATH)/initfs/mnt/root	
 	cp -r $(BUILD_PATH)/lua/* $(BUILD_PATH)/initfs/
 	cp -r $(BUILD_PATH)/bootfiles/* $(BUILD_PATH)/initfs/
+
+# Prepare folders for initramfs
+initfs/init: initfs
+	cp -f $(LUAJIT_PATH) $(BUILD_PATH)/initfs/init
+
+# Initramfs build targets
+initramfs: initfs initfs/init 
+	cd $(BUILD_PATH)/initfs/ && find . | cpio -o --format=newc > ../initramfs
 
 # Build the iso
 bb.iso: initramfs

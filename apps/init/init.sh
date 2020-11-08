@@ -1,0 +1,1 @@
+exec /sbin/luajit /boot.lua
