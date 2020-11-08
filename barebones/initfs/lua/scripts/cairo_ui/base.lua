@@ -242,8 +242,8 @@ function cairo_ui:Init(width, height)
 		self.img_arrowdn.scaley = 16 / self.img_arrowdn.height
 	end
 
-	self.mouseScaleX = (self.WIDTH / sdl_screen.w )
-	self.mouseScaleY = (self.HEIGHT / sdl_screen.h)
+	self.mouseScaleX = (self.WIDTH / FB0.w )
+	self.mouseScaleY = (self.HEIGHT / FB0.h)
 	print("Cairo MouseScale W/H:", self.mouseScaleX, self.mouseScaleY)
 
     self.RenderFPS = self.InternalRenderFPS

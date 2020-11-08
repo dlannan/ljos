@@ -2,8 +2,6 @@
 -- Image related functions
 ------------------------------------------------------------------------------------------------------------
 
-local gles      = require("ffi/OpenGLES2")
-
 local images = {}
 
 ------------------------------------------------------------------------------------------------------------
@@ -24,12 +22,6 @@ end
 
 function images:CreateImageFromFBO( width, height, fboid )
 
-    gl.glBindFramebuffer(gl.GL_FRAMEBUFFER, fboid)
-    local pixel_data = ffi.new("uint8_t["..(4*width*height).."]")
-
-    gles.glReadPixels(0, 0, width, height, gles.GL_RGBA, gles.GL_UNSIGNED_BYTE, pixel_data);
-    local newImage = self:PNGImage( width, height, pixel_data, 1 )
-    gl.glBindFramebuffer(gl.GL_FRAMEBUFFER, 0)
     return newImage
 end
 
@@ -228,13 +220,11 @@ end
 function images:ScreenShot( gui, saveimg, nameoverride )
 
     if gui then self:Render() end
-    gSdisp:Flip()
 
     local stdio = ffi.C
     local W, H = gSdisp.WINwidth, gSdisp.WINheight
     local pixel_data = ffi.new("uint8_t["..(4*W*H).."]")
 
-    gles.glReadPixels(0, 0, W, H, gles.GL_RGBA, gles.GL_UNSIGNED_BYTE, pixel_data);
     -- Image needs flipping and Red and Blue components need swapping
     img = self:PNGImage(W, H, pixel_data, 1)
 

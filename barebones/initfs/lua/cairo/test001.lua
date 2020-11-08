@@ -1,22 +1,24 @@
 ------------------------------------------------------------------------------------------------------------
 
 ffi = require( "ffi" )
-gl  = require( "ffi/OpenGLES2" )
 
-------------------------------------------------------------------------------------------------------------
--- Version format: <release number>.<hg revision>.<special id>  -- TODO: Automate this id.. soon..
-BYT3D_VERSION		= "0.71.001"
+ENV_PATH = "./"
 
-------------------------------------------------------------------------------------------------------------
--- Setup the root file path to use.
-
-package.path 		= package.path..";byt3d\\?.lua;;lua/?.lua;"
+package.cpath = ENV_PATH.."lib/?.so;"..ENV_PATH.."lib64/?.so;/?.so;"..ENV_PATH.."lua/uv/lib/?.so"
+package.path = ENV_PATH.."lua/?.lua;"..ENV_PATH.."lib/?.so"
+package.path = package.path..";"..ENV_PATH.."lua/ffi/?.lua"
+package.path = package.path..";"..ENV_PATH.."lua/libs/?.lua"
+package.path = package.path..";"..ENV_PATH.."lua/deps/?.lua"
+package.path = package.path..";"..ENV_PATH.."lua/libs/?/init.lua"
+package.path = package.path..";"..ENV_PATH.."lua/ffi/?/init.lua;"..ENV_PATH.."lua/?/init.lua"
 
 --package.cpath = package.cpath..";bin\\Windows\\x86\\socket\\?.dll"
 --package.cpath = package.cpath..";bin\\Windows\\x86\\mime\\?.dll"
 
 print(package.path)
 print(package.cpath)
+
+pp = require("pprint").prettyPrint
 
 ------------------------------------------------------------------------------------------------------------
 -- Window width
@@ -28,24 +30,13 @@ local GUIwidth, GUIheight = 480, 800
 ------------------------------------------------------------------------------------------------------------
 -- Global because states need to use it themselves
 
-sm = require("scripts/platform/statemanager")
+sm = require("scripts/states/statemanager")
 
 ------------------------------------------------------------------------------------------------------------
 
 require("scripts/cairo_ui/base")
 require("scripts/utils/xml-reader")
 local Sstartup 	= require("scripts/states/editor/mainStartup")
-
-byt3dRender = require("framework/byt3dRender")
-Gpool		= require("framework/byt3dPool")
-require("framework/byt3dShader")
-require("framework/byt3dTexture")
-
-require("scripts/platform/wm")
-
-require("shaders/base")
-require("shaders/PlasmaShader")
---require("gary/shaders/PlasmaStarsShader")
 
 ------------------------------------------------------------------------------------------------------------
 -- Http testing
@@ -90,74 +81,45 @@ end
 
 function main()
 
-	local wm = InitSDL(WINwidth, WINheight)
-	local eglInfo = InitEGL(wm)
-	
-	wm:update()
-
-    print("OpenGL version string: "..ffi.string(gl.glGetString(gl.GL_VERSION))) 
-    print("OpenGL renderer string: "..ffi.string(gl.glGetString(gl.GL_RENDERER)))
-    print("OpenGL vendor string: "..ffi.string(gl.glGetString(gl.GL_VENDOR)))
-
     Gcairo:Init(GUIwidth, GUIheight)
 
-    local bgShader = byt3dShader:NewProgram(colour_shader, plasma_stars_shader)
-    bgShader.name = "Shader_bg"
-
-	local loc_bgposition = gl.glGetAttribLocation( bgShader.info.prog, "vPosition" )
-	local loc_time		= gl.glGetUniformLocation( bgShader.info.prog, "time" )
-	local loc_res		= gl.glGetUniformLocation( bgShader.info.prog, "resolution" )
-
-	
 	-- Some icons on screen to enable/disable
 	icons	=	{}
 	icons.facebook = { 
 			x=400, y=60, enabled=0, 
-			enableImage=Gcairo:LoadImage("fbEnable", "gary/icons/NORMAL/64/facebook_64.png"),
-			disableImage=Gcairo:LoadImage("fbDisable", "gary/icons/DIS/64/facebook_64.png"),
+			enableImage=Gcairo:LoadImage("fbEnable", "/lua/data/icons/NORMAL/64/facebook_64.png"),
+			disableImage=Gcairo:LoadImage("fbDisable", "/lua/data/icons/DIS/64/facebook_64.png"),
 	}	
 	
 	icons.twitter = { 
 			x=470, y=60, enabled=0, 
-			enableImage=Gcairo:LoadImage("twEnable", "gary/icons/NORMAL/64/twitter_64.png"),
-			disableImage=Gcairo:LoadImage("twDisable", "gary/icons/DIS/64/twitter_64.png"),
+			enableImage=Gcairo:LoadImage("twEnable", "/lua/data/icons/NORMAL/64/twitter_64.png"),
+			disableImage=Gcairo:LoadImage("twDisable", "/lua/data/icons/DIS/64/twitter_64.png"),
 	}	
 
 	icons.google = { 
 			x=540, y=60, enabled=0, 
-			enableImage=Gcairo:LoadImage("ggEnable", "gary/icons/NORMAL/64/google_64.png"),
-			disableImage=Gcairo:LoadImage("ggDisable", "gary/icons/DIS/64/google_64.png"),
+			enableImage=Gcairo:LoadImage("ggEnable", "/lua/data/icons/NORMAL/64/google_64.png"),
+			disableImage=Gcairo:LoadImage("ggDisable", "/lua/data/icons/DIS/64/google_64.png"),
 	}	
 	
-	local image1 = Gcairo:LoadImage("icon1", "gary/icons/NORMAL/64/facebook_64.png")
+	local image1 = Gcairo:LoadImage("icon1", "/lua/data/icons/NORMAL/64/facebook_64.png")
 	
 	-- Test the xml Loader
-	local lsurf = Gcairo:LoadSvg("byt3d/data/svg/test01.svg")
+	local lsurf = Gcairo:LoadSvg("/lua/data/svg/test01.svg")
 	-- DumpXml(lsurf)
 	
+	local dotest = true
+	local start = os.clock()
+
 	-- TODO: This will change substantially. Will move to a state system when testing/prototyping is done
 	--		 Do not rely on this loop! It will be gone soon!
-	while wm:update() do
+	while dotest do
 
         local tcolor = { r=1.0, b=1.0, g=1.0, a=1.0 }
         Gcairo:Begin()
-		gl.glViewport( 0, 0, WINwidth, WINheight )
-		
-		-- No need for clear when BG is being written
---		gl.glClearColor (1.0, 0.0, 0.0, 1.0)
---		gl.glClear (  bit.bor(gl.GL_DEPTH_BUFFER_BIT, gl.GL_COLOR_BUFFER_BIT) )
-		gl.glUseProgram( bgShader.info.prog )
-		
-        gl.glUniform1f(loc_time, os.clock() )
-        gl.glUniform2f(loc_res, WINwidth, WINheight)
-           
-        gl.glVertexAttribPointer( loc_bgposition, 3, gl.GL_FLOAT, gl.GL_FALSE, 0, Gcairo.vertexArray )
-        gl.glEnableVertexAttribArray( loc_bgposition )
 
-        gl.glDrawElements( gl.GL_TRIANGLES, 6, gl.GL_UNSIGNED_SHORT, Gcairo.ibuffer )
-        gl.glDisableVertexAttribArray( loc_bgposition )
-		
-        Gcairo:RenderBox(30, 30, 200, 50, 5)
+		Gcairo:RenderBox(30, 30, 200, 50, 5)
         Gcairo:RenderText("GARY", 45, 65, 30, tcolor )
 		
 		-- A Content window of 'stuff' to show
@@ -203,18 +165,10 @@ function main()
 --		gl.glEnableVertexAttribArray( loc_position )
 --		gl.glDrawArrays( gl.GL_POINTS, 0, vbo_index/3)
 --		prev_vbo_index, vbo_index = vbo_index, 0
-
-        gl.glFinish()
-	    egl.eglSwapBuffers( eglInfo.dpy, eglInfo.surf )
+		if( os.clock() - start > 10 ) then dotest = nil end
 	end
 
     Gcairo:Finish()
-	
-	egl.eglDestroyContext( eglInfo.dpy, eglInfo.ctx )
-	egl.eglDestroySurface( eglInfo.dpy, eglInfo.surf )
-	egl.eglTerminate( eglInfo.dpy )
-	
-	wm:exit()
 end
 
 ------------------------------------------------------------------------------------------------------------

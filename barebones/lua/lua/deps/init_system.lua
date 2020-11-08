@@ -101,6 +101,10 @@ lfs.link("/lib/libpthread.so.0", "/lib/x86_64-linux-gnu/libpthread.so.0")
 end -- _G.REAL_MACHINE == nil
 
 -- **********************************************************************************
+-- Default FB0 dimensions (not realistic)
+FB0 = { w = 1024, h = 1024 }
+
+
 
 -- lfs.chdir("/tmp")
 -- local bootgfx = "tunnel"

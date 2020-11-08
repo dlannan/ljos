@@ -1,6 +1,6 @@
 local ffi = require( "ffi" )
 
-local cr = ffi.load( "/lib/libcairo.so" )
+local cr = ffi.load( "./lib/libcairo.so.2" )
 
 CAIRO_MIME_TYPE_JPEG = "image/jpeg"
 CAIRO_MIME_TYPE_PNG  = "image/png"
