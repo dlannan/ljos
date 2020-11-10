@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------------------------------------
--- Cairo UI - Developed by David Lannan
+-- Cairo UI - Develop by David Lannan
 --
 -- Design Notes:
 -- The aim of the UI is to provide pixel consistancy for scalable graphics. What this means is the art
@@ -24,39 +24,11 @@ local random = math.random
 
 -- This is somewhat dangerous and could cause name clashes!! should rethink this.
 ffi 	= require( "ffi" )
-cr 		= require( "ffi/cairo" )
+ft 		= require( "lua/ffi/freetype")
+cr 		= require( "lua/ffi/cairo" )
+
 tween 	= require( "scripts/utils/tween" )
-
-local S = require "syscall"
-
--- **********************************************************************************
--- Default FB0 dimensions (not realistic)
-FB0 = { w = 1024, h = 1024, fb_name = "/dev/fb0" }
-
-FB0.device  = { fb_fd = nil, fb_data = "", fb_screensize = 0 }
-FB0.device.fb_vinfo = ffi.new("fb_var_screeninfo[1]")
-FB0.device.fb_finfo = ffi.new("fb_fix_screeninfo[1]")
-FB0.surface = ffi.new("cairo_surface_t *")
-
--- Open the file for reading and writing
-FB0.device.fb_fd = S.open(FB0.fb_name, S.O_RDWR)
-if (FB0.device.fb_fd == -1) then 
-  pp("Error: cannot open framebuffer device")
-  os.exit(1)
-end
-
--- Get variable screen information
-if (S.ioctl(FB0.device.fb_fd, cr.FBIOGET_VSCREENINFO, FB0.device.fb_vinfo) == -1) then
-  pp("Error reading variable information")
-  os.exit(3)
-end
-
-FB0.w 		= FB0.device.fb_vinfo[0].xres
-FB0.h 		= FB0.device.fb_vinfo[0].yres
-FB0.bits 	= FB0.device.fb_vinfo[0].bits_per_pixel
-pp(FB0.w, FB0.h, FB0.bits)
-
--- **********************************************************************************
+FB0 	= require( "libs/fb0" )
 
 require("scripts/cairo_ui/constants")
 require("scripts/utils/geometry")
@@ -98,6 +70,9 @@ AddLibrary(cairo_ui, "scripts/cairo_ui/widget_handlers")
 ------------------------------------------------------------------------------------------------------------
 
 cairo_ui.ibuffer 		= ffi.new( "unsigned short[6]", 1, 0, 2, 3, 2, 0 )
+cairo_ui.vertexArray 	= ffi.new( "float[12]", -1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,-1.0, 0.0, -1.0,-1.0, 0.0 )
+cairo_ui.texCoordArray 	= ffi.new( "float[8]", 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0 )
+cairo_ui.FB0			= FB0
 
 ------------------------------------------------------------------------------------------------------------
 -- Style settings.. change these to change the style of buttons etc
@@ -107,7 +82,7 @@ cairo_ui.style.border_width = 1.0
 cairo_ui.style.button_color			= CAIRO_STYLE.METRO.LBLUE		-- { r=0.8, g=0.5, b=0.5, a=1 }
 cairo_ui.style.button_border_color	= CAIRO_STYLE.METRO.LBLUE		-- { r=0.3, g=0, b=0, a=1 }
 cairo_ui.style.image_color			= CAIRO_STYLE.WHITE
-cairo_ui.style.font_name			= "Century Gothic"
+cairo_ui.style.font_name			= "normal" -- "Century Gothic"
 
 ------------------------------------------------------------------------------------------------------------
 
@@ -130,9 +105,6 @@ cairo_ui.data 			= nil
 cairo_ui.tests 			= { "pdf", "svg", "png" }
 
 ------------------------------------------------------------------------------------------------------------
--- Cairo Surface, Context and GL Texture Id
-cairo_ui.sf 			= nil
-cairo_ui.ctx 			= nil
 
 cairo_ui.image_counter	= 1
 ------------------------------------------------------------------------------------------------------------
@@ -196,9 +168,6 @@ function cairo_ui:Reset()
 	self.tests 			    = { "pdf", "svg", "png" }
 	
 	------------------------------------------------------------------------------------------------------------
-	-- Cairo Surface, Context and GL Texture Id
-	self.sf 			    = nil
-	self.ctx 			    = nil
 	
 	self.image_counter	    = 1
 	------------------------------------------------------------------------------------------------------------
@@ -221,9 +190,101 @@ function cairo_ui:Reset()
 	self.select_file		= -1
 
     self.svgs               = {}
+	
 end 
 
 ------------------------------------------------------------------------------------------------------------
+
+function cairo_ui:TestFonts() 
+
+	-- -- draw the entire context white
+	cr.cairo_set_source_rgba(self.ctx, 1, 1, 1, 1)
+	cr.cairo_paint(self.ctx)
+	
+	-- text color black, size 20
+	cr.cairo_set_source_rgb(self.ctx, 0.0, 0.0, 0.0)
+	cr.cairo_set_font_size (self.ctx, 20.0)
+	
+	cr.cairo_select_font_face (self.ctx, "sans", cr.CAIRO_FONT_SLANT_NORMAL, cr.CAIRO_FONT_WEIGHT_NORMAL)
+	cr.cairo_move_to (self.ctx, 50, 50)
+	-- cr.cairo_show_text (self.ctx, "Sans normal")
+	
+	-- cr.cairo_select_font_face (self.ctx, "sans", cr.CAIRO_FONT_SLANT_ITALIC, cr.CAIRO_FONT_WEIGHT_NORMAL)
+	-- cr.cairo_move_to (self.ctx, 50, 70)
+	-- cr.cairo_show_text (self.ctx, "Sans italic")
+	
+	-- cr.cairo_select_font_face (self.ctx, "sans", cr.CAIRO_FONT_SLANT_NORMAL, cr.CAIRO_FONT_WEIGHT_BOLD)
+	-- cr.cairo_move_to (self.ctx, 50, 90)
+	-- cr.cairo_show_text (self.ctx, "Sans bold")
+	
+	
+	-- cr.cairo_select_font_face (self.ctx, "courier", cr.CAIRO_FONT_SLANT_NORMAL, cr.CAIRO_FONT_WEIGHT_NORMAL)
+	-- cr.cairo_move_to (self.ctx,50, 150)
+	-- cr.cairo_show_text (self.ctx, "Courier normal")
+	
+	-- cr.cairo_select_font_face (self.ctx, "courier", cr.CAIRO_FONT_SLANT_ITALIC, cr.CAIRO_FONT_WEIGHT_NORMAL)
+	-- cr.cairo_move_to (cself.ctxr, 50, 170)
+	-- cr.cairo_show_text (self.ctx, "Courier italic")
+	
+	-- cr.cairo_select_font_face (self.ctx, "courier", cr.CAIRO_FONT_SLANT_NORMAL, cr.CAIRO_FONT_WEIGHT_BOLD)
+	-- cr.cairo_move_to (self.ctx, 50, 190)
+	-- cr.cairo_show_text (self.ctx, "Courier bold")
+	
+	
+	-- cr.cairo_select_font_face (self.ctx, "calibri", cr.CAIRO_FONT_SLANT_NORMAL, cr.CAIRO_FONT_WEIGHT_NORMAL)
+	-- cr.cairo_move_to (self.ctx, 50, 250)
+	-- cr.cairo_show_text (self.ctx, "Calibri normal")
+	
+	-- cr.cairo_select_font_face (self.ctx, "calibri", cr.CAIRO_FONT_SLANT_ITALiC, cr.CAIRO_FONT_WEIGHT_NORMAL)
+	-- cr.cairo_move_to (self.ctx, 50, 270)
+	-- cr.cairo_show_text (self.ctx, "Calibri italic")
+	
+	-- cr.cairo_select_font_face (self.ctx, "calibri", cr.CAIRO_FONT_SLANT_NORMAL, cr.CAIRO_FONT_WEIGHT_BOLD)
+	-- cr.cairo_move_to (self.ctx, 50, 290)
+	-- cr.cairo_show_text (self.ctx, "Calibri bold")
+	
+	
+	-- cr.cairo_select_font_face (self.ctx, "times", cr.CAIRO_FONT_SLANT_NORMAL, cr.CAIRO_FONT_WEIGHT_NORMAL)
+	-- cr.cairo_move_to (self.ctx, 50, 350)
+	-- cr.cairo_show_text (self.ctx, "Times normal")
+	
+	-- cr.cairo_select_font_face (self.ctx, "times", cr.CAIRO_FONT_SLANT_ITALIC, cr.CAIRO_FONT_WEIGHT_NORMAL)
+	-- cr.cairo_move_to (self.ctx,50, 370)
+	-- cr.cairo_show_text (self.ctx, "Times italic")
+	
+	-- cr.cairo_select_font_face (self.ctx, "times", cr.CAIRO_FONT_SLANT_NORMAL, cr.CAIRO_FONT_WEIGHT_BOLD)
+	-- cr.cairo_move_to (self.ctx, 50, 390)
+	-- cr.cairo_show_text (self.ctx, "Times bold")
+	
+	
+	-- cr.cairo_select_font_face (self.ctx, "georgia", cr.CAIRO_FONT_SLANT_NORMAL, cr.CAIRO_FONT_WEIGHT_NORMAL)
+	-- cr.cairo_move_to (self.ctx, 50, 450)
+	-- cr.cairo_show_text (self.ctx, "Georgia normal")
+	
+	-- cr.cairo_select_font_face (self.ctx, "georgia", cr.CAIRO_FONT_SLANT_ITALIC, cr.CAIRO_FONT_WEIGHT_NORMAL)
+	-- cr.cairo_move_to (self.ctx, 50, 470)
+	-- cr.cairo_show_text (self.ctx, "Georgia italic")
+	
+	-- cr.cairo_select_font_face (self.ctx, "georgia", cr.CAIRO_FONT_SLANT_NORMAL, cr.CAIRO_FONT_WEIGHT_BOLD)
+	-- cr.cairo_move_to (self.ctx, 50, 490)
+	-- cr.cairo_show_text (self.ctx, "Georgia bold")
+	
+end
+
+------------------------------------------------------------------------------------------------------------
+
+function cairo_ui:SetupFont()
+
+	local faces = {
+		['Gothic'] = 'lua/data/fonts/gothic.ttf',
+		['Origami Mommy']  = 'lua/data/fonts/origami mommy.ttf',
+	}	
+
+	local lib = ft:new()
+	local face = lib:face(faces['Gothic'])
+	ct = cr.cairo_ft_font_face_create_for_ft_face (face, 0)
+	cr.cairo_set_font_face (self.ctx, ct)
+end	
 
 ------------------------------------------------------------------------------------------------------------
 -- Initialise some Cairo informaiton
@@ -235,40 +296,42 @@ function cairo_ui:Init(width, height)
 	
 	local aspect = height / width
 	local calcWidth, calcHeight = CAIRO_RENDER:GetSize(width, aspect)
-	self.V_WIDTH 	= calcWidth
-	self.V_HEIGHT 	= calcHeight
+	self.V_WIDTH 	= FB0.w -- calcWidth
+	self.V_HEIGHT 	= FB0.h -- calcHeight
 	
 	print("Virtual Screen Size: ", self.V_WIDTH, self.V_HEIGHT)	
-	self.data = ffi.new( "uint8_t[?]", self.V_WIDTH * self.V_HEIGHT * 4 )
+	-- self.data = ffi.new( "uint8_t[?]", self.V_WIDTH * self.V_HEIGHT * 4 )
+print(FB0.fb_data)
 
 	-- Make a default surface we will render to
-	self.sf = cr.cairo_image_surface_create_for_data( self.data, cr.CAIRO_FORMAT_ARGB32, self.V_WIDTH, self.V_HEIGHT, self.V_WIDTH*4 );
-    self.device = cr.cairo_surface_get_device(self.sf)
+	local stride = cr.cairo_format_stride_for_width (cr.CAIRO_FORMAT_ARGB32, self.V_WIDTH)
+	self.sf = cr.cairo_image_surface_create_for_data( FB0.fb_data, cr.CAIRO_FORMAT_ARGB32, self.V_WIDTH, self.V_HEIGHT, stride )
+	self.device = cr.cairo_surface_get_device(self.sf)
 	self.ctx = cr.cairo_create( self.sf ); CAIRO_CHK(self.ctx)
 	
+	self:SetupFont()
 	-- Use an available font - need to work out how to use local file based fonts or convert to scaled fonts.
-	cr.cairo_select_font_face( self.ctx, self.style.font_name, cr.CAIRO_FONT_SLANT_NORMAL, 0 ); CAIRO_CHK(self.ctx)
-
-	-- Allocate a texture id for the surface to render to.
-    -- self.V_WIDTH, self.V_HEIGHT)
+	-- cr.cairo_select_font_face( self.ctx, self.style.font_name, cr.CAIRO_FONT_SLANT_NORMAL, 0 ); CAIRO_CHK(self.ctx)
 	
 	self.scaleX = self.V_WIDTH / self.WIDTH 
 	self.scaleY = self.V_HEIGHT / self.HEIGHT
 	cr.cairo_scale(self.ctx, self.scaleX, self.scaleY)
+	-- cr.cairo_set_source_surface (self.ctx, self.sf, 0, 0)
 
 	-- Builtin images for use with widgets
-	self.img_select = self:LoadImage("icon_tick", "lua/data/icons/generic_obj_tick_64.png")
-	self.img_folder	= self:LoadImage("icon_folder", "lua/data/icons/generic_obj_folder_64.png")
+	self.img_select = self:LoadImage("icon_tick", CAIRO_STYLE.ICONS.tick_64)
+	self.img_folder	= self:LoadImage("icon_folder", CAIRO_STYLE.ICONS.folder_64)
+
 	self.img_folder.scalex = 0.35
 	self.img_folder.scaley = 0.35
 	
 	if(self.img_arrowup == nil) then 
-		self.img_arrowup = self:LoadImage("arrowup", "lua/data/icons/generic_arrowup_64.png") 
+		self.img_arrowup = self:LoadImage("arrowup", CAIRO_STYLE.ICONS.arrowup_64) 
 		self.img_arrowup.scalex = 16 / self.img_arrowup.width
 		self.img_arrowup.scaley = 16 / self.img_arrowup.height
 	end
 	if(self.img_arrowdn == nil) then 
-		self.img_arrowdn = self:LoadImage("arrowdn", "lua/data/icons/generic_arrowdn_64.png") 
+		self.img_arrowdn = self:LoadImage("arrowdn", CAIRO_STYLE.ICONS.arrowdn_64) 
 		self.img_arrowdn.scalex = 16 / self.img_arrowdn.width
 		self.img_arrowdn.scaley = 16 / self.img_arrowdn.height
 	end
@@ -298,11 +361,11 @@ function cairo_ui:Finish()
 --	      Probably make cairo_ui singleton - self aware too (cant create more
 --			than one of itself). And always returns that instance.
 -- *************************************************************************
---   cr.cairo_destroy( self.ctx );
---   cr.cairo_surface_destroy( self.sf );
---   
---   self.ctx 	= nil
---   self.sf 		= nil
+	cr.cairo_destroy( self.ctx );
+	cr.cairo_surface_destroy( self.sf );
+ 
+	self.ctx 	= nil
+	self.sf 		= nil
 end
 
 ------------------------------------------------------------------------------------------------------------
@@ -425,9 +488,9 @@ end
 function cairo_ui:InternalRenderFPS()
 
     -- Enable frameMs rendering for profiling.
-    ttime = math.floor (os.clock())
+    ttime = math.floor(os.clock())
     if self.lastclock ~= ttime then
-        self.ms = string.format("FPS: %02.2f", WM_fps)
+        self.ms = string.format("FPS: %02.2f", 0.0)
         self.lastclock = ttime
     end
     self:RenderText(self.ms, 90, 18, 12)
@@ -438,8 +501,11 @@ end
 
 function cairo_ui:Render()
 
-    if self.RenderFPS then self:RenderFPS() end
-	-- self.data -- normal render to framebuffer
+    --if self.RenderFPS then self:RenderFPS() end
+
+	-- send self.data to the FB0!!!
+	-- Need to scale to the FB0 size!!!!
+	--ffi.copy(FB0.fb_data, self.data, FB0.fb_screensize)
 end
 
 ------------------------------------------------------------------------------------------------------------

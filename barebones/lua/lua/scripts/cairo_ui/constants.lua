@@ -97,3 +97,10 @@ CAIRO_STYLE.METRO.GREEN			= { r=0.469, g=0.730, b=0.265, a=1 }
 
 
 ------------------------------------------------------------------------------------------------------------
+
+CAIRO_STYLE.ICONS 	= {}
+CAIRO_STYLE.ICONS.tick_64 		= "data/icons/generic_obj_tick_64.png"
+CAIRO_STYLE.ICONS.folder_64 	= "data/icons/generic_obj_folder_64.png"
+CAIRO_STYLE.ICONS.arrowup_64 	= "data/icons/generic_arrowup_64.png"
+CAIRO_STYLE.ICONS.arrowdn_64 	= "data/icons/generic_arrowdn_64.png"
+------------------------------------------------------------------------------------------------------------

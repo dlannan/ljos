@@ -633,7 +633,7 @@ function widgets:SlideOut(name, image, align, pos, size, corner, list)
 	if(align == CAIRO_UI.RIGHT) 	then left = self.WIDTH - state.move - size; top = pos; lleft = self.WIDTH - state.move; end
 	if(align == CAIRO_UI.TOP) 		then left = pos; top = state.move; width = list.width; height = size; state.target = list.height; lleft = left; ltop = top - list.height; end
 	if(align == CAIRO_UI.BOTTOM)	then left = pos; top = self.HEIGHT - state.move - size; width = list.width; height = size;  state.target = list.height; lleft = left; ltop = top + size; end
-	
+
 	-- Draw the list
 	if(state.move > 0) then	
 		-- Clip within the list box
@@ -652,13 +652,12 @@ function widgets:SlideOut(name, image, align, pos, size, corner, list)
         -- Draw the button
         if(align == CAIRO_UI.LEFT) or (align == CAIRO_UI.RIGHT) then angle = math.pi * 0.5 end
         self:RenderButton(button, angle)
-    end
-
+	end
+	
 	local newSlideOut = { name=name, button=button, list=list }
 
 	self.slideOutStates[name] = state
 	self:AddObject( newSlideOut, CAIRO_TYPE.SLIDEOUT, coroutine.create(SlideOutHandler) )
-
 end
 
 ------------------------------------------------------------------------------------------------------------

@@ -24,159 +24,176 @@ pp = require("pprint").prettyPrint
 libld   = ffi.load(ENV_PATH.."lib/ld-linux-x86-64.so.2", true)
 libc    = ffi.load(ENV_PATH.."lib/libc.so.6", true)
 
-------------------------------------------------------------------------------------------------------------
--- Window width
---local WINwidth, WINheight = 1024, 576
---local WINwidth, WINheight, WINFullscreen = 1280, 720, 0
-local WINwidth, WINheight, WINFullscreen = 480, 800, 0
-local GUIwidth, GUIheight = 480, 800
-
-------------------------------------------------------------------------------------------------------------
--- Global because states need to use it themselves
-
-sm = require("scripts/states/statemanager")
+-- This is somewhat dangerous and could cause name clashes!! should rethink this.
+ft 		= require( "ffi/freetype")
+cr 		= require( "ffi/cairo" )
 
 ------------------------------------------------------------------------------------------------------------
 
-require("scripts/cairo_ui/base")
-require("scripts/utils/xml-reader")
-local Sstartup 	= require("scripts/states/editor/mainStartup")
+tween 	= require( "scripts/utils/tween" )
+FB0 	= require( "libs/fb0" )
 
-------------------------------------------------------------------------------------------------------------
--- Http testing
 
--- Help here: http://w3.impa.br/~diego/software/luasocket/http.html
--- Info: There are two methods of request. Simple and complex
--- Simple:
---http.request(url [, body])
---
--- Complex: (this allows method and all sorts as needed)
---http.request{
---  url = string,
---  [sink = LTN12 sink,]
---  [method = string,]
---  [headers = header-table,]
---  [source = LTN12 source],
---  [step = LTN12 pump step,]
---  [proxy = string,]
---  [redirect = boolean,]
---  [create = function]
---}
+local min, max, abs, sqrt, log, floor = math.min, math.max, math.abs, math.sqrt, math.log, math.floor
 
--- load the http module
---local http = require "socket.http"
---
---local result = http.request("http://www.youtube.com/watch?v=_eT40eV7OiI")
---local title = result:match("<[Tt][Ii][Tt][Ll][Ee]>([^<]*)<")
---print(title)
+local function cairo_test()
+   local surface = ffi.gc( 
+      cr.cairo_image_surface_create( 
+	 cr.CAIRO_FORMAT_ARGB32, 
+	 240, 
+	 80 
+      ),
+      cr.cairo_surface_destroy 
+   )
 
-------------------------------------------------------------------------------------------------------------
--- Simple little icon render func (probably should go in cairo)
+   local c = ffi.gc( 
+      cr.cairo_create( surface ), 
+      cr.cairo_destroy 
+   )
 
-function RenderIcon( icon )
-	if(icon.enabled==0) then 
-		Gcairo:RenderImage(icon.disableImage, icon.x, icon.y, 0.0)
-	else 
-		Gcairo:RenderImage(icon.enableImage, icon.x, icon.y, 0.0)
-	end
+   cr.cairo_select_font_face(
+      c, "bizarre", 
+      cr.CAIRO_FONT_SLANT_OBLIQUE, 
+      cr.CAIRO_FONT_WEIGHT_BOLD 
+   )
+
+   local font_face = cr.cairo_font_face_reference( cr.cairo_get_font_face( c ))
+   print( 'font_face', font_face )
+   assert( ffi.string( cr.cairo_toy_font_face_get_family( font_face )) == "bizarre"      )
+   assert( cr.cairo_font_face_get_type(       font_face ) == cr.CAIRO_FONT_TYPE_TOY      )
+   assert( cr.cairo_toy_font_face_get_slant(  font_face ) == cr.CAIRO_FONT_SLANT_OBLIQUE )
+   assert( cr.cairo_toy_font_face_get_weight( font_face ) == cr.CAIRO_FONT_WEIGHT_BOLD   )
+   assert( cr.cairo_font_face_status(         font_face ) == cr.CAIRO_STATUS_SUCCESS     )
+   cr.cairo_font_face_destroy (font_face);
+   
+   print( 'font_face 1', font_face )
+
+   font_face = cr.cairo_toy_font_face_create(
+      "bozarre",
+      cr.CAIRO_FONT_SLANT_OBLIQUE,
+      cr.CAIRO_FONT_WEIGHT_BOLD
+   )
+   assert( ffi.string( cr.cairo_toy_font_face_get_family( font_face )) == "bozarre"      )
+   assert( cr.cairo_font_face_get_type(       font_face ) == cr.CAIRO_FONT_TYPE_TOY      )
+   assert( cr.cairo_toy_font_face_get_slant(  font_face ) == cr.CAIRO_FONT_SLANT_OBLIQUE )
+   assert( cr.cairo_toy_font_face_get_weight( font_face ) == cr.CAIRO_FONT_WEIGHT_BOLD   )
+   assert( cr.cairo_font_face_status(         font_face ) == cr.CAIRO_STATUS_SUCCESS     )
+   cr.cairo_font_face_destroy( font_face )
+
+   print( 'font_face 2', font_face )
+
+   print( surface, c )
+
+   local temp = [[
+
+   cr.cairo_move_to( c, 10, 50 )
+   cr.cairo_show_text( c, "Hello, world" )
+
+   print( surface, c )
+
+
+   cr.cairo_set_font_size(  c, 32 )
+   cr.cairo_set_source_rgb( c,  0,  0, 1 )
+
+--   cr.cairo_surface_write_to_png( surface, "hello.png" )
+]]
+
 end
 
-------------------------------------------------------------------------------------------------------------
+local function kernel_1d_new( radius, deviation )
+   assert( radius > 0 )
 
-function main()
+   local size = 2 * radius + 1
 
-    Gcairo:Init(GUIwidth, GUIheight)
+   local radius2 = radius + 1
+   if deviation == 0 then
+      deviation = sqrt( - radius2*radius2 / ( 2 * log(1/255)))
+   end
 
-	-- Some icons on screen to enable/disable
-	icons	=	{}
-	icons.facebook = { 
-			x=400, y=60, enabled=0, 
-			enableImage=Gcairo:LoadImage("fbEnable", "/lua/data/icons/NORMAL/64/facebook_64.png"),
-			disableImage=Gcairo:LoadImage("fbDisable", "/lua/data/icons/DIS/64/facebook_64.png"),
-	}	
-	
-	icons.twitter = { 
-			x=470, y=60, enabled=0, 
-			enableImage=Gcairo:LoadImage("twEnable", "/lua/data/icons/NORMAL/64/twitter_64.png"),
-			disableImage=Gcairo:LoadImage("twDisable", "/lua/data/icons/DIS/64/twitter_64.png"),
-	}	
+   kernel = ffi.new( "double[?]", size + 1 )
+   kernel[0] = size
+   local value, sum = -radius, 0
+   local oodeviation = 1 / deviation
+   local oodeviationbyconst = oodeviation / 2.506628275
+   local oodeviationsqhalf = oodeviation * oodeviation / 2
+   for i=0, size do
+      kernel[ i+1 ] = oodeviationbyconst * exp ( - value * value * oodeviationsqhalf )
+      sum = sum + kernel[ i+1 ]
+      value = value + 1
+   end
 
-	icons.google = { 
-			x=540, y=60, enabled=0, 
-			enableImage=Gcairo:LoadImage("ggEnable", "/lua/data/icons/NORMAL/64/google_64.png"),
-			disableImage=Gcairo:LoadImage("ggDisable", "/lua/data/icons/DIS/64/google_64.png"),
-	}	
-	
-	local image1 = Gcairo:LoadImage("icon1", "/lua/data/icons/NORMAL/64/facebook_64.png")
-	
-	-- Test the xml Loader
-	local lsurf = Gcairo:LoadSvg("/lua/data/svg/test01.svg")
-	-- DumpXml(lsurf)
-	
-	local dotest = true
-	local start = os.clock()
+   local oosum = 1 / sum
+   for i=0, size do
+      kernel[ i+1 ] = kernel[ i+1 ] * oosum
+   end
 
-	-- TODO: This will change substantially. Will move to a state system when testing/prototyping is done
-	--		 Do not rely on this loop! It will be gone soon!
-	while dotest do
-
-        local tcolor = { r=1.0, b=1.0, g=1.0, a=1.0 }
-        Gcairo:Begin()
-
-		Gcairo:RenderBox(30, 30, 200, 50, 5)
-        Gcairo:RenderText("GARY", 45, 65, 30, tcolor )
-		
-		-- A Content window of 'stuff' to show
-		local content = Gcairo:List("", 5, 5, 400, 300)
-		local nodes = {}
-		nodes[1] = { name="Information", ntype=CAIRO_TYPE.TEXT, size=20 }
-		nodes[2] = { name="   some 1234", ntype=CAIRO_TYPE.TEXT, size=20 }
-		nodes[3] = { name="   more 1234", ntype=CAIRO_TYPE.TEXT, size=20 }
-		nodes[4] = { name="Do Stuff", ntype=CAIRO_TYPE.BUTTON, size=30, border=2, corner=5, colorA=tcolor, colorB=tcolor }
-		
-		local line1 = {}
-		line1[1] = { name="test1", ntype=CAIRO_TYPE.IMAGE, image=image1, size=30, color=tcolor }
-		line1[2] = { name="space1", size=50 }
-		line1[3] = { name="test2", ntype=CAIRO_TYPE.IMAGE, image=image1, size=40, color=tcolor }
-		
-		nodes[5] = { name="space2", size=40 }
-		nodes[6] = { name="line1", ntype=CAIRO_TYPE.HLINE, size=30, nodes = line1 }
-		nodes[7] = { name="Another Line", ntype=CAIRO_TYPE.TEXT, size=30 }
-		content.nodes = nodes
-		
-		-- Render a slideOut object on left side of screen
-        Gcairo:SlideOut("Main Menu", CAIRO_UI.LEFT, 100, 40, 5, content)
-        Gcairo:Exploder("Test1", nil, 200, 500, 100, 20, 5, content)
-        Gcairo:Exploder("Test2", image1, 400, 600, 120, 100, 5, content)
-
-        Gcairo:RenderSvg(lsurf)
-		
-		-- Render Icons
-		if(wm.MouseButton[1] == true) then icons.facebook.enabled=1 else icons.facebook.enabled=0 end
-		if(wm.MouseButton[2] == true) then icons.twitter.enabled=1 else icons.twitter.enabled=0 end
-		if(wm.MouseButton[3] == true) then icons.google.enabled=1 else icons.google.enabled=0 end
-		for k,v in pairs(icons) do RenderIcon(v) end
-
-        local buttons 	= wm.MouseButton
-        local move 		= wm.MouseMove
-
-        Gcairo:Update(move.x, move.y, buttons)
-        Gcairo:Render()
-		
---	    draw_string( 0, 0, "Some Text" )
---	  
---		gl.glVertexAttribPointer( loc_position, 3, gl.GL_FLOAT, gl.GL_FALSE, 0, vbo )
---		gl.glEnableVertexAttribArray( loc_position )
---		gl.glDrawArrays( gl.GL_POINTS, 0, vbo_index/3)
---		prev_vbo_index, vbo_index = vbo_index, 0
-		if( os.clock() - start > 10 ) then dotest = nil end
-	end
-
-    Gcairo:Finish()
+   return kernel
 end
 
-------------------------------------------------------------------------------------------------------------
-
-main()
-
-------------------------------------------------------------------------------------------------------------
+local function cairo_image_surface_blur( surface, horzRadius, vertRadius )
+   assert( surface )
+   assert( horzSurface > 0 )
+   assert( vertRadius > 0 )
+   assert( cr. ( surface ) == cr.CAIRO_SURFACE_TYPE_IMAGE )
+   cr.cairo_surface_flush( surface )
+   local src = cr.cairo_image_surface_get_data( surface )
+   local width = cr.cairo_image_surface_get_width( surface )
+   local height = cr.cairo_image_surface_get_height( surface )
+   local format = cr.cairo_image_surface_get_format( surface )
+   local chanmap = { 
+      [cr.CAIRO_FORMAT_ARGB32] = 4, 
+      [cr.CAIRO_FORMAT_RGB24]  = 3 
+   }
+   local channels = chanmap[ format ]
+   assert( channels )
+   local stride = width * channels
+   local horzBlur = ffi.new( "double[?]", height * stride )
+   local vertBlur = ffi.new( "double[?]", height * stride )
+   local horzKernel = kernel_1d_new( horzRadius, 0 )
+   local vertKernel = kernel_1d_new( vertRadius, 0 )
+   local process = { 
+      { src,      horzKernel, horzBlur }, 
+      { horzBlur, vertKernel, verbBlur },
+   }
+   for p = 1, #process do
+      local process = process[p]
+      local src, kernel, blur = process[1], process[2], process[3]
+      for iy = 0, height - 1 do
+	 for ix = 0, width - 1 do
+	    local R, G, B, A = 0, 0, 0, 0
+	    local size = horzKernel[0]
+	    local offset = floor(-size * 0.5)
+	    local s, e = max(ix + offset, 0), min(ix + offset + size - 1, width)
+	    for x = s, e do
+	       local i = ix + offset - s + 1
+	       local o = iy * stride + x * channels
+	       if channels == 4 then
+		  A = A + kernel[i] * src[o+3]
+	       end
+	       R = R + kernel[i] * src[o+2]
+	       G = G + kernel[i] * src[o+1]
+	       B = B + kernel[i] * src[o+0]
+	    end
+	    local o = iy * stride + ix * channels
+	    if channels == 4 then
+	       blur[ o+3 ] = A
+	    end
+	    blur[ o+2 ] = R
+	    blur[ o+1 ] = G
+	    blur[ o+0 ] = B
+	 end
+      end
+   end
+   for iy = 0, height - 1 do
+      for ix = 0, width - 1 do
+	 local o = iy * stride + ix * channels
+	 if channels == 4 then
+	    src[ o+3 ] = verBlur[ o+3 ]
+	 end
+	 src[ o+2 ] = vertBlur[ o+3 ]
+	 src[ o+1 ] = vertBlur[ o+3 ]
+	 src[ o+0 ] = vertBlur[ o+3 ]
+      end
+   end
+   cr.cairo_surface_mark_dirty( surface )
+end

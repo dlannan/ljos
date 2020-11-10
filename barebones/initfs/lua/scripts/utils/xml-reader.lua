@@ -6,8 +6,8 @@
 -- into ffi data structures.
 ----------------------------------------------------------------
 
--- local dir = require( "byt3d/scripts/utils/directory" )
--- local byt3dio = require( "byt3d/scripts/utils/fileio" )
+local dir = require( "scripts/utils/directory" )
+local byt3dio = require( "scripts/utils/fileio" )
 
 ----------------------------------------------------------------
 
@@ -19,7 +19,7 @@ function parseargs(s)
 	local arg = {}
 	string.gsub(s, "([%w%-]+)=([\"'])(.-)%2", function (w, _, a)
 		arg[w] = a
-	end)
+	end) 
 	return arg
 end
 
@@ -116,7 +116,6 @@ function LoadXml(filename, labels)
 
 	local myXml = xmlFile:read("*all")
     xmlFile:close()
-	 
  	local xmlData = collect( myXml, labels )
  	return xmlData
 end 
@@ -169,16 +168,16 @@ function writeEntry(file, properties, parent, depth)
 
                     -- Write out a file using the parent name
                     -- get the path
-                    -- local bpath = dir:getfilepath(gpath)
-                    -- local fname = dir:getfilename(gpath)
+                    local bpath = dir:getfilepath(gpath)
+                    local fname = dir:getfilename(gpath)
                     fname = string.gsub(fname, "%.", "_")
 
                     local binfilename = bpath.."\\"..fname.."_"..parent.."_"..tostring(k)..".bin"
                     -- convert to local file type
-                    -- binfilename = dir:osfile(binfilename)
+                    binfilename = dir:osfile(binfilename)
                     local bsize = arraysize * elementsize
 
-                    -- local res = byt3dio:savedata(binfilename, bsize, v )
+                    local res = byt3dio:savedata(binfilename, bsize, v )
                     if res ~= nil then
                         file:write(pad.."<" .. tostring(k) .. " type=\"" .. type(v) .. "\" ffitype=\"" .. fftype .. "\" arraysize=\"" .. arraysize .. "\">" .. binfilename .. "</" .. tostring(k) .. ">\n")
                     end

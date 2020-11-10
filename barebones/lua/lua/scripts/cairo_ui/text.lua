@@ -8,11 +8,11 @@ function text:RenderText( str, posx, posy, fsize, color)
 
 	if(str == nil) then return end
 	if(color == nil) then color = { r=1, g=1, b=1, a=1 } end
-	
-	cr.cairo_set_font_size(        self.ctx, fsize )
-	cr.cairo_set_source_rgba(   self.ctx, color.b, color.g, color.r, color.a );  	
-	cr.cairo_line_to(           self.ctx, posx, posy );          	
-	cr.cairo_show_text(         self.ctx, str);                	
+	-- print(str, posx, posy, fsize, color)
+	cr.cairo_set_font_size(     self.ctx, fsize )
+	cr.cairo_set_source_rgba(   self.ctx, color.b, color.g, color.r, color.a )
+	-- cr.cairo_move_to(           self.ctx, posx, posy )
+	-- cr.cairo_show_text(         self.ctx, str)         	
 end
 
 ------------------------------------------------------------------------------------------------------------

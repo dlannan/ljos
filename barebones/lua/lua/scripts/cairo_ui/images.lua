@@ -157,8 +157,9 @@ function images:LoadImage(name, filename, forcenew)
 			return lookup
 		end
 	end
-	
-	local image = cr.cairo_image_surface_create_from_png( filename );
+    
+    print("Loading Image: ", filename)
+	local image = cr.cairo_image_surface_create_from_png( filename )
     if image == nil then return nil end
 
 	local w = cr.cairo_image_surface_get_width( image);
@@ -220,11 +221,13 @@ end
 function images:ScreenShot( gui, saveimg, nameoverride )
 
     if gui then self:Render() end
+    gSdisp:Flip()
 
     local stdio = ffi.C
     local W, H = gSdisp.WINwidth, gSdisp.WINheight
     local pixel_data = ffi.new("uint8_t["..(4*W*H).."]")
 
+    -- gles.glReadPixels(0, 0, W, H, gles.GL_RGBA, gles.GL_UNSIGNED_BYTE, pixel_data);
     -- Image needs flipping and Red and Blue components need swapping
     img = self:PNGImage(W, H, pixel_data, 1)
 

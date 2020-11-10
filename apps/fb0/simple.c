@@ -76,7 +76,7 @@ cairo_surface_t *cairo_linuxfb_surface_create(const char *fb_name)
 	            device->fb_vinfo.xres,
 	            device->fb_vinfo.yres,
 	            cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, device->fb_vinfo.xres));
-	            cairo_surface_set_user_data(surface, NULL, device,
+	cairo_surface_set_user_data(surface, NULL, device,
                 &cairo_linuxfb_surface_destroy);
 
 	return surface;

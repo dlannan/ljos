@@ -67,8 +67,9 @@ end
 ----------------------------------------------------------------
 
 function fileio:exists(name)
-    local f=io.open(name,"r")
-    if f~=nil then io.close(f); return true else return false end
+    local isfile, err = lfs.attributes( name )
+    if(isfile == nil) then return false end 
+    return true
 end
 
 ----------------------------------------------------------------
