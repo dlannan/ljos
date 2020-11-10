@@ -10,7 +10,7 @@ if( _G.COMMAND_LINE ) then
 end 
 
 package.cpath = ENV_PATH.."lib/?.so;"..ENV_PATH.."lib64/?.so;/?.so;"..ENV_PATH.."lua/uv/lib/?.so"
-package.path = ENV_PATH.."lua/?.lua;"..ENV_PATH.."lib/?.so"
+package.path = ENV_PATH.."?.lua;"..ENV_PATH.."lua/?.lua;"..ENV_PATH.."lib/?.so"
 package.path = package.path..";"..ENV_PATH.."lua/ffi/?.lua"
 package.path = package.path..";"..ENV_PATH.."lua/libs/?.lua"
 package.path = package.path..";"..ENV_PATH.."lua/deps/?.lua"
