@@ -24,6 +24,10 @@ An iso is included in the repo - bb.iso
 ## Additional Thanks
 I am slowly adding packages to ljos so that more and more capabilities are available. 
 
+Thanks to Justin Cormack for: https://github.com/justincormack/ljsyscall
+
+This is an amazing large amount of work. It is highly appreciated. I will be looking to help on this as this progresses.
+
 Thanks to Desvelao for a fantastic commandline toolkit: https://github.com/Desvelao/lummander
 
 Thanks to Antirez for an amazing little editor kilo: https://github.com/antirez/kilo
