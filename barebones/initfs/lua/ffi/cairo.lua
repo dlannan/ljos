@@ -12,7 +12,6 @@ CAIRO_MIME_TYPE_URI  = "text/x-uri"
 -- Generated from cairo headers. Do not modify. --
 ffi.cdef [[
 
-
 	int
 	cairo_version (void);
 	

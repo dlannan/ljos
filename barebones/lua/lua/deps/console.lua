@@ -62,11 +62,6 @@ local cli = Lummander.new{
 cli:commands_dir("lua/deps/commands")
 
 -- Add commands
-cli:command("mycmd", "My command description")
-    :action(function(parsed, command, app)
-        print("You activated `mycmd` command")
-    end)
-
 cli:command("sum <value1> <value2>", "Sum 2 values")
     :option(
         "option1","o","Option1 description",nil,"normal","option_default_value")
@@ -122,7 +117,24 @@ cli:command("exec <file> [arg1] [arg2]", "execute a binary file")
 
         local status, retval = pcall( runproc, cargv )
         if(status == false) then print("Error:", retval) end        
-    end)    
+    end) 
+
+cli:command("strace <file> [arg1] [arg2]", "strace a binary file")
+    :action(function(parsed, command, app)
+
+        local isfile, err = lfs.attributes( parsed.file )
+        if(isfile == nil) then print("Error:", tostring(err)); return end
+        if(isfile.mode == "directory") then print("Not a file."); return end
+
+        print("[ "..parsed.file.." ]")
+
+        local cargv = { "/sbin/strace", parsed.file }
+        if( parsed.arg1 ) then tinsert(cargv, parsed.arg1) end
+        if( parsed.arg2 ) then tinsert(cargv, parsed.arg2) end
+
+        local status, retval = pcall( runproc, cargv )
+        if(status == false) then print("Error:", retval) end        
+    end)     
 
 cli:command("cat <file>", "show the contents of a file")
     :action(function(parsed, command, app)
@@ -133,15 +145,21 @@ cli:command("cat <file>", "show the contents of a file")
         for line in io.lines(parsed.file) do print(line) end
     end)    
 
-cli:command("dofile <luafile>", "execute a lua file")
+cli:command("dofile <luafile> [arg1] [arg2]", "execute a lua file")
     :action(function(parsed, command, app)
 
         local isfile, err = lfs.attributes( parsed.luafile )
         if(isfile == nil) then print("Error:", tostring(err)); return end
+        if(isfile.mode == "directory") then print("Not a file."); return end
 
-        local fh = loadfile(parsed.luafile)
-        local status, retval = pcall( fh )
-        if(status == false) then print("Error:", retval) end
+        print("[ "..parsed.luafile.." ]")
+
+        local cargv = { "sbin/luajit", parsed.luafile }
+        if( parsed.arg1 ) then tinsert(cargv, parsed.arg1) end
+        if( parsed.arg2 ) then tinsert(cargv, parsed.arg2) end
+
+        local status, retval = pcall( runproc, cargv )
+        if(status == false) then print("Error:", retval) end    
     end)    
 
 cli:command("reboot", "reboot the system.")

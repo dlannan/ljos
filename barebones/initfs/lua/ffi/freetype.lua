@@ -2,8 +2,6 @@
 --freetype ffi binding.
 --Written by Cosmin Apreutesei. Public Domain.
 
-if not ... then require'freetype_test'; return end
-
 local ffi = require'ffi'
 local bit = require'bit'
 require'lua/ffi/freetype_h'
