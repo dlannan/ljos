@@ -2,6 +2,12 @@
 
 Warning: Under development. Various systems are being added, so this is very unstable at the moment.
 
+This doesnt exist without Lua and Luajit. Lua was introduced to me at Pandemic Studios in 2001 by a brilliant coder also named David. Thanks, it really struck a cord with me because of its simplicity. And then Mike Pauls Luajit made something that was annoying (binding with Lua) into something beautiful - ffi. FFI and luajit are an impressive combination. So thankyou to these people, I really appreciate the work they have done.
+
+> https://www.lua.org/
+
+> https://luajit.org/
+
 Firstly, big thanks to Kenneth Wilke whos excellent blogs on making a bootable linux lead me to make this setup.
 > https://suchprogramming.com/barebones-linux-system/
 
@@ -21,6 +27,8 @@ An iso is included in the repo - bb.iso
 
 ![ljos boot](/screenshots/2020-10-23_23-52.png "ljos boot in qemu")
 
+![ljos demo](/screenshots/2020-11-11_15-33.png "ljos running FBGraphics flags demo")
+
 ## Additional Thanks
 I am slowly adding packages to ljos so that more and more capabilities are available. 
 
@@ -30,9 +38,9 @@ This is an amazing large amount of work. It is highly appreciated. I will be loo
 
 Thanks to Desvelao for a fantastic commandline toolkit: https://github.com/Desvelao/lummander
 
-Thanks to Antirez for an amazing little editor kilo: https://github.com/antirez/kilo
+Thanks to grz0zrg for a brilliant little fb gfx library: https://github.com/grz0zrg/fbg
 
-24/10/2020 - kilo is not fully functional yet (need to sort out some library and linking issues). 
+Thanks to Antirez for an amazing little editor kilo: https://github.com/antirez/kilo
 
 ## Build Problems
 Here is a list of common problems I have come across when building (on linux and windows).
