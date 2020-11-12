@@ -21,6 +21,8 @@ An iso is included in the repo - bb.iso
 
 ![ljos boot](/screenshots/2020-10-23_23-52.png "ljos boot in qemu")
 
+![ljos demo](/screenshots/2020-11-11_15-33.png "ljos running FBGraphics flags demo")
+
 ## Additional Thanks
 I am slowly adding packages to ljos so that more and more capabilities are available. 
 
