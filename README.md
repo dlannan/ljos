@@ -42,7 +42,7 @@ Thanks to grz0zrg for a brilliant little fb gfx library: https://github.com/grz0
 
 Thanks to Antirez for an amazing little editor kilo: https://github.com/antirez/kilo
 
-24/10/2020 - kilo is not fully functional yet (need to sort out some library and linking issues). 
+--24/10/2020 - kilo is not fully functional yet (need to sort out some library and linking issues). --
 
 ## Build Problems
 Here is a list of common problems I have come across when building (on linux and windows).
