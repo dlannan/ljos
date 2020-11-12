@@ -46,6 +46,7 @@ cairo_surface_t *cairo_linuxfb_surface_create(const char *fb_name)
 		exit(1);
 	}
 
+printf("%0x  %0x   %0x\n", PROT_READ, PROT_WRITE, MAP_SHARED );
 	// Get variable screen information
 	if (ioctl(device->fb_fd, FBIOGET_VSCREENINFO, &device->fb_vinfo) == -1) {
 		perror("Error reading variable information");
@@ -76,8 +77,8 @@ cairo_surface_t *cairo_linuxfb_surface_create(const char *fb_name)
 	            device->fb_vinfo.xres,
 	            device->fb_vinfo.yres,
 	            cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, device->fb_vinfo.xres));
-	cairo_surface_set_user_data(surface, NULL, device,
-                &cairo_linuxfb_surface_destroy);
+	//cairo_surface_set_user_data(surface, NULL, device,
+    //            &cairo_linuxfb_surface_destroy);
 
 	return surface;
 }
@@ -95,6 +96,22 @@ int main (int argc, char *argv[])
 	cairo_set_source_rgb(cr, 0.0, 0.0, 1.0);
 	cairo_move_to(cr, 100.0, 100.0);
 	cairo_show_text(cr, "Hello, CairoGraphics!");
+
+
+	cairo_arc (cr, 128.0, 128.0, 76.8, 0, 2 * 3.141);
+	cairo_clip (cr);
+
+	cairo_new_path (cr);  /* current path is not
+							consumed by cairo_clip() */
+	cairo_rectangle (cr, 0, 0, 256, 256);
+	cairo_fill (cr);
+	cairo_set_source_rgb (cr, 0, 1, 0);
+	cairo_move_to (cr, 0, 0);
+	cairo_line_to (cr, 256, 256);
+	cairo_move_to (cr, 256, 0);
+	cairo_line_to (cr, 0, 256);
+	cairo_set_line_width (cr, 10.0);
+	cairo_stroke (cr);
 
 	cairo_destroy(cr);
 	cairo_surface_destroy(surface);

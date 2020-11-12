@@ -92,9 +92,13 @@ try(S.mount, "tmpfs", "/run", "tmpfs", "rw,nosuid,nodev,noexec,relatime")
 -- Add some uiseful links - this will grow. We are replicating udev here.
 lfs.link("/lib", "/lib64", true)
 
-lfs.link("/lib/libc.so.6", "/lib/x86_64-linux-gnu/libc.so.6")
-lfs.link("/lib/libm.so.6", "/lib/x86_64-linux-gnu/libm.so.6")
-lfs.link("/lib/libpthread.so.0", "/lib/x86_64-linux-gnu/libpthread.so.0")
+lfs.link("/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2", "/lib/ld-linux-x86-64.so.2")
+
+lfs.link("/lib/x86_64-linux-gnu/libc.so.6", "/lib/libc.so.6")
+lfs.link("/lib/x86_64-linux-gnu/libm.so.6", "/lib/libm.so.6")
+lfs.link("/lib/x86_64-linux-gnu/libpthread.so.0", "/lib/libpthread.so.0")
+lfs.link("/lib/x86_64-linux-gnu/libdl.so.2", "/lib/libdl.so.2")
+lfs.link("/lib/x86_64-linux-gnu/libgcc_s.so.1", "/lib/libgcc_s.so.1")
 
 --lfs.link("/lib/libuv.so.1.0.0", "/lib/libuv.so")
 

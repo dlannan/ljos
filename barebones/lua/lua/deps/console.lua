@@ -119,18 +119,15 @@ cli:command("exec <file> [arg1] [arg2]", "execute a binary file")
         if(status == false) then print("Error:", retval) end        
     end) 
 
-cli:command("strace <file> [arg1] [arg2]", "strace a binary file")
+cli:command("strace [arg1] [arg2] [arg3]", "strace a binary file")
     :action(function(parsed, command, app)
 
-        local isfile, err = lfs.attributes( parsed.file )
-        if(isfile == nil) then print("Error:", tostring(err)); return end
-        if(isfile.mode == "directory") then print("Not a file."); return end
+        print("[ strace "..(arg1 or "")..", "..(arg2 or "")..", "..(arg3 or "").." ]")
 
-        print("[ "..parsed.file.." ]")
-
-        local cargv = { "/sbin/strace", parsed.file }
+        local cargv = { "/sbin/strace" }
         if( parsed.arg1 ) then tinsert(cargv, parsed.arg1) end
         if( parsed.arg2 ) then tinsert(cargv, parsed.arg2) end
+        if( parsed.arg3 ) then tinsert(cargv, parsed.arg3) end
 
         local status, retval = pcall( runproc, cargv )
         if(status == false) then print("Error:", retval) end        

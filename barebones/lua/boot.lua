@@ -46,8 +46,8 @@ if(_G.COMMAND_LINE ) then
 libld   = ffi.load("/usr/lib64/ld-linux-x86-64.so.2", true)
 libc    = ffi.load("/lib/x86_64-linux-gnu/libc.so.6", true)
 else
-libld   = ffi.load("/lib/ld-linux-x86-64.so.2", true)
-libc    = ffi.load("/lib/libc.so.6", true)
+libld   = ffi.load("/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2", true)
+libc    = ffi.load("/lib/x86_64-linux-gnu/libc.so.6", true)
 end
 
 -- **********************************************************************************

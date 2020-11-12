@@ -6,7 +6,7 @@ CC = gcc
 #  -Wall turns on most, but not all, compiler warnings
 CFLAGS  = -g -Wall -I.
 
-LFLAGS  = -Wl,-rpath=../../barebones/bootfiles/lib -l:libcairo.so.2 
+LFLAGS  = -Wl,-rpath=../../barebones/bootfiles/lib/x86_64-linux-gnu -l:libcairo.so.2 
 # the build target executable:
 TARGET = simple
 
