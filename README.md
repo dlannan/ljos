@@ -2,6 +2,12 @@
 
 Warning: Under development. Various systems are being added, so this is very unstable at the moment.
 
+This doesnt exist without Lua and Luajit. Lua was introduced to me at Pandemic Studios in 2001 by a brilliant coder also named David. Thanks, it really struck a cord with me because of its simplicity. And then Mike Pauls Luajit made something that was annoying (binding with Lua) into something beautiful - ffi. FFI and luajit are an impressive combination. So thankyou to these people, I really appreciate the work they have done.
+
+> https://www.lua.org/
+
+> https://luajit.org/
+
 Firstly, big thanks to Kenneth Wilke whos excellent blogs on making a bootable linux lead me to make this setup.
 > https://suchprogramming.com/barebones-linux-system/
 
