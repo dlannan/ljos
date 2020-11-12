@@ -32,6 +32,8 @@ This is an amazing large amount of work. It is highly appreciated. I will be loo
 
 Thanks to Desvelao for a fantastic commandline toolkit: https://github.com/Desvelao/lummander
 
+Thanks to grz0zrg for a brilliant little fb gfx library: https://github.com/grz0zrg/fbg
+
 Thanks to Antirez for an amazing little editor kilo: https://github.com/antirez/kilo
 
 24/10/2020 - kilo is not fully functional yet (need to sort out some library and linking issues). 
