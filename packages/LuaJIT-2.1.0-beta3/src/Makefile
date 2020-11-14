@@ -24,7 +24,7 @@ NODOTABIVER= 51
 # removing the '#' in front of them. Make sure you force a full recompile
 # with "make clean", followed by "make" if you change any options.
 #
-DEFAULT_CC = gcc -static
+DEFAULT_CC = gcc
 #
 # LuaJIT builds as a native 32 or 64 bit binary by default.
 CC= $(DEFAULT_CC)
@@ -56,11 +56,11 @@ CCOPT_mips=
 #
 CCDEBUG=
 # Uncomment the next line to generate debug information:
-#CCDEBUG= -g
+#CDEBUG= -g
 #
 CCWARN= -Wall
 # Uncomment the next line to enable more warnings:
-#CCWARN+= -Wextra -Wdeclaration-after-statement -Wredundant-decls -Wshadow -Wpointer-arith
+#CWARN+= -Wextra -Wdeclaration-after-statement -Wredundant-decls -Wshadow -Wpointer-arith
 #
 ##############################################################################
 
@@ -111,7 +111,7 @@ XCFLAGS=
 #XCFLAGS+= -DLUAJIT_NUMMODE=2
 #
 # Enable GC64 mode for x64.
-#XCFLAGS+= -DLUAJIT_ENABLE_GC64
+XCFLAGS+= -DLUAJIT_ENABLE_GC64
 #
 ##############################################################################
 

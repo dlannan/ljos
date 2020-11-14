@@ -143,6 +143,8 @@ end
 -- Bit of a hard loop.. will make this a little better with FBP
 while(true) do
 
+--dofile("lua/cairo/test001.lua")
+
 -- start console.
 console.runconsole( {} )
 

@@ -1,0 +1,30 @@
+# inittab for in-place testing
+
+PATH=/sbin
+VAR=value
+
+# System boot
+#mount	W	sbin/mount -o remount,rw /
+#hwc	R	sbin/hwclock
+#	W	sbin/net up
+
+# System shutdown
+#	X	sbin/net down
+#	X	sbin/umount -a
+
+# Respawning services (see also initdir/)
+#syslog	L	sbin/slogdg sbin/devlog sbin/daemon.log
+#srv1	S	sbin/trap srv1 10
+#srv2	S	sbin/trap srv2 23
+#srv3	S	sbin/trap srv3
+
+# Sleep modes
+#	R789	sbin/net down
+#sleep	W8	sbin/sleep 2
+#suspend	W9	sbin/sleep 5
+#	X789	sbin/net up
+
+# vim: ft=conf
+
+ney     X   sbin/ifconfig
+ljos    X   sbin/init /boot.lua

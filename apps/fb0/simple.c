@@ -91,9 +91,9 @@ int main (int argc, char *argv[])
 	surface = cairo_linuxfb_surface_create(NULL);
 	cr = cairo_create(surface);
 
-	cairo_select_font_face(cr, "serif", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+	cairo_select_font_face(cr, "sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
 	cairo_set_font_size(cr, 32.0);
-	cairo_set_source_rgb(cr, 0.0, 0.0, 1.0);
+	cairo_set_source_rgba(cr, 0.0, 0.0, 1.0, 0.5);
 	cairo_move_to(cr, 100.0, 100.0);
 	cairo_show_text(cr, "Hello, CairoGraphics!");
 
@@ -105,7 +105,7 @@ int main (int argc, char *argv[])
 							consumed by cairo_clip() */
 	cairo_rectangle (cr, 0, 0, 256, 256);
 	cairo_fill (cr);
-	cairo_set_source_rgb (cr, 0, 1, 0);
+	cairo_set_source_rgba (cr, 0, 1, 0, 0.5);
 	cairo_move_to (cr, 0, 0);
 	cairo_line_to (cr, 256, 256);
 	cairo_move_to (cr, 256, 0);

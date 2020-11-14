@@ -33,8 +33,9 @@ $(KERNEL_DIRECTORY):
 initfs:
 	rm -rf $(BUILD_PATH)/initfs/*
 	mkdir -p $(BUILD_PATH)/initfs/mnt/root	
-	cp -r $(BUILD_PATH)/lua/* $(BUILD_PATH)/initfs/
-	cp -r $(BUILD_PATH)/bootfiles/* $(BUILD_PATH)/initfs/
+	cp -f $(LUAJIT_PATH) $(BUILD_PATH)/bootfiles/sbin/
+	cp -fr $(BUILD_PATH)/lua/* $(BUILD_PATH)/initfs/
+	cp -fr $(BUILD_PATH)/bootfiles/* $(BUILD_PATH)/initfs/
 
 # Prepare folders for initramfs
 initfs/init: initfs
@@ -49,8 +50,8 @@ bb.iso: initramfs
 	rm -f $(BUILD_PATH)/bb.iso
 	rm -rf $(BUILD_PATH)/iso/*
 	mkdir -p $(BUILD_PATH)/iso/boot/grub
-	cp $(BUILD_PATH)/grub.cfg $(BUILD_PATH)/iso/boot/grub/
-	cp $(LINUX_SRC)/vmlinuz $(BUILD_PATH)/initramfs $(BUILD_PATH)/iso/boot/
+	cp -f $(BUILD_PATH)/grub.cfg $(BUILD_PATH)/iso/boot/grub/
+	cp -f $(LINUX_SRC)/vmlinuz $(BUILD_PATH)/initramfs $(BUILD_PATH)/iso/boot/
 	grub-mkrescue -o $(BUILD_PATH)/bb.iso $(BUILD_PATH)/iso
 
 # Utility targets
@@ -59,7 +60,7 @@ runvm: initramfs
 
 # Builds iso and that builds initramfs
 runiso: bb.iso
-	sudo qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d -netdev user,id=mynet0,hostfwd=tcp::8080-:8080 -device e1000,netdev=mynet0
+	sudo qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d 
 
 # Just runs the last built iso
 run: 

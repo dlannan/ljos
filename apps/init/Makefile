@@ -2,11 +2,11 @@
 CC = gcc
 
 # compiler flags:
-#  -g    adds debugging information to the executable file
-#  -Wall turns on most, but not all, compiler warnings
-CFLAGS  = -g -O2 -Wall -static
+CFLAGS  = -O2 -fomit-frame-pointer -Wall -static 
+CFLAGS 	+= -I../../packages/LuaJIT-2.1.0-beta3/src
 
-LFLAGS  = 
+LFLAGS  = -L. -l:libluajit.a -lm -lc -ldl 
+LOBJS 	= 
 
 # the build target executable:
 TARGET = init

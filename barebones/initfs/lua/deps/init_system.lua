@@ -64,8 +64,10 @@ try(S.mkdir, "/proc")
 try(S.mkdir, "/sys")
 try(S.mkdir, "/run")
 try(S.mkdir, "/mnt")
+try(S.mkdir, "/usr")
 
 try(S.mkdir, "/lib/x86_64-linux-gnu")
+try(S.mkdir, "/usr/local")
 
 -- mkdir -p $(INITFS_PATH)/bin $(INITFS_PATH)/dev $(INITFS_PATH)/dev/pts 
 -- mkdir -p $(INITFS_PATH)/etc $(INITFS_PATH)/lib
@@ -91,6 +93,7 @@ try(S.mount, "tmpfs", "/run", "tmpfs", "rw,nosuid,nodev,noexec,relatime")
 
 -- Add some uiseful links - this will grow. We are replicating udev here.
 lfs.link("/lib", "/lib64", true)
+lfs.link("/lib/x86_64-linux-gnu", "/usr/local/lib", true)
 
 lfs.link("/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2", "/lib/ld-linux-x86-64.so.2")
 

@@ -90,6 +90,8 @@ local MAP_PRIVATE       = 0x02               -- Changes are private.
 
 local FB0 = { w = 1024, h = 1024, fb_name = "/dev/fb0", fb_data = nil, fb_screensize = 0 }
 
+local pp 	= require("lua/libs/pprint").prettyPrint
+
 FB0.init = function(self)
 	self.device  = { }
 	self.device.fb_fd 		= nil
