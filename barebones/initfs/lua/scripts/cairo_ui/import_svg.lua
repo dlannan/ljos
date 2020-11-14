@@ -198,7 +198,10 @@ function import_svg:RecursiveRenderSvg(svgdata, label)
 end
 
 ------------------------------------------------------------------------------------------------------------
-
+-- NOTES: 
+--   Need to hadnle svg versioning. 
+--   Should have a meta table based on the version so that we can easily swap functionality in/out
+--   Will work on this later. At moment, just need 1.1 working.
 function import_svg:LoadSvg(filename)
 
     local xmldata = LoadXml(filename, 1)
@@ -206,16 +209,27 @@ function import_svg:LoadSvg(filename)
 	-- Root level should have svg label and xargs containing surface information
     local svgdata = xmldata.svg
 
-	if(xmldata.svg) then
-        -- Get the surface sizes, and so forth
-		local xargs = svgdata["xarg"]
-		local width = tonumber(xargs["width"])
-		local height = tonumber(xargs["height"])
-		local xmlns = xargs["xmlns"]
+	if(svgdata) then
 
-		for k,v in pairs(svgdata) do
-            local temp = self:BuildSvg(k, v)
-            svgdata[k] = temp
+		local xargs = svgdata["xarg"]
+		-- Check version first thing
+		local version = xargs["version"]
+		-- print("SVG Version:", version)
+
+		-- Handle things differently for new svg
+		if(tonumber(version) >= 1.1) then
+
+		else
+
+			-- Get the surface sizes, and so forth
+			local width = tonumber(xargs["width"])
+			local height = tonumber(xargs["height"])
+			local xmlns = xargs["xmlns"]
+
+			for k,v in pairs(svgdata) do
+				local temp = self:BuildSvg(k, v)
+				svgdata[k] = temp
+			end
 		end
 	end
 

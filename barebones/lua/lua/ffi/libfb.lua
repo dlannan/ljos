@@ -14,29 +14,31 @@ typedef struct{
     char *data;
 } Image;
 
-struct{
-	char id[18]; //!< Framebuffer driver identification string
+typedef struct _lfb{
+	char id[18]; 
 	int pixels_per_line;
+	int bytes_per_line;
 	int width;
 	int height;
 	int bpp;
-	void (*memset)(void *dst, unsigned int data, size_t n);
-	void (*fillscr)(Color c);
-	void (*fillbox)(int, int, int, int, Color);
-	void (*drawline)(Point a, Point b, int width, Color c);
-	void (*drawpolygon)(Point *, int, Color);
-	void (*drawtriangle)(Point[3], int, Color);
-	void (*drawsquare)(Point, int, int, int, Color);
-	void (*fillsquare)(Point, int, int, Color);
-	Image* (*loadPNG)(int);
-	int (*drawimage)(Image *, Point);
-	void (*setpixel)(int offset, Color);
-	void (*putpixel)(int, int, Color);
-	void (*draw_char)(char, Color);
-	void (*refresh)();
-	unsigned char * (*getframebuffer)();
-} lfb;
+	unsigned char *buff;
+} lfb_object;
 
+void lfb_memset(void *dst, unsigned int data, size_t n);
+void lfb_fillscr(Color c);
+void lfb_fillbox(int, int, int, int, Color);
+void lfb_drawline(Point a, Point b, int width, Color c);
+void lfb_drawpolygon(Point *, int, Color);
+void lfb_drawtriangle(Point[3], int, Color);
+void lfb_drawsquare(Point, int, int, int, Color);
+void lfb_fillsquare(Point, int, int, Color);
+Image* lfb_loadPNG(int);
+int lfb_drawimage(Image *, Point);
+void lfb_setpixel(int offset, Color);
+void lfb_putpixel(int, int, Color);
+void lfb_draw_char(char, Color);
+void lfb_refresh();
+lfb_object * lfb_getfb();
 void lfb_init();
 ]]
 
@@ -44,5 +46,6 @@ void lfb_init();
 local libfb = ffi.load("lib/x86_64-linux-gnu/libfb.so")
 
 libfb.lfb_init()
+libfb.lfb_fillscr(0)
 
-return libfb.lfb
+return libfb

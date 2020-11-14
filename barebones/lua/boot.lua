@@ -102,6 +102,10 @@ local tbl = {
 -- **********************************************************************************
 -- Setup output
 
+local cargv = { "sbin/luajit", "lua/logo.lua" }
+local status, retval = pcall( runproc, cargv )
+if(status == false) then print("Error:", retval) end   
+
 libc.sleep(10)
 
 -- start the logger

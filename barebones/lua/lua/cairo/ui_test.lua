@@ -20,8 +20,8 @@ print(package.path)
 pp = require("pprint").prettyPrint
 
 -- If running on real machine, becareful!!!
-libld   = ffi.load(ENV_PATH.."lib/ld-linux-x86-64.so.2", true)
-libc    = ffi.load(ENV_PATH.."lib/libc.so.6", true)
+libld   = ffi.load(ENV_PATH.."lib/x86_64-linux-gnu/ld-linux-x86-64.so.2", true)
+libc    = ffi.load(ENV_PATH.."lib/x86_64-linux-gnu/libc.so.6", true)
 
 ------------------------------------------------------------------------------------------------------------
 -- Window width
@@ -31,15 +31,9 @@ local WINwidth, WINheight, WINFullscreen = 480, 800, 0
 local GUIwidth, GUIheight = 1024, 768
 
 ------------------------------------------------------------------------------------------------------------
--- Global because states need to use it themselves
 
-sm = require("lua/scripts/states/statemanager")
-
-------------------------------------------------------------------------------------------------------------
-
-require("lua/scripts/cairo_ui/base")
+Gcairo      = require("lua/scripts/cairo_ui/base")
 require("lua/scripts/utils/xml-reader")
-local Sstartup 	= require("lua/scripts/states/editor/mainStartup")
 
 ------------------------------------------------------------------------------------------------------------
 -- Http testing
@@ -123,7 +117,7 @@ function main()
         local tcolor = { r=1.0, b=1.0, g=1.0, a=1.0 }
 		Gcairo:Begin()
 		
-		Gcairo:TestFonts() 
+		-- Gcairo:TestFonts() 
 
 		Gcairo:RenderBox(30, 30, 200, 50, 5)
         Gcairo:RenderText("GARY", 45, 65, 30, tcolor )
@@ -151,27 +145,22 @@ function main()
         Gcairo:Exploder("Test1", nil, CAIRO_UI.LEFT, 200, 300, 100, 20, 0, content)
         Gcairo:Exploder("Test2", image1, CAIRO_UI.LEFT, 200, 400, 120, 100, 0, content)
 
-        --Gcairo:RenderSvg(lsurf)
+        Gcairo:RenderSvg(lsurf)
 		
 		-- Render Icons
 		-- if(wm.MouseButton[1] == true) then icons.facebook.enabled=1 else icons.facebook.enabled=0 end
 		-- if(wm.MouseButton[2] == true) then icons.twitter.enabled=1 else icons.twitter.enabled=0 end
 		-- if(wm.MouseButton[3] == true) then icons.google.enabled=1 else icons.google.enabled=0 end
-		-- for k,v in pairs(icons) do RenderIcon(v) end
+		for k,v in pairs(icons) do RenderIcon(v) end
 
         -- local buttons 	= wm.MouseButton
         -- local move 		= wm.MouseMove
 
-		--Gcairo:Update(move.x, move.y, buttons)
+		-- Gcairo:Update(move.x, move.y, buttons)
 		Gcairo:Update(0, 0, {0,0,0})
         Gcairo:Render()
 		
 --	    draw_string( 0, 0, "Some Text" )
---	  
---		gl.glVertexAttribPointer( loc_position, 3, gl.GL_FLOAT, gl.GL_FALSE, 0, vbo )
---		gl.glEnableVertexAttribArray( loc_position )
---		gl.glDrawArrays( gl.GL_POINTS, 0, vbo_index/3)
---		prev_vbo_index, vbo_index = vbo_index, 0
 		if( os.clock() - start > 10 ) then dotest = nil end
 	end
 

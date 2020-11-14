@@ -28,7 +28,10 @@ ft 		= require( "lua/ffi/freetype")
 cr 		= require( "lua/ffi/cairo" )
 
 tween 	= require( "scripts/utils/tween" )
-FB0 	= require( "libs/fb0" )
+------------------------------------------------------------------------------------------------------------
+
+tween   = require( "lua/scripts/utils/tween" )
+lfb 	= require("lua/ffi/libfb")
 
 require("scripts/cairo_ui/constants")
 require("scripts/utils/geometry")
@@ -72,7 +75,7 @@ AddLibrary(cairo_ui, "scripts/cairo_ui/widget_handlers")
 cairo_ui.ibuffer 		= ffi.new( "unsigned short[6]", 1, 0, 2, 3, 2, 0 )
 cairo_ui.vertexArray 	= ffi.new( "float[12]", -1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,-1.0, 0.0, -1.0,-1.0, 0.0 )
 cairo_ui.texCoordArray 	= ffi.new( "float[8]", 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0 )
-cairo_ui.FB0			= FB0
+cairo_ui.lfb			= lfb
 
 ------------------------------------------------------------------------------------------------------------
 -- Style settings.. change these to change the style of buttons etc
@@ -116,6 +119,7 @@ cairo_ui.currentCursor	 = nil
 
 ------------------------------------------------------------------------------------------------------------
 cairo_ui.timeLast 		= os.clock()
+cairo_ui.lastclock		= os.clock()
 cairo_ui.written 		= 0
 
 ------------------------------------------------------------------------------------------------------------
@@ -296,16 +300,16 @@ function cairo_ui:Init(width, height)
 	
 	local aspect = height / width
 	local calcWidth, calcHeight = CAIRO_RENDER:GetSize(width, aspect)
-	self.V_WIDTH 	= FB0.w -- calcWidth
-	self.V_HEIGHT 	= FB0.h -- calcHeight
+	local fb = lfb.lfb_getfb()
+	self.V_WIDTH 	= fb.width -- calcWidth
+	self.V_HEIGHT 	= fb.height -- calcHeight
 	
+	local stride = cr.cairo_format_stride_for_width (cr.CAIRO_FORMAT_ARGB32, self.V_WIDTH)
 	print("Virtual Screen Size: ", self.V_WIDTH, self.V_HEIGHT)	
-	-- self.data = ffi.new( "uint8_t[?]", self.V_WIDTH * self.V_HEIGHT * 4 )
-print(FB0.fb_data)
+	self.data = ffi.new( "uint8_t[?]", stride * self.V_HEIGHT )
 
 	-- Make a default surface we will render to
-	local stride = cr.cairo_format_stride_for_width (cr.CAIRO_FORMAT_ARGB32, self.V_WIDTH)
-	self.sf = cr.cairo_image_surface_create_for_data( FB0.fb_data, cr.CAIRO_FORMAT_ARGB32, self.V_WIDTH, self.V_HEIGHT, stride )
+	self.sf = cr.cairo_image_surface_create_for_data( self.data, cr.CAIRO_FORMAT_ARGB32, self.V_WIDTH, self.V_HEIGHT, stride )
 	self.device = cr.cairo_surface_get_device(self.sf)
 	self.ctx = cr.cairo_create( self.sf ); CAIRO_CHK(self.ctx)
 	
@@ -336,8 +340,8 @@ print(FB0.fb_data)
 		self.img_arrowdn.scaley = 16 / self.img_arrowdn.height
 	end
 
-	self.mouseScaleX = (self.WIDTH / FB0.w )
-	self.mouseScaleY = (self.HEIGHT / FB0.h)
+	self.mouseScaleX = (self.WIDTH / fb.width )
+	self.mouseScaleY = (self.HEIGHT / fb.height)
 	print("Cairo MouseScale W/H:", self.mouseScaleX, self.mouseScaleY)
 
     self.RenderFPS = self.InternalRenderFPS
@@ -401,7 +405,8 @@ function cairo_ui:Begin()
 	tween.update(timeDiff)
 
 	cr.cairo_save (self.ctx)
-	cr.cairo_set_source_rgba (self.ctx, 0, 0, 0, 0)
+	--cr.cairo_set_source_rgba (self.ctx, 0, 0, 0, 0)
+	cr.cairo_set_source_rgb (self.ctx, 0, 0, 0)
 	cr.cairo_set_operator (self.ctx, cr.CAIRO_OPERATOR_SOURCE)
 	cr.cairo_paint (self.ctx)
 	cr.cairo_restore (self.ctx)
@@ -488,9 +493,9 @@ end
 function cairo_ui:InternalRenderFPS()
 
     -- Enable frameMs rendering for profiling.
-    ttime = math.floor(os.clock())
+    ttime = os.clock()
     if self.lastclock ~= ttime then
-        self.ms = string.format("FPS: %02.2f", 0.0)
+        self.ms = string.format("FPS: %02.2f", 1.0 / (ttime - self.lastclock) )
         self.lastclock = ttime
     end
     self:RenderText(self.ms, 90, 18, 12)
@@ -501,11 +506,10 @@ end
 
 function cairo_ui:Render()
 
-    --if self.RenderFPS then self:RenderFPS() end
-
-	-- send self.data to the FB0!!!
-	-- Need to scale to the FB0 size!!!!
-	--ffi.copy(FB0.fb_data, self.data, FB0.fb_screensize)
+    if self.RenderFPS then self:RenderFPS() end
+	local fb = lfb.lfb_getfb()
+--	print(self.V_WIDTH, self.V_HEIGHT, fb.buff)
+	ffi.copy(fb.buff, self.data, self.V_WIDTH * self.V_HEIGHT * 4)
 end
 
 ------------------------------------------------------------------------------------------------------------
