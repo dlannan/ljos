@@ -39,7 +39,7 @@ initfs:
 
 # Prepare folders for initramfs
 initfs/init: initfs
-	cp -f $(INIT_PATH)/init $(BUILD_PATH)/initfs/init
+	cp -f $(INIT_PATH)/init $(BUILD_PATH)/initfs/sbin/ljboot
 
 # Initramfs build targets
 initramfs: initfs initfs/init 

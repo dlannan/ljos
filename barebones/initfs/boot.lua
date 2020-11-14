@@ -102,7 +102,7 @@ local tbl = {
 -- **********************************************************************************
 -- Setup output
 
--- libc.sleep(10)
+libc.sleep(10)
 
 -- start the logger
 os.execute("/sbin/syslogd -T -f /etc/syslog.conf")
