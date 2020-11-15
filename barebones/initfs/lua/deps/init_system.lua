@@ -34,11 +34,11 @@ if(_G.REAL_MACHINE == nil ) then
 
 -- -- According to here: https://stackoverflow.com/questions/35245247/writing-my-own-init-executable
 -- --   its important to setup stdin, stdout, stderr - I think this is BS tho.
--- local onefd = ffi.C.open("/dev/console", IO_OPEN.O_RDONLY, 0)
--- stdin = ffi.C.dup2(onefd, 0) -- stdin
--- local twofd = ffi.C.open("/dev/console", IO_OPEN.O_RDWR, 0)
--- stdout = ffi.C.dup2(twofd, 1) -- stdout
--- stderr = ffi.C.dup2(twofd, 2) -- stderr
+local onefd = ffi.C.open("/dev/console", IO_OPEN.O_RDONLY, 0)
+stdin = ffi.C.dup2(onefd, 0) -- stdin
+local twofd = ffi.C.open("/dev/console", IO_OPEN.O_RDWR, 0)
+stdout = ffi.C.dup2(twofd, 1) -- stdout
+stderr = ffi.C.dup2(twofd, 2) -- stderr
 
 -- os.execute("dir /dev 755 0 0")
 -- os.execute("nod /dev/console 644 0 0 c 5 1")

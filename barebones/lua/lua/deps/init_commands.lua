@@ -54,6 +54,10 @@ end
 
 -- **********************************************************************************
 
+function sig_handler( sigid )
+    print("Ctrl+C pressed.")
+end
+
 function runproc( pargs ) 
 
     local pid0 = S.getpid()

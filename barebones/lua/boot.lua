@@ -9,7 +9,8 @@ if( _G.COMMAND_LINE ) then
     ENV_PATH = "./"
 end 
 
-package.cpath = ENV_PATH.."lib/?.so;"..ENV_PATH.."lib64/?.so;/?.so;"..ENV_PATH.."lua/uv/lib/?.so"
+package.cpath = ENV_PATH.."lib/?.so;"..ENV_PATH.."lib64/?.so;/?.so;"
+package.cpath = package.cpath..ENV_PATH.."lua/libs/shared/?.so"
 package.path = ENV_PATH.."?.lua;"..ENV_PATH.."lua/?.lua;"..ENV_PATH.."lib/?.so"
 package.path = package.path..";"..ENV_PATH.."lua/ffi/?.lua"
 package.path = package.path..";"..ENV_PATH.."lua/libs/?.lua"
@@ -102,11 +103,11 @@ local tbl = {
 -- **********************************************************************************
 -- Setup output
 
-local cargv = { "sbin/luajit", "lua/logo.lua" }
-local status, retval = pcall( runproc, cargv )
-if(status == false) then print("Error:", retval) end   
+-- local cargv = { "sbin/luajit", "lua/logo.lua" }
+-- local status, retval = pcall( runproc, cargv )
+-- if(status == false) then print("Error:", retval) end   
 
-libc.sleep(10)
+-- libc.sleep(10)
 
 -- start the logger
 os.execute("/sbin/syslogd -T -f /etc/syslog.conf")

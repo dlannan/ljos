@@ -3,6 +3,10 @@ local S     = require "syscall"
 local t     = S.t
 
 local tinsert   = table.insert
+local getch     = require("lua-getch")
+local get_mbs   = require("lua-getch/get_mbs")
+
+
 
 -- **********************************************************************************
 -- Config
@@ -28,8 +32,8 @@ end
 
 local function iowrite( str )
     -- io.stdout:write( str )
-    io.write( str )
-    -- libc.write(stdout, ffi.string(str, #str), #str)
+    --io.write( str )
+    libc.write(stdout, ffi.string(str, #str), #str)
 end
 
 local function ioread()
@@ -227,23 +231,71 @@ function mysplit (inputstr, sep)
 end
 
 -- **********************************************************************************
+local function w(...)
+	-- "graphical" terminal output to stderr
+	io.stderr:write(...)
+end
+
+-- simple drawing routine using ANSI escape sequences
+local function draw()
+	-- reset sgr, clear screen, set cursor to 1,1
+	w("\027[0m\027[2J\027[;H")
+	w("\027[1m", prompt, "\027[0m\n\n")
+
+	-- print menu items
+	for k,v in ipairs(menu) do
+		if k==menu_i then
+			w("\027[31m [ ", tostring(v), " ]\027[0m\n")
+		else
+			w("   ",tostring(v),"  \n")
+		end
+	end
+end
+
+-- **********************************************************************************
 -- main
 local runconsole = function( lummander )
---print(_VERSION)
-local line = getline("")
+    -- print(_VERSION)
+    w("\027[?1049h") -- Enable alternative screen buffer
 
-while line ~= nil do
+    local line = ""
+    iowrite("$ ")
 
-    -- Parse and execute the command wrote
-    local args = mysplit(line, " ")
+    -- infinite loop for command line..
+    while true do
 
-    cli:parse(args) -- parse arg and execute if a command was written
-    line = ""
-    line = getline(line)                          -- read next line
+        local keyused = nil
+        local ch =  getch.getch_blocking()
+--print(ch)
+        -- TODO: convert this into an index meta table. Will make handling special
+        --       keys like delete, tab and others more simple.
+        if( ch == 10 ) then 
+            -- Parse and execute the command wrote
+            local args = mysplit(line, " ")
+            print()
+            cli:parse(args) -- parse arg and execute if a command was written
+            line = ""
+            iowrite("$ ")
+            keyused = 1
+        end 
+        
+        if( ch == 127 ) then 
+            if( #line > 0 ) then 
+                w("\027[1D\027[K ")
+                line = string.sub(line, 1, -2) 
+                w("\027[1D")
+            end
+            keyused = 1
+        end
+
+        if( keyused == nil ) then
+            line = line..string.char(ch)
+            iowrite(string.char(ch))
+        end
     end
-  
-    print()
-end
+
+    w("\027[?1049l") -- Disable alternative screen buffer
+end 
 
 -- **********************************************************************************
 

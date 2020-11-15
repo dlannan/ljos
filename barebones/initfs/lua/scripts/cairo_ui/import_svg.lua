@@ -36,8 +36,9 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 
-function import_svg:RenderSvg(svgdata)
+function import_svg:RenderSvg(svgobject)
 
+	local svgdata = svgobject.data
     if(type(svgdata) ~= "table") then return end
     cr.cairo_save(self.ctx)
     self:RecursiveRenderSvg(svgdata, nil)
@@ -207,14 +208,18 @@ function import_svg:LoadSvg(filename)
     local xmldata = LoadXml(filename, 1)
 
 	-- Root level should have svg label and xargs containing surface information
+	local svgobject = {}
     local svgdata = xmldata.svg
+
+	svgobject.data = svgdata
 
 	if(svgdata) then
 
 		local xargs = svgdata["xarg"]
 		-- Check version first thing
-		local version = xargs["version"]
+		local version = xargs["version"] or "0.0"
 		-- print("SVG Version:", version)
+		svgobject.version = version
 
 		-- Handle things differently for new svg
 		if(tonumber(version) >= 1.1) then
@@ -223,7 +228,11 @@ function import_svg:LoadSvg(filename)
 
 			-- Get the surface sizes, and so forth
 			local width = tonumber(xargs["width"])
+			svgobject.width = width
+
 			local height = tonumber(xargs["height"])
+			svgobject.height = width
+
 			local xmlns = xargs["xmlns"]
 
 			for k,v in pairs(svgdata) do
@@ -233,7 +242,7 @@ function import_svg:LoadSvg(filename)
 		end
 	end
 
-	return svgdata
+	return svgobject
 end
 
 ------------------------------------------------------------------------------------------------------------

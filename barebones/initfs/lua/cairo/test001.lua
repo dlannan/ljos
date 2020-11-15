@@ -28,12 +28,13 @@ local cr    = require( "lua/ffi/cairo" )
 tween   = require( "lua/scripts/utils/tween" )
 local lfb = require("lua/ffi/libfb")
 
-lfb.fillscr(0x00FF00)
+lfb.lfb_fillscr(0x00FF00)
+local fbobj = lfb.lfb_getfb()
 
-local stride = cr.cairo_format_stride_for_width(cr.CAIRO_FORMAT_ARGB32, lfb.width)
-print(lfb.width, lfb.height, stride)
+local stride = cr.cairo_format_stride_for_width(cr.CAIRO_FORMAT_ARGB32, fbobj.width)
+print(fbobj.width, fbobj.height, stride)
 
-surface = cr.cairo_image_surface_create_for_data(lfb.getframebuffer(), cr.CAIRO_FORMAT_ARGB32, lfb.width, lfb.height, stride)
+surface = cr.cairo_image_surface_create_for_data(fbobj.buff, cr.CAIRO_FORMAT_ARGB32, fbobj.width, fbobj.height, stride)
 -- local data = ffi.new( "uint8_t[?]", FB0.w * FB0.h * 4 )
 -- surface = cr.cairo_image_surface_create_for_data(data, cr.CAIRO_FORMAT_ARGB32, FB0.w, FB0.h, FB0.w*4)
 local ctx = cr.cairo_create(surface)

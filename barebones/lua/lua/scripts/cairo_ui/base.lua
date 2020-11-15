@@ -37,6 +37,27 @@ require("scripts/cairo_ui/constants")
 require("scripts/utils/geometry")
 require("scripts/utils/text")
 
+S 		= require("lua/libs/syscall")
+
+local  KDSETMODE	= 0x4B3A	--/* set text/graphics mode */
+local		KD_TEXT		= 0x00
+local		KD_GRAPHICS	= 0x01
+local		KD_TEXT0	= 0x02	--/* obsolete */
+local		KD_TEXT1	= 0x03	--/* obsolete */
+local KDGETMODE		= 0x4B3B	--/* get current mode */
+
+function settextmode()
+	local fd = S.open("/dev/console", O_RDWR, 0);
+	S.ioctl(fd, KDSETMODE, KD_TEXT)
+	S.close(fd)
+end
+
+function setgfxmode()
+	local fd = S.open("/dev/console", O_RDWR, 0);
+	S.ioctl(fd, KDSETMODE, KD_GRAPHICS)
+	S.close(fd)
+end
+
 ------------------------------------------------------------------------------------------------------------
 -- Some manager lists -- bit crap.. for the moment
 
@@ -293,7 +314,8 @@ end
 ------------------------------------------------------------------------------------------------------------
 -- Initialise some Cairo informaiton
 function cairo_ui:Init(width, height)
-	
+
+	setgfxmode()
 	self:Reset()
 	self.WIDTH 		= width
 	self.HEIGHT 	= height
@@ -370,6 +392,7 @@ function cairo_ui:Finish()
  
 	self.ctx 	= nil
 	self.sf 		= nil
+	settextmode()
 end
 
 ------------------------------------------------------------------------------------------------------------
