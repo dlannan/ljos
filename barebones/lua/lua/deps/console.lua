@@ -172,7 +172,7 @@ cli:command("reboot", "reboot the system.")
 cli:command("ctest", "run the cairo test001.lua - for quick testing")
     :action(function(parsed, command, app)
 
-        local cargv = { "sbin/luajit", "lua/cairo/test001.lua" }
+        local cargv = { "sbin/luajit", "lua/examples/mitree-test.lua" }
         local status, retval = pcall( runproc, cargv )
         if(status == false) then print("Error:", retval) end   
     end) 

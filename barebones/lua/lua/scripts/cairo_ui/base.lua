@@ -37,6 +37,33 @@ require("scripts/cairo_ui/constants")
 require("scripts/utils/geometry")
 require("scripts/utils/text")
 
+------------------------------------------------------------------------------------------------------------
+-- ffi.cdef[[
+-- struct timeval {
+-- 	long int    tv_sec;   // Number of whole seconds of elapsed time
+-- 	long int    tv_usec;  // Number of microseconds of rest of elapsed time minus tv_sec. Always less than one million
+-- };
+
+-- struct input_event {
+-- 	struct timeval time;
+-- 	unsigned short type;
+-- 	unsigned short code;
+-- 	unsigned int value;
+-- };
+-- ]]
+
+local mousefh = nil
+function mouse_init()
+	mousefh = io.open( "/dev/input/mice", "rb" )
+end
+
+function mouse_in()
+	local md = mousefh:read(3)
+	print(md[1], md[2], md[3])	
+end 
+
+------------------------------------------------------------------------------------------------------------
+
 S 		= require("lua/libs/syscall")
 
 local  KDSETMODE	= 0x4B3A	--/* set text/graphics mode */
@@ -316,6 +343,8 @@ end
 function cairo_ui:Init(width, height)
 
 	setgfxmode()
+	mouse_init()
+
 	self:Reset()
 	self.WIDTH 		= width
 	self.HEIGHT 	= height
@@ -484,6 +513,7 @@ function cairo_ui:Update(mxi, myi, buttons)
 	-- Scale the mouse position because of the Interface/Window scaling
 	local mx = mxi * self.mouseScaleX
 	local my = myi * self.mouseScaleY
+--mouse_in()
 
 	-- TODO:
 	-------------------------------------------------------------------------------------------------------

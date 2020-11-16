@@ -55,6 +55,16 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 
+function operations:SetColor(r, g, b, a)
+    if( a ) then 
+        cr.cairo_set_source_rgba(self.ctx, r, g, b, a)
+    else
+        cr.cairo_set_source_rgb(self.ctx, r, g, b)
+    end
+end
+
+------------------------------------------------------------------------------------------------------------
+
 function operations:DrawTriangle( pt, dir, high, base )
 
     -- dir is angle
@@ -81,7 +91,26 @@ function operations:DrawTriangle( pt, dir, high, base )
 
 end
 
+------------------------------------------------------------------------------------------------------------
 
+function operations:DrawPolyline( pts, color, size )
+
+    cr.cairo_save(self.ctx)
+	--cr.cairo_set_source_rgba( self.ctx, color.r, color.g, color.b, color.a)
+        
+    for k,pt in ipairs( pts ) do
+        cr.cairo_move_to(self.ctx, pts[1], pts[2])
+        cr.cairo_line_to(self.ctx, pts[3], pts[4])
+        cr.cairo_line_to(self.ctx, pts[5], pts[6])
+        cr.cairo_line_to(self.ctx, pts[7], pts[8])
+        cr.cairo_close_path(self.ctx)
+
+	    cr.cairo_set_source_rgba( self.ctx, color.r, color.g, color.b, color.a)
+        cr.cairo_set_line_width(self.ctx, size)
+        cr.cairo_stroke(self.ctx)        
+    end
+    cr.cairo_restore(self.ctx)
+end
 
 ------------------------------------------------------------------------------------------------------------
 
