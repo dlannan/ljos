@@ -58,17 +58,42 @@ function sig_handler( sigid )
     print("Ctrl+C pressed.")
 end
 
+processes = {}
+processes.list = {}
+processes.active = nil
+processes.ids = 0
+processes.starttime = os.clock()
+
+function process_new(pargs, pid)
+    local process = {}
+    process.id = processes.ids + 1
+    processes.ids = processes.ids + 1
+    process.pargs = pargs
+    process.pid = pid
+    process.starttime = os.clock()
+
+    processes.active = process.id
+    processes.list[process.id] = process
+    return process.id
+end
+
+function process_end( pid)
+    processes.list[pid] = nil
+    if(processes.active == pid) then processes.active = nil end
+end
+
 function runproc( pargs ) 
 
     local pid0 = S.getpid()
     pid = S.fork()
     if(pid == 0) then 
+        local id = process_new(pargs[1], 111)
         S.execve( pargs[1], pargs, { } )
+        process_end(id)
     else 
         S.wait()
     end
 end
-
 
 -- **********************************************************************************
 -- Our implementation of ls

@@ -58,9 +58,17 @@ bb.iso: initramfs
 runvm: initramfs
 	qemu-system-x86_64 -m 2048 -kernel $(LINUX_PATH)/vmlinuz -initrd $(BUILD_PATH)/initramfs 
 
+# Setup bridge for network
+	sudo brctl addbr brkvm
+	sudo ip addr add 192.168.4.101/24 dev brkvm
+	sudo ip link set brkvm up
+	sudo mkdir /etc/qemu
+	sudo touch /etc/qemu/bridge.conf
+	sudo echo "allow brkvm" >> /etc/qemu/bridge.conf
+
 # Builds iso and that builds initramfs
 runiso: bb.iso
-	sudo qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d 
+	sudo qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d -net nic -net bridge,br=brkvm
 
 # Just runs the last built iso
 run: 

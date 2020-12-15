@@ -31,9 +31,9 @@ local function fork_assert(cond, s)
 end
 
 local function iowrite( str )
-    -- io.stdout:write( str )
-    --io.write( str )
-    libc.write(stdout, ffi.string(str, #str), #str)
+    io.stdout:write( str )
+    -- io.write( str )
+    --libc.write(stdout, ffi.string(str, #str), #str)
 end
 
 local function ioread()
@@ -256,16 +256,24 @@ end
 -- main
 local runconsole = function( lummander )
     -- print(_VERSION)
-    w("\027[?1049h") -- Enable alternative screen buffer
+    --w("\027[?1049h") -- Enable alternative screen buffer
+    w("\027[?25m")
 
     local line = ""
     iowrite("$ ")
 
+    local chout = ffi.new("int[1]")
+
     -- infinite loop for command line..
     while true do
 
-        local keyused = nil
-        local ch =  getch.getch_blocking()
+        if(processes.active == nil) then 
+  
+            print("here")
+            local keyused = nil
+--        local ch =  getch.getch_blocking()
+            getch.getch_non_blocking(chout)
+            local ch = tonumber(chout[0])
 --print(ch)
         -- TODO: convert this into an index meta table. Will make handling special
         --       keys like delete, tab and others more simple.
@@ -288,13 +296,17 @@ local runconsole = function( lummander )
             keyused = 1
         end
 
-        if( keyused == nil ) then
+        if( keyused == nil and ch ~= 0 ) then
             line = line..string.char(ch)
             iowrite(string.char(ch))
         end
+        
+        end 
+
+        libc.usleep(10000)
     end
 
-    w("\027[?1049l") -- Disable alternative screen buffer
+    --w("\027[?1049l") -- Disable alternative screen buffer
 end 
 
 -- **********************************************************************************

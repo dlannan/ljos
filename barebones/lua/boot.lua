@@ -18,6 +18,8 @@ package.path = package.path..";"..ENV_PATH.."lua/deps/?.lua"
 package.path = package.path..";"..ENV_PATH.."lua/libs/?/init.lua"
 package.path = package.path..";"..ENV_PATH.."lua/ffi/?/init.lua;"..ENV_PATH.."lua/?/init.lua"
 
+-- print("PATH: ", package.path)
+
 local ffi = require("ffi")
 pp = require("pprint").prettyPrint
 
@@ -26,6 +28,7 @@ pp = require("pprint").prettyPrint
 ffi.cdef[[
 
 void sleep( unsigned int sec );
+int usleep(unsigned int usec);
 
 int dup2(int oldfd, int newfd);
 int open(const char *pathname, int flags, int mode);
@@ -34,6 +37,10 @@ unsigned int read(int fd, void *buf, unsigned int count);
 unsigned int write(int fd, const void *buf, unsigned int count);
 
 int execvp(const char *file, char *const argv[]);
+
+int epoll_create(int size);
+int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
+int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);
 
 /*
 long syscall(long number, ...);
@@ -52,10 +59,10 @@ libc    = ffi.load("/lib/x86_64-linux-gnu/libc.so.6", true)
 end
 
 -- **********************************************************************************
-
-require("init_system")
-require("init_commands")
-require("init_interfaces")
+-- This is necessary to setup main lua state properly.
+dofile("lua/deps/init_system.lua")
+dofile("lua/deps/init_commands.lua")
+dofile("lua/deps/init_interfaces.lua")
 
 -- **********************************************************************************
 -- LJOS Configs!!
@@ -110,11 +117,11 @@ local tbl = {
 -- libc.sleep(10)
 
 -- start the logger
-os.execute("/sbin/syslogd -T -f /etc/syslog.conf")
+-- os.execute("/sbin/syslogd -T -f /etc/syslog.conf")
 
 if( LJOS_CONF.display_logo ) then
 -- Clear screen
-print("\027c")
+--print("\027c")
 
 -- Logo.. put your own in here.
 local logo2 = [[
@@ -143,24 +150,7 @@ if( _G.COMMAND_LINE ) then print( "WARNING: Running on local machine." ) end
 
 end 
 
--- dofile("lua/examples/libuv_test1.lua")
+-- os.execute( "sbin/ifconfig" )
+-- dofile("lua/examples/httpserver.lua")
 
--- Bit of a hard loop.. will make this a little better with FBP
-while(true) do
-
---dofile("lua/cairo/test001.lua")
-
--- start console.
-console.runconsole( {} )
-
--- **********************************************************************************
--- TODO:
---   Key goals: 
---      - replace filesystem with leveldb or redis
---      - add FBP kernel controller. Launching modules should be simple.
---      - add simple bindings for ctrl+alt+Fx for switching terms. support standard
---      - each term is a module, and FBP controller manages them.
---      - add base networking (if possible with minimal drivers)
---      - add nuklear for UI. 
-
-end
+console.runconsole()

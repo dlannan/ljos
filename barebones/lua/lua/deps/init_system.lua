@@ -30,7 +30,7 @@ if not S then fatal("cannot find syscall library") end
 -- **********************************************************************************
 -- This is the preferred way to setup linux dev.
 
-if(_G.REAL_MACHINE == nil ) then 
+if(_G.COMMAND_LINE == nil ) then 
 
 -- -- According to here: https://stackoverflow.com/questions/35245247/writing-my-own-init-executable
 -- --   its important to setup stdin, stdout, stderr - I think this is BS tho.
@@ -105,11 +105,11 @@ lfs.link("/lib/x86_64-linux-gnu/libgcc_s.so.1", "/lib/libgcc_s.so.1")
 
 --lfs.link("/lib/libuv.so.1.0.0", "/lib/libuv.so")
 
-end -- _G.REAL_MACHINE == nil
+end -- _G.COMMAND_LINE == nil
 
 -- lfs.chdir("/tmp")
--- local bootgfx = "tunnel"
--- local ok, err = S.execve( bootgfx, { bootgfx }, { HOME="/tmp", PATH="/bin:/sbin" } )
+-- local bootgfx = "flags"
+-- local ok, err = S.execve( bootgfx, { bootgfx }, { HOME="/opt", PATH="/opt:/bin:/sbin" } )
 
 -- local ok, err = os.execute(bootgfx)
 -- if( ok == nil ) then print("Error:", err) end

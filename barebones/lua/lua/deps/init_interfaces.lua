@@ -24,13 +24,13 @@ for k,v in pairs(ifaces) do
     v:up()
 end 
 
-if( ifaces.eth0 ) then ifaces.eth0:address("192.168.4.130/24") end
+if( ifaces.eth0 ) then ifaces.eth0:address("192.168.4.102/24") end
 
 -- -- hostname
--- S.sethostname("lua")
+S.sethostname("ljos")
 
 -- print available interfaces
-print(i)
+-- print(i)
 
 -- -- run processes
 
