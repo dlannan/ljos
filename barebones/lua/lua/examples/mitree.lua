@@ -15,7 +15,7 @@ end
 Gcairo.style.image_color = {r=0.3, g=0.3, b=0.7, a=0.6}
 local FractalTree = {
 
-    DEPTH       = 9,
+    DEPTH       = 8,
     LEAN        = 1.5,
     SPREAD 	    = 20.0,
     BRANCH      = 20.0,
@@ -81,7 +81,7 @@ local FractalTree = {
             
             local vertices = { self.lastLX, self.lastLY, newLX, newLY,
                                         newRX, newRY, self.lastRX, self.lastRY }
-            Gcairo:DrawPolyline(vertices, self.color, 0.3 )
+            Gcairo:DrawPolyline(vertices, self.color, 1.3 )
             -- DrawImage(img, x1, y1, -angle, scaleX, scaleY, 0) 
             local saved  = { llx=self.lastLX, lly=self.lastLY, lrx=self.lastRX, lry=self.lastRY }
             self.lastLX = newLX

@@ -8,9 +8,18 @@ local nl    = nlbase.init(S)
 -- for k,v in pairs(nl) do print(k,v) end
 
 local IO_OPEN = {
-    O_RDONLY    = 0,
-    O_WRONLY    = 1,
-    O_RDWR      = 2,
+    O_RDONLY    = 0x0000,    -- open for reading only
+    O_WRONLY    = 0x0001,    -- open for writing only
+    O_RDWR      = 0x0002,    -- open for reading and writing
+    O_NONBLOCK  = 0x0004,    -- no delay
+    O_APPEND    = 0x0008,    -- set append mode
+    O_SHLOCK    = 0x0010,    -- open with shared file lock
+    O_EXLOCK    = 0x0020,    -- open with exclusive file lock
+    O_ASYNC     = 0x0040,    -- signal pgrp when data ready
+    O_NOFOLLOW  = 0x0100,    -- don't follow symlinks
+    O_CREAT     = 0x0200,    -- create if nonexistant
+    O_TRUNC     = 0x0400,    -- truncate to zero length
+    O_EXCL      = 0x0800,    -- error if already exists
 }
 
 local function fatal(s)
@@ -34,11 +43,11 @@ if(_G.COMMAND_LINE == nil ) then
 
 -- -- According to here: https://stackoverflow.com/questions/35245247/writing-my-own-init-executable
 -- --   its important to setup stdin, stdout, stderr - I think this is BS tho.
-local onefd = ffi.C.open("/dev/console", IO_OPEN.O_RDONLY, 0)
-stdin = ffi.C.dup2(onefd, 0) -- stdin
-local twofd = ffi.C.open("/dev/console", IO_OPEN.O_RDWR, 0)
-stdout = ffi.C.dup2(twofd, 1) -- stdout
-stderr = ffi.C.dup2(twofd, 2) -- stderr
+-- local onefd = ffi.C.open("/dev/console", IO_OPEN.O_RDONLY, 0)
+-- stdin = ffi.C.dup2(onefd, 0) -- stdin
+-- local twofd = ffi.C.open("/dev/console", IO_OPEN.O_RDWR, 0)
+-- stdout = ffi.C.dup2(twofd, 1) -- stdout
+-- stderr = ffi.C.dup2(twofd, 2) -- stderr
 
 -- os.execute("dir /dev 755 0 0")
 -- os.execute("nod /dev/console 644 0 0 c 5 1")
@@ -75,7 +84,7 @@ try(S.mkdir, "/usr/local")
 -- mkdir -p $(INITFS_PATH)/sbin $(INITFS_PATH)/sys $(INITFS_PATH)/usr
 
 -- mounts
-try(S.mount, "devtmpfs", "/dev", "devtmpfs", "rw,nosuid,seclabel")
+try(S.mount, "devtmpfs", "/dev", "devtmpfs", "rw,nosuid")
 try(S.mount, "proc", "/proc", "proc", "rw,nosuid,nodev,noexec,relatime")
 try(S.mount, "sysfs", "/sys", "sysfs", "rw,nosuid,nodev,noexec,relatime")
 try(S.mount, "tmpfs", "/run", "tmpfs", "rw,nosuid,nodev,noexec,relatime")
@@ -114,6 +123,13 @@ end -- _G.COMMAND_LINE == nil
 -- local ok, err = os.execute(bootgfx)
 -- if( ok == nil ) then print("Error:", err) end
 -- lfs.chdir("..")
+
+-- /* Open framebuffer, mouse, terminal */
+fbfd = ffi.C.open("/dev/fb0", IO_OPEN.O_RDWR, 0)
+msfd = ffi.C.open("/dev/input/event5", bit.bor(IO_OPEN.O_RDWR , IO_OPEN.O_NONBLOCK), 0)
+ttyfd = ffi.C.open("/dev/tty0", IO_OPEN.O_RDWR, 0)
+
+
 
 os.execute( "echo $HOME" )
 os.execute( "set HOME=/tmp" )

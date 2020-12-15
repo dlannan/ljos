@@ -97,18 +97,16 @@ function operations:DrawPolyline( pts, color, size )
 
     cr.cairo_save(self.ctx)
 	--cr.cairo_set_source_rgba( self.ctx, color.r, color.g, color.b, color.a)
-        
-    for k,pt in ipairs( pts ) do
-        cr.cairo_move_to(self.ctx, pts[1], pts[2])
-        cr.cairo_line_to(self.ctx, pts[3], pts[4])
-        cr.cairo_line_to(self.ctx, pts[5], pts[6])
-        cr.cairo_line_to(self.ctx, pts[7], pts[8])
-        cr.cairo_close_path(self.ctx)
+           
+    cr.cairo_move_to(self.ctx, pts[1], pts[2])
 
-	    cr.cairo_set_source_rgba( self.ctx, color.r, color.g, color.b, color.a)
-        cr.cairo_set_line_width(self.ctx, size)
-        cr.cairo_stroke(self.ctx)        
+    for k,pt in ipairs( pts ) do
+        if(k > 2 and k % 2 == 1) then cr.cairo_line_to(self.ctx, pts[k], pts[k+1]) end
     end
+    cr.cairo_close_path(self.ctx)
+    cr.cairo_set_source_rgba( self.ctx, color.r, color.g, color.b, color.a)
+    cr.cairo_set_line_width(self.ctx, size)
+    cr.cairo_stroke(self.ctx)        
     cr.cairo_restore(self.ctx)
 end
 

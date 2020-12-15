@@ -150,6 +150,9 @@ if( _G.COMMAND_LINE ) then print( "WARNING: Running on local machine." ) end
 
 end 
 
+local cargv = { "sbin/luajit", "lua/examples/mitree-test.lua" }
+local status, retval = pcall( runproc, cargv )
+
 -- os.execute( "sbin/ifconfig" )
 -- dofile("lua/examples/httpserver.lua")
 

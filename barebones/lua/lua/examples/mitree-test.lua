@@ -89,37 +89,38 @@ function main()
 	local dotest = true
 	local start = os.clock()
 
+    local tcolor = { r=1.0, b=1.0, g=1.0, a=1.0 }
+
+    -- A Content window of 'stuff' to show
+    local nodes = {}
+    nodes[1] = { name="Information", ntype=CAIRO_TYPE.TEXT, size=20 }
+    nodes[2] = { name="   some 1234", ntype=CAIRO_TYPE.TEXT, size=20 }
+    nodes[3] = { name="   more 1234", ntype=CAIRO_TYPE.TEXT, size=20 }
+    nodes[4] = { name="Do Stuff", ntype=CAIRO_TYPE.BUTTON, size=20, border=2, corner=5, colorA=tcolor, colorB=tcolor }
+
+    local line1 = {}
+    line1[1] = { name="test1", ntype=CAIRO_TYPE.IMAGE, image=image1, size=30, color=tcolor }
+    line1[2] = { name="space1", size=50 }
+    line1[3] = { name="test2", ntype=CAIRO_TYPE.IMAGE, image=image1, size=40, color=tcolor }
+
+    nodes[5] = { name="space2", size=40 }
+    nodes[6] = { name="line1", ntype=CAIRO_TYPE.HLINE, size=30, nodes = line1 }
+    nodes[7] = { name="Another Line", ntype=CAIRO_TYPE.TEXT, size=30 }
+
 	-- TODO: This will change substantially. Will move to a state system when testing/prototyping is done
 	--		 Do not rely on this loop! It will be gone soon!
 	while dotest do
 
-        local tcolor = { r=1.0, b=1.0, g=1.0, a=1.0 }
 		Gcairo:Begin()
 		
 		-- Gcairo:TestFonts() 
 
 		Gcairo:RenderBox(30, 30, 200, 50, 2)
         Gcairo:RenderText("LJOS", 45, 65, 30, tcolor )
-		
-		-- A Content window of 'stuff' to show
-		local content = Gcairo:List("", 5, 5, 400, 300)
-		local nodes = {}
-		nodes[1] = { name="Information", ntype=CAIRO_TYPE.TEXT, size=20 }
-		nodes[2] = { name="   some 1234", ntype=CAIRO_TYPE.TEXT, size=20 }
-		nodes[3] = { name="   more 1234", ntype=CAIRO_TYPE.TEXT, size=20 }
-		nodes[4] = { name="Do Stuff", ntype=CAIRO_TYPE.BUTTON, size=20, border=2, corner=5, colorA=tcolor, colorB=tcolor }
-
-		local line1 = {}
-		line1[1] = { name="test1", ntype=CAIRO_TYPE.IMAGE, image=image1, size=30, color=tcolor }
-		line1[2] = { name="space1", size=50 }
-		line1[3] = { name="test2", ntype=CAIRO_TYPE.IMAGE, image=image1, size=40, color=tcolor }
-
-		nodes[5] = { name="space2", size=40 }
-		nodes[6] = { name="line1", ntype=CAIRO_TYPE.HLINE, size=30, nodes = line1 }
-		nodes[7] = { name="Another Line", ntype=CAIRO_TYPE.TEXT, size=30 }
-		content.nodes = nodes
-		
+			
 		-- Render a slideOut object on left side of screen
+        local content = Gcairo:List("", 5, 5, 400, 300)
+        content.nodes = nodes
         Gcairo:SlideOut("Main Menu", nil, CAIRO_UI.LEFT, 100, 40, 0, content)
 
         tree:Render()
