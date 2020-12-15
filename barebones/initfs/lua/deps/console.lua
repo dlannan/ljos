@@ -269,7 +269,6 @@ local runconsole = function( lummander )
 
         if(processes.active == nil) then 
   
-            print("here")
             local keyused = nil
 --        local ch =  getch.getch_blocking()
             getch.getch_non_blocking(chout)

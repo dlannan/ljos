@@ -68,7 +68,11 @@ runvm: initramfs
 
 # Builds iso and that builds initramfs
 runiso: bb.iso
+	sudo qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d -net nic
+
+runisobr: bb.iso
 	sudo qemu-system-x86_64 -m 2048 -cdrom $(BUILD_PATH)/bb.iso -boot d -net nic -net bridge,br=brkvm
+
 
 # Just runs the last built iso
 run: 
