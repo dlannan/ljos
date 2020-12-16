@@ -1,0 +1,87 @@
+image:
+  - Visual Studio 2015
+  - Visual Studio 2017
+  - Visual Studio 2019
+
+platform:
+  - x86
+  - x64
+
+environment:
+  matrix:
+    - FROM_DEPS: true
+
+    # LuaRocks 3.x
+    - LUA_VER: 5.4.1
+      NOCOMPAT: true  # with compatibility flags disabled.
+      LUAROCKS_VER: 3.4.0
+    - LJ_VER: 2.1
+      LUAROCKS_VER: 3.4.0
+
+    # LuaRocks 2.x
+    - LUA_VER: 5.3.2
+      NOCOMPAT: true  # with compatibility flags disabled.
+      LUAROCKS_VER: 2.3.0
+    - LJ_VER: 2.1
+      LUAROCKS_VER: 2.3.0
+
+matrix:
+  fast_finish: true
+  exclude:
+    # Skip x86 for LuaRocks tests
+    - platform: x86
+      LUAROCKS_VER: 3.4.0
+    - platform: x86
+      LUAROCKS_VER: 2.3.0
+    # Only test LuaRocks with MSVC 2017
+    - image: Visual Studio 2015
+      LUAROCKS_VER: 3.4.0
+    - image: Visual Studio 2015
+      LUAROCKS_VER: 2.3.0
+    - image: Visual Studio 2019
+      LUAROCKS_VER: 3.4.0
+    - image: Visual Studio 2019
+      LUAROCKS_VER: 2.3.0
+
+cache:
+  - c:\lua -> appveyor.yml
+  - c:\external -> appveyor.yml
+
+install:
+  - git submodule update --init
+
+for:
+-
+  # For testing building from git
+  matrix:
+    only:
+      - FROM_DEPS: true
+
+  build_script:
+  - msvcbuild.bat
+  - luajit.exe tests\run.lua
+
+  artifacts:
+    - path: luv.dll
+    - path: luajit.exe
+-
+  # For testing LuaRocks
+  matrix:
+    except:
+      - FROM_DEPS: true
+
+  build_script:
+  - call .ci\set_compiler_env.bat
+  - call .ci\install.bat
+  - luarocks make
+  - luarocks show luv
+  - ps: if("$(Get-Location)" -eq $(lua -e "print(require'luv'.cwd())")) { "LuaRocks test OK" } else { "LuaRocks test failed"; exit 1 }
+  - lua tests\run.lua
+  - luarocks remove luv
+    # Test the alternate rockspec
+  - mkdir build\lib
+  - cp build.luarocks\deps\libuv\Release\uv_a.lib build\lib\uv.lib
+  - cp -a deps\libuv\include build
+  - ps: luarocks make rockspecs\$(ls rockspecs) LIBUV_DIR=build LUA_COMPAT53_INCDIR=deps/lua-compat-5.3/c-api CFLAGS="/nologo /MT /O2"
+  - ps: if("$(Get-Location)" -eq $(lua -e "print(require'luv'.cwd())")) { "LuaRocks test OK" } else { "LuaRocks test failed"; exit 1 }
+  - luarocks remove luv
