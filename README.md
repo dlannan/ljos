@@ -9,6 +9,7 @@ The overall structure of LJOS will not be like a traditional linux kernel OS. Th
 I expect some of this to be working over the next few weeks. I will add a link here. There may not be much further work on this repo. You are welcome to add PR's and suggestions, but it will not be my main focus from here on. 
 
 Thanks again to the people who make the awesome packages that allowed this reasearch into this little system.
+
 ---
 This doesnt exist without Lua and Luajit. Lua was introduced to me at Pandemic Studios in 2001 by a brilliant coder also named David. Thanks, it really struck a cord with me because of its simplicity. And then Mike Pauls Luajit made something that was annoying (binding with Lua) into something beautiful - ffi. FFI and luajit are an impressive combination. So thankyou to these people, I really appreciate the work they have done.
 
