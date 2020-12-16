@@ -1,6 +1,7 @@
 # ljos
 ---
-## Warning: Everything is about to change. Will probably migrate this to mitree repo before it changes too much. 
+## Warning: Everything is about to change. 
+Will probably migrate this to mitree repo before it changes too much. 
 
 LJOS will become a fully fledged FBP OS over the next few months. The initial investigations using this repo have gone very well (mostly). Thanks to the assistance of @technomancy for thoughful discussions and ideas. 
 
