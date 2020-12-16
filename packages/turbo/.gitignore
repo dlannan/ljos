@@ -1,0 +1,10 @@
+doc/_build
+*.so.*
+*.so
+*.dylib
+*.dSYM
+*.o
+*.swp
+deps/http-parser/libhttp_parser.so.2.1
+.DS_Store
+package
