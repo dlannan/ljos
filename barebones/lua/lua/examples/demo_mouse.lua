@@ -67,7 +67,7 @@ local function load()
 
     -- //if(setjmp(png_jmpbuf(png))) abort();
 
-    local filename = "/wallpaper.png"
+    local filename = "/usr/local/images/wallpapers/wallpaper0001.png"
     local fp = io.open(filename, "rb")
     lpng.png_init_io(png, fp)
     lpng.png_read_info(png, info)

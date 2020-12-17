@@ -1,3 +1,0 @@
-#!/usr/bin/env luajit
-
-require "turbovisor":supervise()

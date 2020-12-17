@@ -103,6 +103,11 @@ enum {
     PNG_INFO_IDAT =0x8000    /* ESR, 1.0.6 */
 };
 
+enum {
+    PNG_FILLER_BEFORE = 0,
+    PNG_FILLER_AFTER = 1
+};
+
 typedef int jmp_buf[(9 * 2) + 3 + 16];
 typedef int FILE;
 typedef unsigned int png_uint_32;
