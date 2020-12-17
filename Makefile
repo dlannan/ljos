@@ -59,6 +59,7 @@ runvm: initramfs
 	qemu-system-x86_64 -m 2048 -kernel $(LINUX_PATH)/vmlinuz -initrd $(BUILD_PATH)/initramfs 
 
 # Setup bridge for network
+setupbr:
 	sudo brctl addbr brkvm
 	sudo ip addr add 192.168.4.101/24 dev brkvm
 	sudo ip link set brkvm up

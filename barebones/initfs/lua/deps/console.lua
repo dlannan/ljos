@@ -6,8 +6,6 @@ local tinsert   = table.insert
 local getch     = require("lua-getch")
 local get_mbs   = require("lua-getch/get_mbs")
 
-
-
 -- **********************************************************************************
 -- Config
 local LINE_CARET    = "$"

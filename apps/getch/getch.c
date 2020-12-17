@@ -5,6 +5,27 @@
 #include <fcntl.h>
 #include <sys/select.h>
 
+
+void fdclr(int fd, void *set)
+{
+    FD_CLR(fd, (fd_set *)set);
+}
+
+int fdisset(int fd, void *set)
+{
+    return FD_ISSET( fd, (fd_set *)set);
+}
+
+void fdset(int fd, void *set)
+{
+    FD_SET( fd, (fd_set *)set);
+}
+
+void fdzero(void *set)
+{
+    FD_ZERO((fd_set *)set);
+}
+
 int getch_blocking() {
 	int ch;
 	struct termios oldt, newt;

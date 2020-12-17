@@ -9,6 +9,11 @@ local ffi = require("ffi")
 ffi.cdef[[
     int getch_blocking();
     void getch_non_blocking( int *outch);
+
+    void fdclr(int fd, void *set);
+    int  fdisset(int fd, void *set);
+    void fdset(int fd, void *set);
+    void fdzero(void *set);    
 ]]
 
 -- load C module

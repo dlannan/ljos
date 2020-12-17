@@ -1,6 +1,6 @@
 
 -- **********************************************************************************
--- Setup paths first
+-- Setup paths first - needs to go in a common/env file.
 
 _G.COMMAND_LINE = nil
 
@@ -11,12 +11,14 @@ end
 
 package.cpath = ENV_PATH.."lib/?.so;"..ENV_PATH.."lib64/?.so;/?.so;"
 package.cpath = package.cpath..ENV_PATH.."lua/libs/shared/?.so"
+
 package.path = ENV_PATH.."?.lua;"..ENV_PATH.."lua/?.lua;"..ENV_PATH.."lib/?.so"
 package.path = package.path..";"..ENV_PATH.."lua/ffi/?.lua"
 package.path = package.path..";"..ENV_PATH.."lua/libs/?.lua"
 package.path = package.path..";"..ENV_PATH.."lua/deps/?.lua"
 package.path = package.path..";"..ENV_PATH.."lua/libs/?/init.lua"
-package.path = package.path..";"..ENV_PATH.."lua/ffi/?/init.lua;"..ENV_PATH.."lua/?/init.lua"
+package.path = package.path..";"..ENV_PATH.."lua/ffi/?/init.lua;"
+package.path = package.path..";"..ENV_PATH.."lua/?/init.lua"
 
 -- print("PATH: ", package.path)
 
@@ -33,8 +35,9 @@ int usleep(unsigned int usec);
 int dup2(int oldfd, int newfd);
 int open(const char *pathname, int flags, int mode);
 
-unsigned int read(int fd, void *buf, unsigned int count);
-unsigned int write(int fd, const void *buf, unsigned int count);
+int read(int fd, void *buf, unsigned int count);
+int write(int fd, const void *buf, unsigned int count);
+int lseek(int filein, long int offset, int whence);
 
 int execvp(const char *file, char *const argv[]);
 
@@ -145,15 +148,16 @@ local fillcount = #(LOGO_LINE) - #(LJOS_WELCOME) - 5
 logo = logo..[[  |]]..LJOS_WELCOME..(string.rep(" ",fillcount)).."|\n"
 logo = logo..LOGO_LINE
 -- output logo
-print(logo)
+-- print(logo)
 if( _G.COMMAND_LINE ) then print( "WARNING: Running on local machine." ) end
 
 end 
 
-local cargv = { "sbin/luajit", "lua/examples/mitree-test.lua" }
-local status, retval = pcall( runproc, cargv )
+-- local cargv = { "sbin/shell" }
+-- local status, retval = pcall( runproc, cargv )
 
 -- os.execute( "sbin/ifconfig" )
 -- dofile("lua/examples/httpserver.lua")
+dofile("lua/examples/demo_mouse.lua")
 
 console.runconsole()
