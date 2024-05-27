@@ -11,6 +11,8 @@ I expect some of this to be working over the next few weeks. I will add a link h
 
 Thanks again to the people who make the awesome packages that allowed this reasearch into this little system.
 
+< UPDATE > There is a MiTree OS repo, but it hasnt had the love it needs. Life got in the way again. I will revisit this one day.. maybe when Im retired :)
+
 ---
 This doesnt exist without Lua and Luajit. Lua was introduced to me at Pandemic Studios in 2001 by a brilliant coder also named David. Thanks, it really struck a cord with me because of its simplicity. And then Mike Pauls Luajit made something that was annoying (binding with Lua) into something beautiful - ffi. FFI and luajit are an impressive combination. So thankyou to these people, I really appreciate the work they have done.
 
