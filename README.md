@@ -1,5 +1,16 @@
 # ljos
 ---
+## Its been a while...
+Some important notes while Ive been gone:
+- It looks like modern Qemu complains about the initramfs now - Investigating.
+- Found some makefile bugs (updating)
+- In the next week, I will add Nuklear rendering - quite a nice GUI that should work with fb0 fine.
+- Adding some nice things to make it all easier to work with.
+- Hopefully over the next six months, the Linux kernel will go, and the system will use its own x86_64 OS runtime (yes less compete, but also very different).
+
+Sorry this hasnt had the attention it really deserves, but there are parts being built that will eventually end up here :)
+
+---
 ## Warning: Everything is about to change. 
 Will probably migrate this to mitree repo before it changes too much. 
 
