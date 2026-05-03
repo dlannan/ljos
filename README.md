@@ -2,8 +2,10 @@
 ---
 ## Its been a while...
 Some important notes while Ive been gone:
-- It looks like modern Qemu complains about the initramfs now - Investigating.
-- Found some makefile bugs (updating)
+- ~~It looks like modern Qemu complains about the initramfs now - Investigating.~~
+- Issue: grub needs updating due to booting from cdrom iso - use ```sudo apt-get install grub-pc-bin```
+- Issue: runvm wont work - Qemu + old vmlinuz not compatible. Will resolve later (newer kernel and build libs).
+- ~~Found some makefile bugs (updating)~~ - Done. Also removed vmlinuz building.
 - In the next week, I will add Nuklear rendering - quite a nice GUI that should work with fb0 fine.
 - Adding some nice things to make it all easier to work with.
 - Hopefully over the next six months, the Linux kernel will go, and the system will use its own x86_64 OS runtime (yes less compete, but also very different).
