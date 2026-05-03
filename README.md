@@ -10,6 +10,10 @@ Some important notes while Ive been gone:
 
 Sorry this hasnt had the attention it really deserves, but there are parts being built that will eventually end up here :)
 
+![Cairo test](/screenshots/2026-05-03_21-38-cairo-test.png)
+
+A little test - if you type ctest on the command line you should see this run for 10 seconds.
+
 ---
 ## Warning: Everything is about to change. 
 Will probably migrate this to mitree repo before it changes too much. 

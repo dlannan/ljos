@@ -148,7 +148,7 @@ local fillcount = #(LOGO_LINE) - #(LJOS_WELCOME) - 5
 logo = logo..[[  |]]..LJOS_WELCOME..(string.rep(" ",fillcount)).."|\n"
 logo = logo..LOGO_LINE
 -- output logo
--- print(logo)
+print(logo)
 if( _G.COMMAND_LINE ) then print( "WARNING: Running on local machine." ) end
 
 end 
@@ -158,6 +158,8 @@ end
 
 -- os.execute( "sbin/ifconfig" )
 -- dofile("lua/examples/httpserver.lua")
-dofile("lua/examples/demo_mouse.lua")
+
+-- dofile("lua/examples/demo_mouse.lua")
+-- dofile("lua/examples/mitree-test.lua")
 
 console.runconsole()

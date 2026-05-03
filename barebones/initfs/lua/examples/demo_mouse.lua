@@ -166,8 +166,8 @@ end
 
 local function main() 
 
-    local mouse_event = ffi.new("struct input_event[1]")
-    --local data = ffi.new("char[3]")
+    -- local mouse_event = ffi.new("struct input_event[1]")
+    local data = ffi.new("char[4]")
 
     -- /* Allocate framebuffer */
     framebuffer = ffi.new("char[?]", screenwidth * screenheight * 4)
@@ -177,9 +177,9 @@ local function main()
     --return 0
 
     -- /* Open framebuffer, mouse, terminal */
-    fbfd = S.open("/dev/fb0", "rdwr", 0)
-    msfd = S.open("/dev/input/event2", "rdwr,nonblock", "0666")
-    ttyfd = S.open("/dev/tty0", "rdwr", 0)
+    fbfd    = S.open("/dev/fb0", "rdwr", 0)
+    msfd    = S.open("/dev/input/mice", "rdwr,nonblock", "0666")
+    ttyfd   = S.open("/dev/tty0", "rdwr", 0)
 
     -- /* Render once */
     render(fbfd)
@@ -198,18 +198,21 @@ local function main()
 
         while (true) do
 
- 			local last_read = S.read(msfd, mouse_event, ffi.sizeof("struct input_event"))
+ 			-- local last_read = S.read(msfd, mouse_event, ffi.sizeof("struct input_event"))
 
-            -- local last_read = libc.read(msfd, data, 3)
+            -- local last_read = libc.read(msfd, data, 4)
+            local last_read = S.read(msfd, data, 4)
             if (last_read == nil) then break end
 
-			if (EV_REL == mouse_event[0].type) then
-				if (REL_X == mouse_event[0].code) then
-					mouse_x = mouse_x + mouse_event[0].value
-				elseif (REL_Y == mouse_event[0].code) then
-					mouse_y = mouse_y + mouse_event[0].value
-                end
-            end
+            mouse_x = mouse_x + data[1]
+            mouse_y = mouse_y - data[2]
+			-- if (EV_REL == mouse_event[0].type) then
+			-- 	if (REL_X == mouse_event[0].code) then
+			-- 		mouse_x = mouse_x + mouse_event[0].value
+			-- 	elseif (REL_Y == mouse_event[0].code) then
+			-- 		mouse_y = mouse_y + mouse_event[0].value
+            --     end
+            -- end
  
             -- /* Cap mouse x */
             if (mouse_x < 0) then
@@ -225,7 +228,7 @@ local function main()
                 mouse_y = screenheight - 1
             end
 
-            -- print(last_read, mouse_x, mouse_y)
+            -- print(last_read, data[0], data[1], data[2], data[3])
         end 
         
         render(fbfd) 

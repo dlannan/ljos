@@ -56,7 +56,7 @@ bb.iso: initramfs
 
 # Utility targets
 runvm: initramfs
-	qemu-system-x86_64 -m 2048 -kernel $(LINUX_PATH)/vmlinuz -initrd $(BUILD_PATH)/initramfs 
+	qemu-system-x86_64 -m 2048 -kernel $(LINUX_SRC)/vmlinuz -initrd $(BUILD_PATH)/initramfs 
 
 # Setup bridge for network
 setupbr:

@@ -219,11 +219,11 @@ end
 
 function mysplit (inputstr, sep)
     if sep == nil then
-            sep = "%s"
+        sep = "%s"
     end
     local t={}
     for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-            table.insert(t, str)
+        table.insert(t, str)
     end
     return t
 end
@@ -231,7 +231,7 @@ end
 -- **********************************************************************************
 local function w(...)
 	-- "graphical" terminal output to stderr
-	io.stderr:write(...)
+	io.stdout:write(...)
 end
 
 -- simple drawing routine using ANSI escape sequences
@@ -251,14 +251,26 @@ local function draw()
 end
 
 -- **********************************************************************************
+
+local function delete_char(line)
+    if( #line > 0 ) then 
+        w("\027[1D\027[K ")
+        line = string.sub(line, 1, -2) 
+        w("\027[1D")
+    end
+    return line
+end
+
+-- **********************************************************************************
 -- main
 local runconsole = function( lummander )
     -- print(_VERSION)
     --w("\027[?1049h") -- Enable alternative screen buffer
-    w("\027[?25m")
+    w("\027[?25h")
 
     local line = ""
     iowrite("$ ")
+    io.stdout:flush()
 
     local chout = ffi.new("int[1]")
 
@@ -267,40 +279,38 @@ local runconsole = function( lummander )
 
         if(processes.active == nil) then 
   
-            local keyused = nil
 --        local ch =  getch.getch_blocking()
             getch.getch_non_blocking(chout)
             local ch = tonumber(chout[0])
---print(ch)
-        -- TODO: convert this into an index meta table. Will make handling special
-        --       keys like delete, tab and others more simple.
-        if( ch == 10 ) then 
-            -- Parse and execute the command wrote
-            local args = mysplit(line, " ")
-            print()
-            cli:parse(args) -- parse arg and execute if a command was written
-            line = ""
-            iowrite("$ ")
-            keyused = 1
-        end 
-        
-        if( ch == 127 ) then 
-            if( #line > 0 ) then 
-                w("\027[1D\027[K ")
-                line = string.sub(line, 1, -2) 
-                w("\027[1D")
+
+            -- TODO: convert this into an index meta table. Will make handling special
+            --       keys like delete, tab and others more simple.
+            if( ch == 0x0A ) then 
+                -- Parse and execute the command wrote
+                if(#line > 0) then 
+                    local args = mysplit(line, " ")
+                    cli:parse(args) -- parse arg and execute if a command was written
+                end
+                line = ""
+                iowrite("$ ")
+                io.stdout:flush()
+           
+            -- Backspace
+            elseif (ch == 0x08 ) then 
+                line = delete_char(line)
+
+            -- Delete
+            elseif( ch == 0x7f ) then 
+                line = delete_char(line)
+
+            -- Printable chars
+            elseif( ch >= 0x20 and ch < 0x7f ) then
+                line = line..string.char(ch)
+                -- iowrite(string.char(ch))
             end
-            keyused = 1
-        end
-
-        if( keyused == nil and ch ~= 0 ) then
-            line = line..string.char(ch)
-            iowrite(string.char(ch))
-        end
-        
         end 
 
-        libc.usleep(10000)
+        libc.usleep(30000)
     end
 
     --w("\027[?1049l") -- Disable alternative screen buffer

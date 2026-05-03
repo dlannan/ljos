@@ -309,28 +309,28 @@ end
 -- @treturn Parsed
 function Lummander:parse(message)
     -- if(type(message) == "table") then message = table.join(message,"-") end
-    local args
-    if(type(message) == "string")then
-        args = {}
-        local i = 1
-        for s in message:gsub(
-            '"([^"]+)"',
-            function(x)
-                return x:gsub("%s+", "\0")
-            end
-        ):gmatch "%S+" do
-            local v = s:gsub("%z+", " ")
-                table.insert(args, v)
-            -- if (i > 2) then
-            --     local v = s:gsub("%z+", " ")
-            --     table.insert(args, v)
-            -- end
-            -- i = i + 1
-            -- print( s:gsub("%z+", " ") )
-        end
-    else
-        args = message
-    end
+    local args = message
+    -- if(type(message) == "string")then
+    --     args = {}
+    --     local i = 1
+    --     for s in message:gsub(
+    --         '"([^"]+)"',
+    --         function(x)
+    --             return x:gsub("%s+", "\0")
+    --         end
+    --     ):gmatch "%S+" do
+    --         local v = s:gsub("%z+", " ")
+    --             table.insert(args, v)
+    --         -- if (i > 2) then
+    --         --     local v = s:gsub("%z+", " ")
+    --         --     table.insert(args, v)
+    --         -- end
+    --         -- i = i + 1
+    --         -- print( s:gsub("%z+", " ") )
+    --     end
+    -- else
+        -- args = message
+    -- end
 
     -- Create a table what contains parsed arguments. Add this to Lummander.parsed
     -- @table Parsed
@@ -341,10 +341,11 @@ function Lummander:parse(message)
     else
         local cmd = self:find_cmd(args[1]) -- Search a command
         if not cmd then self:run() else -- If not a command found, then execute Lummander:help()
-            self:dev(function()
-                parsed:setarg("_cmd", cmd.name)
-                -- parsed._cmd = cmd.name
-            end)
+            -- self:dev(function()
+            --     parsed:setarg("_cmd", cmd.name)
+            --     -- parsed._cmd = cmd.name
+            -- end)
+
             local indexarg = 2
             if (#cmd.arguments > 0) then -- Parse required and optional arguments
                 for _, cmd_arg in ipairs(cmd.arguments) do
@@ -386,7 +387,7 @@ function Lummander:parse(message)
                 end
             end)
 
-            self:dev(function() parsed:print() end)
+            -- self:dev(function() parsed:print() end)
             
             -- Execute command
             self.pcall(function()

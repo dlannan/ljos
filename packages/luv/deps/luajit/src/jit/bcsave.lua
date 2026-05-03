@@ -82,8 +82,7 @@ local map_arch = {
 }
 
 local map_os = {
-  linux = true, windows = true, osx = true, freebsd = true, netbsd = true,
-  openbsd = true, dragonfly = true, solaris = true,
+  linux = true,
 }
 
 local function checkarg(str, map, err)

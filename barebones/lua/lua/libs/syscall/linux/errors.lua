@@ -1,6 +1,7 @@
 -- Linux error messages
 
 return {
+  NOATTR = "Nu such attribute",
   PERM = "Operation not permitted",
   NOENT = "No such file or directory",
   SRCH = "No such process",
@@ -136,5 +137,7 @@ return {
   INIT = "Reserved EINIT", -- what is correct message?
   REMDEV = "Remote device", -- what is correct message?
   HWPOISON = "Reserved EHWPOISON", -- what is correct message?
+  WOULDBLOCK = "Socket will block no sync",
+  NOTSUP = "Unsupported",
 }
 
