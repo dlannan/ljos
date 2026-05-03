@@ -16,7 +16,7 @@ A little test - if you type ctest on the command line you should see this run fo
 
 __Note:__ Cairo is very slow on fb0 because it doesnt do any block caching or minimal frame updates, it renders everything every frame (even clear screen too). This is why I will probably change to nuklear or I might make a cached/tiled/block system for Cairo to get it up to reasonable speeds. 
 
-Alternatively, I could start building my OpenGL driver :) 
+Alternatively, I could start building my OpenGL driver (which I intend to do later anyway) :)
 
 ---
 ## Warning: Everything is about to change. 
