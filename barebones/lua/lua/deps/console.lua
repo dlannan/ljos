@@ -1,5 +1,6 @@
 local ffi   = require("ffi")
 local S     = require "syscall"
+local h     = require "syscall.helpers"
 local t     = S.t
 
 local tinsert   = table.insert
@@ -251,14 +252,40 @@ local function draw()
 end
 
 -- **********************************************************************************
+-- Event structure for mouse or keyboard input
+-- struct input_event {
+--     struct timeval time;
+--     unsigned short type;
+--     unsigned short code;
+--     unsigned int value;
+-- };
+
+kybdfd    = S.open("/dev/input/event1", "rdwr,nonblock", "0666")
+local input_event = ffi.new("struct input_event[1]")
+
+local key_ascii = {}
+for name, code in pairs( S.c.KEY ) do key_ascii[code] = name end
+
+local function read_event()
+
+    local last_read = S.read(kybdfd, input_event, ffi.sizeof("struct input_event"))
+
+    return last_read
+end
+
+-- **********************************************************************************
 
 local function delete_char(line)
     if( #line > 0 ) then 
-        w("\027[1D\027[K ")
         line = string.sub(line, 1, -2) 
-        w("\027[1D")
+        w("\027[2K\r")
+        w(line)
     end
     return line
+end
+
+local function clear_line()
+    w("\027[2K\r")
 end
 
 -- **********************************************************************************
@@ -274,43 +301,95 @@ local runconsole = function( lummander )
 
     local chout = ffi.new("int[1]")
 
+    local history = {}
+    local history_select = 0
+
+    -- /* Select on fds */
+    local rfds = ffi.new("fd_set[1]")
+    getch.fdzero(rfds)
+    getch.fdset(h.getfd(kybdfd), rfds)
+
+    local mod_shift   = false
+
     -- infinite loop for command line..
     while true do
 
         if(processes.active == nil) then 
   
 --        local ch =  getch.getch_blocking()
-            getch.getch_non_blocking(chout)
-            local ch = tonumber(chout[0])
+            -- getch.getch_non_blocking(chout)
+            -- local ch = tonumber(chout[0])
+            local ch = ""
 
-            -- TODO: convert this into an index meta table. Will make handling special
-            --       keys like delete, tab and others more simple.
-            if( ch == 0x0A ) then 
-                -- Parse and execute the command wrote
-                if(#line > 0) then 
-                    local args = mysplit(line, " ")
-                    cli:parse(args) -- parse arg and execute if a command was written
+            local valid = read_event()
+            if(valid) then 
+
+                local key_pressed = true
+                local key_released = false
+
+                if(input_event[0].type == 01) then 
+                    ch = key_ascii[input_event[0].code]
                 end
-                line = ""
-                iowrite("$ ")
-                io.stdout:flush()
-           
-            -- Backspace
-            elseif (ch == 0x08 ) then 
-                line = delete_char(line)
 
-            -- Delete
-            elseif( ch == 0x7f ) then 
-                line = delete_char(line)
+                if(input_event[0].value == 0) then 
+                    key_pressed = false
+                    key_released = true
+                end
 
-            -- Printable chars
-            elseif( ch >= 0x20 and ch < 0x7f ) then
-                line = line..string.char(ch)
-                -- iowrite(string.char(ch))
+                -- if(ch > 0) then print(ch, tonumber(ch)) end
+
+                -- TODO: convert this into an index meta table. Will make handling special
+                --       keys like delete, tab and others more simple.
+                if( ch == "LEFTSHIFT" or ch == "RIGHTSHIFT") then 
+                    if(key_pressed == true) then 
+                        mod_shift = true 
+                    else 
+                        mod_shift = false 
+                    end
+                end 
+
+                if( key_released == true ) then 
+                    if( ch == "ENTER" ) then 
+                        -- Parse and execute the command wrote
+                        if(#line > 0) then 
+                            local args = mysplit(line, " ")
+                            cli:parse(args) -- parse arg and execute if a command was written
+                            -- Store history
+                            tinsert(history, 1, line)
+                        end
+                        line = ""
+                        iowrite("$ ")
+                        io.stdout:flush()
+
+                    -- Arrow key pressed
+                    elseif( ch == "UP" ) then
+                        if(history_select < #history) then 
+                            history_select = history_select + 1
+                            line = history[history_select]
+                            clear_line()
+                            iowrite(line)
+                        end
+                    elseif( ch == "DOWN" ) then 
+
+                    -- Backspace
+                    elseif (ch == "BACKSPACE" ) then 
+                        line = delete_char(line)
+
+                    -- Delete
+                    elseif( ch == "DELETE" ) then 
+                        line = delete_char(line)
+
+                    -- Printable chars
+                    elseif( #ch == 1 ) then
+                        if(mod_shift == false) then ch = string.lower(ch) end
+                        line = line..ch
+                        -- iowrite(string.char(ch))
+                    end
+                end
             end
         end 
 
-        libc.usleep(30000)
+        libc.usleep(10000)
     end
 
     --w("\027[?1049l") -- Disable alternative screen buffer
